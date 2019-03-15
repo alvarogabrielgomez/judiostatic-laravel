@@ -4,21 +4,18 @@
 
 @section('content')
 <div class="container">
-
+@if($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{$error}}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
     <form class="form-group" method="POST" action="/trainers" enctype="multipart/form-data">
         @csrf
-        <div class="form-group">
-            <label for="">Nombre</label>
-            <input type="text" class="form-control" name="name">      
-        </div>
-        <div class="form-group">
-                <label for="">Avatar</label>
-                <input type="file" class="form-control" name="avatar">      
-            </div>
-            <div class="form-group">
-                    <label for="">Description</label>
-                    <input type="text" class="form-control" name="description">      
-                </div>
+        @include('trainers.form');
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 

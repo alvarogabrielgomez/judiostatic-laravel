@@ -26,7 +26,7 @@ class AddDescriptionField extends Migration
     public function down()
     {
         Schema::table('trainers', function (Blueprint $table) {
-            //
+            $table->dropColumn('description');
         });
     }
 }
