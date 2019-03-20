@@ -8,34 +8,21 @@ use judiostatic\Http\Requests\StoreTrainerRequest;
 
 class TrainerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
+        $request->user()->authorizeRoles(['admin', 'user']);
         $trainers = Trainer::all();
 
         return view('trainers.index', compact('trainers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
 
         return view('Trainers.create');
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(StoreTrainerRequest $request) // Por default lleva un Request normal
     {
         // $validateData = $request->validate([       // Esto se puede hacer para validar sin usar el StoreTrainerRequest
@@ -62,12 +49,7 @@ class TrainerController extends Controller
         // return $request->all();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($slug)
     {
         //se puede hacer implicit binding con public function show(Trainer $trainer)
@@ -78,12 +60,7 @@ class TrainerController extends Controller
         return view('trainers.show', compact('trainer'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($slug)
     {
         //se puede hacer implicit binding con public function edit(Trainer $trainer)
@@ -92,13 +69,6 @@ class TrainerController extends Controller
         return view('trainers.edit', compact('trainer'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $slug)
     {
         //se puede hacer implicit binding con public function update(Trainer $trainer)
@@ -119,12 +89,6 @@ class TrainerController extends Controller
         return redirect()->route('trainers.show', [$trainer])->with('status', 'Updated');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($slug)
     {
         $trainer = Trainer::where('slug', '=', $slug)->firstOrFail();
