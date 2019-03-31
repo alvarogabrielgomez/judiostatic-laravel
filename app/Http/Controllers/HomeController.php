@@ -6,23 +6,26 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
+    public function index(Request $request){
+
+        return view ('home');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function carousel(Request $request)
     {
-        return view('home');
+
+            return response()->json([
+            ['id' => 1, 'title' => 'Lorem', 'description' => 'Desc', 'buss_name' => 'Tumamaeshombre'],
+            ['id' => 2, 'title' => 'Lorem', 'description' => 'Desc', 'buss_name' => 'Tumamaeshombre'],
+            ['id' => 3, 'title' => 'Lorem', 'description' => 'Desc', 'buss_name' => 'Tumamaeshombre'],
+            ['id' => 4, 'title' => 'Lorem', 'description' => 'Desc', 'buss_name' => 'Tumamaeshombre'],
+            ]);
+        
+
     }
 }
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }

@@ -6,7 +6,7 @@
                     <div class="card-header">Tu mama es hombre</div>
 
                     <div class="card-body">
-                        I'm an example component.
+                        I'm an example component. AAAAAAAAAAAAA
                     </div>
                 </div>
             </div>

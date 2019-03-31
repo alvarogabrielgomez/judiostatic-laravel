@@ -1,99 +1,81 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts/appindex')
+@section('content')
 
-        <title>Judiostatic</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
+<section id="main-hero">
+        <div id="main-hero-img">
+            <div id="main-hero-img-carousel" class="animated fadeIn">
+                <div id="main-hero-img-carousel-textcontainer">
+    
+                    <p id="textbloq1">As melhores ofertas no momento certo</p>
+            
+                    <p id="textbloq2">
+                    Conte conosco para resolver o seu dia, e você pode dar o seu prazer quando quiser.<br><br> Cupons online baratos e rápidos.
+                    </p>
+                    <a href="deals.php" class="herob button blue">Dê uma olhada</a>
+                    <a href="#main"><div id="main-hero-arrow"></div></a>
                 </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Judiostatic
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+            
             </div>
         </div>
-    </body>
-</html>
+    </section><!--Final main portada-->
+
+    <section>
+        <div id="main-container" style = "margin-top:0px;">
+            <div id='main'>
+                <h1>Se você se dá um gosto?</h1>
+               <h3>As melhores ofertas online por dia.</h3> 
+               <div id="onload-carousel">
+                   <!-- Aca carga el carousel -->
+                   <carousel-component></carousel-component>
+                   <div id='loader-carousel'>
+                       
+                    
+                   </div>     
+               </div>
+
+               <div id="main-posts-container">
+                <div class="main-post">
+                  <h1>
+                    Adquira o seu código promocional Omeleth e aproveite tudo ao melhor preço
+                  </h1>
+              
+                  <p style="margin-top: 38px;">
+                    Se você gosta de bons negócios, barato, não se esqueça de visitar os
+                    diferentes cupons e códigos de desconto que o Omeleth pode lhe oferecer,
+                    acompanhe diferentes promoções para que você possa encontrar as economias
+                    que melhor se adequam ao que você deseja.
+                  </p>
+              
+                  <h1>Como usar um código promocional do Omeleth</h1>
+                  <p style="margin-top: 38px;">
+                    Você está interessado no que estamos falando? Muito bem, explicamos de
+                    forma muito simples como usar os cupons de desconto Omeleth:
+                  </p>
+                  <p>
+                    É muito simples, o processo é um círculo que deve ser fechado, em 3 etapas
+                    rápidas:
+                  </p>
+                  <ul>
+                    <li>
+                      Decida que comida você quer comprar online, hambúrgueres? Uma combinação
+                      de 2x1 ?, cerveja ?, sanduíches?, Comida gourmet? Há uma grande
+                      variedade de coisas que podem interessá-lo, decidir entre tantas ofertas
+                      de produtos será a parte mais difícil.
+                    </li>
+                    <li>
+                      Escolha o cupom de desconto on-line que você deseja usar em sua compra,
+                      quando a promoção for escolhida, aponte para o código promocional ou
+                      salve seu código QR (precisaremos mais tarde).
+                    </li>
+                    <li>
+                      Faça a compra no local mostrando o código copiado ou o código QR. O
+                      desconto será então aplicado.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            
+                   </div>  
+               </div> 
+    </section>
+@endsection

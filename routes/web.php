@@ -15,11 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('prueba/{name}', 'PruebaController@prueba');
+
+Route::resource('pokemons', 'PokemonController');
+
+Route::get('carousel', 'HomeController@carousel');
 
 Route::resource('trainers', 'TrainerController');
 
-Route::resource('pokemons', 'PokemonController');
 
 Auth::routes();
 
