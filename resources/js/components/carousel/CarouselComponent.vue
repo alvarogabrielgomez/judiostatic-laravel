@@ -1,9 +1,9 @@
 <template>
-  <div class="animated fadeIn carousel-container">
+  <div class="carousel-container">
     <spinner v-show="loading"></spinner>
-    <div class="carousel">
-
-      <a href="#" class="main-box"  v-for="post in posts" v-bind:key="post.id">
+<transition name="fade" mode="out-in">
+    <div class="carousel" v-if="showing" >
+      <a href="#" class="main-box" v-for="post in posts" v-bind:key="post.id">
         <div class="main-img">
           <img src alt>
         </div>
@@ -28,10 +28,20 @@
         </div>
         <p class="main-box-desc">{{post.description}}</p>
       </a>
-
     </div>
+</transition>
   </div>
 </template>
+
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .7s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>
+
 
 <script>
 function createSlick() {
@@ -71,8 +81,8 @@ export default {
   data() {
     return {
       posts: [],
-      loading: true
-      
+      loading: true,
+      showing:false
     };
   },
 
@@ -94,6 +104,7 @@ export default {
   updated(){
     createSlick();
     cargado();
+    this.showing = true;
   }
 };
 </script>
