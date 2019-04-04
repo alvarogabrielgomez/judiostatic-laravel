@@ -25,16 +25,15 @@
                 <h1>Se você se dá um gosto?</h1>
                <h3>As melhores ofertas online por dia.</h3> 
                <div id="onload-carousel">
-                   <!-- Aca carga el carousel -->
+
                    <div id='loader-carousel'>
-                    <carousel-component></carousel-component>
-                       
-                    
+                    <carousel-component></carousel-component><!-- Aca carga el carousel -->
                    </div>     
                </div>
 
                <div id="main-posts-container">
                 <div class="main-post">
+
                   <h1>
                     Adquira o seu código promocional Omeleth e aproveite tudo ao melhor preço
                   </h1>
