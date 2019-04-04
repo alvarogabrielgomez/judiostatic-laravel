@@ -5,10 +5,9 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./carousel');
 
 window.Vue = require('vue');
-
+window.axios = require('axios');
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -24,9 +23,10 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 Vue.component('pokemons-component', require('./components/PokemonsComponent.vue').default);
 
-
-
 Vue.component('add-pokemon-btn', require('./components/AddPokemonComponent.vue').default);
+
+Vue.component('Spinner', require('./components/Spinner.vue').default);
+Vue.component('carousel-component', require('./components/carousel/CarouselComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

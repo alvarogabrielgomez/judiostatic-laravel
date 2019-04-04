@@ -1,5 +1,8 @@
 <template>
-    <div class="loader">Loading...</div>
+<div class="loader-container">
+   <div class="loader">Loading...</div>
+</div>
+   
 </template>
 
 <script>

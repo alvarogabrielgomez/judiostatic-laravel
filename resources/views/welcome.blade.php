@@ -26,8 +26,8 @@
                <h3>As melhores ofertas online por dia.</h3> 
                <div id="onload-carousel">
                    <!-- Aca carga el carousel -->
-                   <carousel-component></carousel-component>
                    <div id='loader-carousel'>
+                    <carousel-component></carousel-component>
                        
                     
                    </div>     

@@ -1,11 +1,9 @@
 <template>
-
   <div class="animated fadeIn carousel-container">
-                <spinner v-show="loading"></spinner>   
+    <spinner v-show="loading"></spinner>
     <div class="carousel">
-  
-      <a href="#" class="main-box" v-for="post in posts" v-bind:key="post.id">
-        
+
+      <a href="#" class="main-box"  v-for="post in posts" v-bind:key="post.id">
         <div class="main-img">
           <img src alt>
         </div>
@@ -30,6 +28,7 @@
         </div>
         <p class="main-box-desc">{{post.description}}</p>
       </a>
+
     </div>
   </div>
 </template>
@@ -62,38 +61,39 @@ function createSlick() {
       ]
     });
 }
-$(document).ready(function() {
-  createSlick();
-});
+function cargado(){
+
+      $("#onload-carousel").css("background","rgba(255,255,255,0.01)");
+    
+}
 
 export default {
   data() {
-        return{
-            posts:[
-             
-            ],
-            loading: true
-        }
+    return {
+      posts: [],
+      loading: true
+      
+    };
   },
+
   mounted() {
     console.log("Monted");
 
-  },
-  created() {
-    this.fetchPosts();
-  },
-  methods: {
-    fetchPosts() {
       axios
         .get("/carousel")
         .then(res => {
           this.posts = res.data;
           this.loading = false;
+
         })
         .catch(err => {
           console.log(err);
         });
-    }
+      return this.posts;
+  },
+  updated(){
+    createSlick();
+    cargado();
   }
 };
 </script>

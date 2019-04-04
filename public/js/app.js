@@ -1870,6 +1870,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'spinner'
 });
@@ -1885,7 +1888,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
 //
 //
 //
@@ -1944,9 +1946,10 @@ function createSlick() {
   });
 }
 
-$(document).ready(function () {
-  createSlick();
-});
+function cargado() {
+  $("#onload-carousel").css("background", "rgba(255,255,255,0.01)");
+}
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1955,22 +1958,20 @@ $(document).ready(function () {
     };
   },
   mounted: function mounted() {
-    console.log("Monted");
-  },
-  created: function created() {
-    this.fetchPosts();
-  },
-  methods: {
-    fetchPosts: function fetchPosts() {
-      var _this = this;
+    var _this = this;
 
-      axios.get("/carousel").then(function (res) {
-        _this.posts = res.data;
-        _this.loading = false;
-      }).catch(function (err) {
-        console.log(err);
-      });
-    }
+    console.log("Monted");
+    axios.get("/carousel").then(function (res) {
+      _this.posts = res.data;
+      _this.loading = false;
+    }).catch(function (err) {
+      console.log(err);
+    });
+    return this.posts;
+  },
+  updated: function updated() {
+    createSlick();
+    cargado();
   }
 });
 
@@ -3357,9 +3358,18 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "loader" }, [_vm._v("Loading...")])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "loader-container" }, [
+      _c("div", { staticClass: "loader" }, [_vm._v("Loading...")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -15587,9 +15597,8 @@ module.exports = g;
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-__webpack_require__(/*! ./carousel */ "./resources/js/carousel.js");
-
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -15603,6 +15612,8 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
 Vue.component('pokemons-component', __webpack_require__(/*! ./components/PokemonsComponent.vue */ "./resources/js/components/PokemonsComponent.vue").default);
 Vue.component('add-pokemon-btn', __webpack_require__(/*! ./components/AddPokemonComponent.vue */ "./resources/js/components/AddPokemonComponent.vue").default);
+Vue.component('Spinner', __webpack_require__(/*! ./components/Spinner.vue */ "./resources/js/components/Spinner.vue").default);
+Vue.component('carousel-component', __webpack_require__(/*! ./components/carousel/CarouselComponent.vue */ "./resources/js/components/carousel/CarouselComponent.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -15611,23 +15622,6 @@ Vue.component('add-pokemon-btn', __webpack_require__(/*! ./components/AddPokemon
 
 var app = new Vue({
   el: '#app'
-});
-
-/***/ }),
-
-/***/ "./resources/js/carousel.js":
-/*!**********************************!*\
-  !*** ./resources/js/carousel.js ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-Vue.component('Spinner', __webpack_require__(/*! ./components/Spinner.vue */ "./resources/js/components/Spinner.vue").default);
-Vue.component('carousel-component', __webpack_require__(/*! ./components/carousel/CarouselComponent.vue */ "./resources/js/components/carousel/CarouselComponent.vue").default);
-var app = new Vue({
-  el: '#onload-carousel'
 });
 
 /***/ }),
@@ -16031,8 +16025,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laravel\judiostatic-laravel\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laravel\judiostatic-laravel\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\user\judiostatic-laravel\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\user\judiostatic-laravel\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
