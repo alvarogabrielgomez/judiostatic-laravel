@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,12 +18,12 @@ Route::get('/', function () {
 
 
 Route::resource('pokemons', 'PokemonController');
+Route::resource('trainers', 'TrainerController');
+Route::resource('deals', 'DealsController');
+
 
 Route::get('carousel', 'HomeController@carousel');
-
-Route::resource('trainers', 'TrainerController');
-
-
-Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('deals', 'DealsController@index');
+

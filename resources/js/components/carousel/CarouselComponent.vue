@@ -73,10 +73,9 @@ function createSlick() {
 }
 function cargado(){
 
-      $("#onload-carousel").css("background","rgba(255,255,255,0.01)");
+  $("#onload-carousel").css("background","rgba(255,255,255,0.01)");
     
 }
-
 export default {
   data() {
     return {
