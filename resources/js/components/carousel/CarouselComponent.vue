@@ -2,10 +2,24 @@
   <div class="carousel-container">
     <spinner v-show="loading"></spinner>
 <transition name="fade" mode="out-in">
+<div id="empty-state-container" v-show="empty">
+
+<div id="empty-state-message">
+<div id="empty-state-message-img">
+</div>
+<span><h1>Oh, oh!. </h1><br>
+Aparentemente não há nada para mostrar aqui, e se você tentar depois? ;)
+</span>
+
+</div>
+
+</div>
+</transition>
+<transition name="fade" mode="out-in">
     <div class="carousel" v-if="showing" >
-      <a href="#" class="main-box" v-for="post in posts" v-bind:key="post.id">
+      <a v-bind:href="'deals/'+post.post_id" class="main-box" v-for="post in posts" v-bind:key="post.post_id">
         <div class="main-img">
-          <img src alt>
+          <img v-bind:src="post.post_hero_img_url" alt>
         </div>
         <div class="buss-name">
           <span>{{post.buss_name}}</span>
@@ -19,11 +33,11 @@
         <div class="price-box">
           <div class="price-new">
             <abbr title="BRL">R$</abbr>
-            <span>50</span>
+            <span>{{post.price_from}}</span>
           </div>
           <div class="price-from">
             <abbr title="BRL">R$</abbr>
-            <span>100</span>
+            <span>{{post.price_new}}</span>
           </div>
         </div>
         <p class="main-box-desc">{{post.description}}</p>
@@ -81,19 +95,21 @@ export default {
     return {
       posts: [],
       loading: true,
-      showing:false
+      showing:false,
+      empty:false,
+      response: ""
     };
   },
 
   mounted() {
-    console.log("Monted");
 
       axios
         .get("/carousel")
         .then(res => {
-          this.posts = res.data;
+          this.posts = res.data.data;
           this.loading = false;
-
+          this.response = res.data.response
+          this.empty = false;
         })
         .catch(err => {
           console.log(err);
@@ -101,9 +117,16 @@ export default {
       return this.posts;
   },
   updated(){
-    createSlick();
-    cargado();
-    this.showing = true;
+    if(this.response == 'success'){
+      createSlick();
+      cargado();
+      this.showing = true;
+    }else if(this.response == 'error'){
+      this.showing = false;
+      this.empty = true;
+      cargado();
+    }
+
   }
 };
 </script>

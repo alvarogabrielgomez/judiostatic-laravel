@@ -24,7 +24,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('pokemons-component', require('./components/PokemonsComponent.vue').default);
 
 Vue.component('add-pokemon-btn', require('./components/AddPokemonComponent.vue').default);
-
+Vue.component('dealsubmit-component', require('./components/modalwindow/DealSubmitComponent.vue').default);
 Vue.component('Spinner', require('./components/Spinner.vue').default);
 Vue.component('carousel-component', require('./components/carousel/CarouselComponent.vue').default);
 /**

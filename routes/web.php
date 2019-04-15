@@ -14,16 +14,19 @@ Auth::routes();
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('/');
 
 
 Route::resource('pokemons', 'PokemonController');
 Route::resource('trainers', 'TrainerController');
 Route::resource('deals', 'DealsController');
 
-
-Route::get('carousel', 'HomeController@carousel');
-Route::get('/home', 'HomeController@index')->name('home');
-
+Route::get('dealsubmit', 'DealsController@dealsubmit');
+Route::get('carousel', 'DealsController@carousel');
+Route::get('/home', function () {
+    return view('welcome');
+})->name('home');
 Route::get('deals', 'DealsController@index');
 
+Route::get('modalwindow', 'ModalwindowController@index');
+Route::get('modalwindow/deals/{id}', 'ModalwindowController@show');

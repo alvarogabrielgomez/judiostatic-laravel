@@ -1,5 +1,8 @@
-@extends('layouts.app', ['title' => $posts->title])
-
+@extends('layouts.app')
+@section('title',  $posts->title)
+@section('id',  $posts->post_id)
+@section('description',  $posts->description)
+@section('heroimage',  $posts->post_hero_img_url)
 @section('content')
 <div id="nav-bar">
         <div id="nav-bar-container">
@@ -26,7 +29,6 @@
 </div>
 
 <section>
-
     <div id="main-container"style = "margin-top:0px;">
         <div id="main">
             <div id="hero-deals-container">
@@ -53,7 +55,7 @@
                     </div>
                     <div class="col2">
                         <div class="image-hero-container">
-                            <img src="img/tumb1.jpg" alt="image deals">
+                            <img src="{{ asset($posts->post_hero_img_url) }}" alt="image deals">
                         </div>
                     </div>
                 </div>
@@ -71,53 +73,20 @@
 
             <div id="main-posts-container">
                 <div class="main-post">
-                    <!-- The Modal -->
-                    <div id="modalwindow" class="modal">
-                
-                        <!-- Modal content -->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <span class="close">×</span>
-                                <h2 class="titulomodal">Complete o pedido</h2>
-                            </div>
-                            <div class="modal-body">
-                
-                                <div class="animated fadeIn index">
-                                    <div class="buss-info-container">
-                                        <img src="img/buss/buss1.jpg" alt="image deals">
-                                        <div class="buss-info-metadata">
-                                            <div class="buss-info-name">{{$posts->buss_name}}</div>
-                                            <div class="buss-info-dir">{{$posts->buss_dir}}</div>
-                                        </div>
-                                    </div>
-                
-                                    <div class="deal-info1">
-                                        <p>Anote bem ou <strong>salve o lugar</strong> onde você tem que ir depois de ter seu código</p>
-                                        <p>Se você tem tudo pronto, você pode<strong>continuar</strong></p>
-                                    </div>
-                
-                                    <div>
-                
-                                        <div><a class="button blue modal-continue"
-                                        onclick="cargarContenido('modalwindow/deals_pages/continue.php?id={{$posts->post_id}}#top')">Vou
-                                                continuar</a></div>
-                
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                
-                                <div id="creditos">
-                                    <div><a href="documents/terms.html">Condições de Uso</a> <a
-                                            href="documents/privacy-policy.html">Privacidade</a><a href="https://ckj.one"> © Alvaro
-                                            Gabriel Gomez</a>. <span id="rights">TODOS OS DIREITOS RESERVADOS</span></div>
-                                </div>
-                
-                            </div>
-                        </div>
-                
+<!-- The Modal -->
+
+
+<div id="modalwindow" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+          <div class="modal-body">
+
+        </div>
+      </div>
+      </div>
+
                     </div>
-                
                 
                     <div id="principal-small" style="display: none;" class="cupon-std-small-vertical">
                         <div class="cupon-col1-small-vertical">
@@ -223,10 +192,57 @@
 
             </div>
 
-        </div>
+        
         
     </div>
-
 </section>
+</div>
+<script>
+var isMobile;
+        function widthpx(){
+            if($(document).width() <= 600){
+              isMobile = true;
+              $(".cupon-std-small-vertical").css("display", "flex");
+              $(".cupon-std").css("display", "none");
+        
+            }else if($(document).width() >= 601){
+              isMobile = false;
+              $(".cupon-std-small-vertical").css("display", "none");
+              $(".cupon-std").css("display", "flex");
+            }
+            var isSmallScreen;
+            if($(document).width() <= 800){
+                isSmallScreen = true;
+                var Screen = $(document).width();
+                var boxWidth = 728.6;
+                var translatevar = (Screen/2) - (Screen*0.080) - (boxWidth/2);
+              $(".cupon-std").css("transform", "scale(0.8) translate("+translatevar+"px)");
+        
+            }else if($(document).width() >= 801){
+                isSmallScreen = false;
+              $(".cupon-std").css("transform", "scale(1)");
+            }
+        
+          }
+        widthpx();
+
+        window.onload = function() {
+            //funciones a ejecutar
+            
+            window.addEventListener('resize', widthpx);
+                // cargamos el icono en el div donde ira el contenido
+                $(".modal-body").html("<img src='{{ asset('images/icons/loading.svg') }}' class='loadermodal' border='0' />");
+                // cargamos la pagina en el div capa
+                $(".modal-body").load('{{ asset('modalwindow/deals/'.$posts->post_id) }}');
+                
+        };
+          function cargarContenido(pagina)
+            {
+                // cargamos el icono en el div donde ira el contenido
+                $(".modal-body").html("<img style='float:none!important; display:block;margin:auto;' src='{{ asset('images/icons/loading.svg') }}' class='loadermodal' border='0' />");
+                // cargamos la pagina en el div capa
+                $(".modal-body").load(pagina);
+            }
+</script>
 
 @endsection

@@ -10,7 +10,8 @@
     <title>@yield('title') - Omeleth Cupon</title>
     <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"type="text/javascript" charset="utf-8"></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/qrious.min.js') }}" async="async"></script>
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 
 
     <META NAME="Title" CONTENT="TITULO - Omeleth Cupon">
@@ -18,44 +19,45 @@
     <META NAME="Subject" CONTENT="Cupon Business">
     <META NAME="Language" CONTENT="Portuguese">
 
+    <link rel="preload" href="{{ asset('css/style.css') }}" as= "style">
     <link rel="preload" href="{{ asset('css/responsive.css') }}" as= "style">
-    <link rel="preload" href="{{ asset('css/responsive.css') }}" as= "style">
-    <link rel="preload" href="{{ asset('modalwindow/modalwindow.css') }}" as= "style">
+    <link rel="preload" href="{{ asset('css/modalwindow.css') }}" as= "style">
     <link rel="preload" href="{{ asset('images/icons/cupon-std.svg') }}" as="image">
+    <link rel="preload" href="{{ asset('images/icons/loading.svg') }}" as="image">
 
-    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
-    <link rel="manifest" href="images/favicon/site.webmanifest">
-    <link rel="mask-icon" href="images/favicon/safari-pinned-tab.svg" color="#bc2b19">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('images/favicon/apple-touch-icon-60x60.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/favicon/apple-touch-icon-76x76.png') }}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('images/favicon/apple-touch-icon-120x120.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('images/favicon/apple-touch-icon-152x152.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/apple-touch-icon-180x180.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('images/favicon/site.webmanifest') }}">
+    
+    <link rel="mask-icon" href="{{ asset('images/favicon/safari-pinned-tab.svg')}}" color="#bc2b19">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#bc2b19">
    
     <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('modalwindow/modalwindow.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/modalwindow.css') }}">
     
     <link href="https://fonts.googleapis.com/css?family=Oxygen:400,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/fontawesome.css" integrity="sha384-WK8BzK0mpgOdhCxq86nInFqSWLzR5UAsNg0MGX9aDaIIrFWQ38dGdhwnNCAoXFxL" crossorigin="anonymous"> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/regular.css" integrity="sha384-l+NpTtA08hNNeMp0aMBg/cqPh507w3OvQSRoGnHcVoDCS9OtgxqgR7u8mLQv8poF" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/solid.css" integrity="sha384-aj0h5DVQ8jfwc8DA7JiM+Dysv7z+qYrFYZR+Qd/TwnmpDI6UaB3GJRRTdY8jYGS4" crossorigin="anonymous">
 
-    <script src="{{ asset('js/qrious.min.js') }}" async="async"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/animate.min.css') }}"> 
 
-    <meta property="og:url"                content="https://omeleth.com/deals.php?id=@yield('id')" />
+    <meta property="og:url"                content="https://omeleth.com/deals/@yield('id')" />
     <meta property="og:type"               content="article" />
-    <meta property="og:title"              content="" />
-    <meta property="og:description"        content="" />
-    <meta property="og:image"              content="https://omeleth.com/" />
+    <meta property="og:title"              content="@yield('title')" />
+    <meta property="og:description"        content="@yield('description')" />
+    <meta property="og:image"              content="https://omeleth.com/@yield('heroimage')" />
     <meta property="fb:app_id"             content="238563567095772" /> 
 </head>
 <body>
-    <div id="app">
+   
         <div id="themoderfoquer">
 
             <header id="header">
@@ -85,8 +87,9 @@
             </header>
 
         @yield('content')
+        
         </div>
-    </div>
+    
 
 <footer id="footer">
     <div id="ir-arriba"><a href="#">Subir</a></div>
@@ -142,5 +145,7 @@
     </div>
 
 </footer>
+<script src="{{ asset('js/modalwindow.js') }}" defer></script>
+
 </body>
 </html>
