@@ -2569,6 +2569,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["title", "descuento", "bussname", "user"],
   data: function data() {
     return {
       next: 2,
@@ -2576,7 +2577,9 @@ __webpack_require__.r(__webpack_exports__);
       loading: true,
       showing: false,
       response: "",
-      deal: [],
+      deal: {
+        "title": this.title
+      },
       steps: {
         "step": {
           "1": "Verifique los datos",
@@ -2595,7 +2598,13 @@ __webpack_require__.r(__webpack_exports__);
 
     span.onclick = function () {
       modal.style.display = "none";
-    };
+    }; // window.onclick = function(event) {
+    //   if (event.target == modal) {
+    //     modal.style.display = "none";
+    //     this.stepactual = 1;
+    //   }
+    // }
+
 
     var nextSelection = $(".next-selection")[0];
     var continueBtn = $("#continue-btn")[0];
@@ -2618,6 +2627,11 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return true;
+    }
+  },
+  methods: {
+    passToNext: function passToNext() {
+      this.stepactual += 1;
     }
   }
 });
@@ -4267,7 +4281,18 @@ var render = function() {
     "div",
     { attrs: { id: "dealsubmit" } },
     [
-      _vm._m(0),
+      _c("div", { staticClass: "modal-header" }, [
+        _c("span", {
+          staticClass: "close",
+          on: {
+            click: function($event) {
+              _vm.stepactual = 1
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("h2", { staticClass: "titulomodal" }, [_vm._v("Complete o pedido")])
+      ]),
       _vm._v(" "),
       _c("transition", { attrs: { name: "slide" } }, [
         _vm.stepactual == 1
@@ -4288,11 +4313,11 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "deal-info" }, [
                     _c("p", [
-                      _c("strong", [
-                        _vm._v("PromoÃ§Ã£o de 600 gr de Brigadeiros")
-                      ]),
+                      _c("strong", [_vm._v(_vm._s(_vm.deal.title))]),
                       _vm._v(" "),
-                      _c("span", [_vm._v("50% de descuento")])
+                      _c("span", [
+                        _vm._v(_vm._s(this.descuento) + "% de descuento")
+                      ])
                     ])
                   ]),
                   _vm._v(" "),
@@ -4458,11 +4483,7 @@ var render = function() {
           {
             staticClass: "button footer-btn",
             attrs: { id: "continue-btn" },
-            on: {
-              click: function($event) {
-                _vm.stepactual += 1
-              }
-            }
+            on: { click: _vm.passToNext }
           },
           [_vm._v("Continuar")]
         )
@@ -4471,18 +4492,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("span", { staticClass: "close" }),
-      _vm._v(" "),
-      _c("h2", { staticClass: "titulomodal" }, [_vm._v("Complete o pedido")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

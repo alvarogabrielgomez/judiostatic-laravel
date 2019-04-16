@@ -20,6 +20,7 @@ Route::get('/', function () {
 Route::resource('pokemons', 'PokemonController');
 Route::resource('trainers', 'TrainerController');
 Route::resource('deals', 'DealsController');
+Route::resource('modalwindow', 'ModalwindowController');
 
 Route::get('dealsubmit', 'DealsController@dealsubmit');
 Route::get('carousel', 'DealsController@carousel');

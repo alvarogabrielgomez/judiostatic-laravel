@@ -2,7 +2,7 @@
   
 <div id="dealsubmit">
               <div class="modal-header">
-            <span class="close"></span>
+            <span v-on:click="stepactual = 1" class="close"></span>
             <h2 class = "titulomodal">Complete o pedido</h2>
           </div>
           
@@ -23,8 +23,8 @@
 
                 <div class="deal-info">
                     <p>
-                       <strong>PromoÃ§Ã£o de 600 gr de Brigadeiros</strong>
-                       <span>50% de descuento</span>
+                       <strong>{{deal.title}}</strong>
+                       <span>{{this.descuento}}% de descuento</span>
                        <!-- <span style="display:none;">{{stepactual}}</span> -->
                     </p>
                 </div>
@@ -145,7 +145,7 @@
 
 
 <div class="modal-footer">
- <a v-on:click="stepactual += 1;" id="continue-btn" class="button footer-btn">Continuar</a>
+ <a v-on:click="passToNext" id="continue-btn" class="button footer-btn">Continuar</a>
 </div>
 
 
@@ -548,6 +548,7 @@ background: #FFF;
 <script>
 
 export default {
+  props: ["title", "descuento", "bussname", "user"],
   data(){
         return{
             next: 2,
@@ -555,7 +556,7 @@ export default {
             loading: true,
             showing:false,
             response: "",
-            deal:[],
+            deal:{"title":this.title},
             steps: { "step":{
                       "1":"Verifique los datos", 
                       "2":"Ingrese su nombre", 
@@ -567,8 +568,9 @@ export default {
                     
         }
   },
-
   mounted(){
+
+  
   // Get the modal
   var modal = document.getElementById('modalwindow');
   
@@ -579,6 +581,15 @@ export default {
   span.onclick = function() {
     modal.style.display = "none";
   }
+
+// window.onclick = function(event) {
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+//     this.stepactual = 1;
+//   }
+// }
+
+
   var nextSelection = $(".next-selection")[0];
   var continueBtn = $("#continue-btn")[0];
   
@@ -586,6 +597,8 @@ export default {
   },
 
   updated(){
+
+
       this.next = this.stepactual+1 
       this.steps.Next = this.steps.step[this.next];
 
@@ -605,7 +618,13 @@ export default {
       }
       return true;
     }
+  },
+  methods:{
+    passToNext: function(){
+      this.stepactual += 1;
+    }
   }
+
 
 };
 
