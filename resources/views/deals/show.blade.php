@@ -79,7 +79,7 @@
 <div id="modalwindow" class="modal">
 
         <!-- Modal content -->
-        <div class="modal-content">
+        <div id="modal-content">
           <div class="modal-body">
 
         </div>

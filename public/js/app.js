@@ -2482,32 +2482,111 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  created: function created() {},
-  //     data(){
-  //         return{
-  //             loading: true,
-  //             showing:false,
-  //             response: ""
-  //         }
-  //     },
-  //     mounted(){
-  //         axios
-  //         .post("/dealsubmit", {
-  //             data: from
-  //         })
-  //         .then(res =>{
-  //             this.loading = false;
-  //             this.response = res.data.response
-  //         })
-  //     },
-  //     updated(){
-  //     if(this.response == 'success'){
-  //       this.showing = true;
-  //     }else if(this.response == 'error'){
-  //       this.showing = false;
-  //     }
-  //   }
+  data: function data() {
+    return {
+      next: 2,
+      stepactual: 1,
+      loading: true,
+      showing: false,
+      response: "",
+      deal: [],
+      steps: {
+        "step": {
+          "1": "Verifique los datos",
+          "2": "Ingrese su nombre",
+          "3": "Listo"
+        },
+        "Next": "Next Step"
+      }
+    };
+  },
   mounted: function mounted() {
     // Get the modal
     var modal = document.getElementById('modalwindow'); // Get the <span> element that closes the modal
@@ -2517,8 +2596,30 @@ __webpack_require__.r(__webpack_exports__);
     span.onclick = function () {
       modal.style.display = "none";
     };
+
+    var nextSelection = $(".next-selection")[0];
+    var continueBtn = $("#continue-btn")[0];
+    this.steps.Next = this.steps.step[this.next];
   },
-  updated: function updated() {}
+  updated: function updated() {
+    this.next = this.stepactual + 1;
+    this.steps.Next = this.steps.step[this.next];
+
+    if (this.response == 'success') {
+      this.showing = true;
+    } else if (this.response == 'error') {
+      this.showing = false;
+    }
+  },
+  computed: {
+    stepactuallimit: function stepactuallimit() {
+      if (this.stepactual > 3) {
+        return false;
+      }
+
+      return true;
+    }
+  }
 });
 
 /***/ }),
@@ -2592,7 +2693,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.modal, #modalwindow, .modal-content{\r\ntransition: -webkit-transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out, -webkit-transform .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    margin-top: 71px;\r\n    margin-left: 49px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n    vertical-align: middle;\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 85px;\r\n    margin-left: 49px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n    vertical-align: middle;\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    flex: 10;\n}\n.row-centered{\r\n    display: flex;\r\n    flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: center;\n}\n.row-linea{\r\n      flex: 2;\r\n      position: relative;\n}\n.steps{\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n#step1, #step2, #step3{\r\n    display: flex;\r\n    flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\r\n\r\n\r\n/* The Modal (background) */\n.modal {\r\n    display: none; /* Hidden by default */\r\n    position: fixed; /* Stay in place */\r\n    z-index: 100000; /* Sit on top */\r\n    padding-top: 28px; /* Location of the box */\r\n    left: 0;\r\n    top: 0;\r\n    width: 100%; /* Full width */\r\n    height: 100%; /* Full height */\r\n    overflow: auto; /* Enable scroll if needed */\r\n    background-color: rgba(0, 0, 0, 0.18);  \r\n    transition: all .2s ease-in-out;\n}\n#modalwindow{\r\n    transition: all .2s ease-in-out;\n}\r\n  /* Modal Content */\n.modal-content {\r\n    transition: all .2s ease-in-out;\r\n    position: relative;\r\n    background-color: #fffefe;\r\n    margin: auto;\r\n    margin-bottom: 59px;\r\n    padding: 0;\r\n    border: 1px solid rgba(151, 37, 21, 0.45);\r\n    border-top: 0px;\r\n    width: 80%;\r\n    max-width: 677px;\r\n    min-height: 527px;\r\n    border-radius: 10px 10px 0px 0px;\r\n    box-shadow: 3px 3px 8px 1px rgba(0, 0, 0, 0.16), 1px 10px 20px 0px rgba(0, 0, 0, 0.1), 0px -3px 0px 0px #BC2D19;    -webkit-animation-name: animatetop;    animation-name: animatetop;\r\n    -webkit-animation-duration: 0.4s;\r\n            animation-duration: 0.4s;\r\n    overflow:hidden;\n}\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-body {\r\n  \r\n    overflow: auto;\r\n    max-height: 523px;\r\n    \r\n    min-height: 355px;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px;\r\n    width: 100%;\r\n    z-index: 1000;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: flex;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info1{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info2{\r\n    display: block;\r\n    max-width: 498px;\r\n    padding: 7px 27px;\r\n    margin: auto;\r\n    margin-top: 12px;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  align-items: center;\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.continue-btn{\r\n    z-index: 10000;\r\n    position: absolute;\r\n    bottom: 56px;\r\n    left: calc(50% - 50px);\n}\n.continue-btn a{\r\n    width: 50px;\r\n    height: 50px;\r\n    border-radius: 50%;\r\n    padding: 13px 16px;\r\n    text-decoration: none;\r\n    font-size: 24px;\n}\n.continue-btn a:hover{\r\n    text-decoration: none;\n}\n.modal, #modalwindow, #modal-content,{\r\ntransition: -webkit-transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out, -webkit-transform .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    margin-top: 71px;\r\n    margin-left: 49px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n    vertical-align: middle;\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 85px;\r\n    margin-left: 49px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n    vertical-align: middle;\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    flex: 10;\n}\n.row-centered{\r\n    display: flex;\r\n    flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: center;\n}\n.row-linea{\r\n      flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3{\r\n    display: flex;\r\n    flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-body {\r\n  \r\n    overflow: auto;\r\n    max-height: 523px;\r\n    \r\n    min-height: 355px;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n    display: block;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  align-items: center;\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -4162,222 +4263,223 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "div",
+    { attrs: { id: "dealsubmit" } },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "slide" } }, [
+        _vm.stepactual == 1
+          ? _c("div", { staticClass: "steps", attrs: { id: "step1" } }, [
+              _c("div", { staticClass: "content-step" }, [
+                _c("div", { staticClass: "content-row row-linea" }, [
+                  _c("div", { staticClass: "linea" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "seleccion" }, [_vm._v("1")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "opciones" }, [_vm._v("2")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content-row row-centered" }, [
+                  _c("div", { staticClass: "title-step" }, [
+                    _c("h1", [_vm._v(_vm._s(_vm.steps.step[1]))])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "deal-info" }, [
+                    _c("p", [
+                      _c("strong", [
+                        _vm._v("PromoÃ§Ã£o de 600 gr de Brigadeiros")
+                      ]),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("50% de descuento")])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "deal-info deal-white" }, [
+                    _c("p", [
+                      _c("strong", [_vm._v("Verifique")]),
+                      _vm._v(
+                        " se tudo está em ordem e é a oferta que\r\n                        você deseja. Se tudo estiver correto, você pode\r\n                        "
+                      ),
+                      _c("strong", [_vm._v("continuar")]),
+                      _vm._v("*\r\n                    ")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        staticStyle: {
+                          "font-size": "13px",
+                          color: "#9a9a9a",
+                          "font-weight": "600"
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\r\n                        *Depois de continuar, você estará aceitando os termos e condições.\r\n                    "
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "next-selection" }, [
+                    _c("h2", [_vm._v(_vm._s(_vm.steps.Next))])
+                  ])
+                ])
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "slide" } }, [
+        _vm.stepactual == 2
+          ? _c("div", { staticClass: "steps", attrs: { id: "step2" } }, [
+              _c("div", { staticClass: "content-step" }, [
+                _c("div", { staticClass: "content-row row-linea" }, [
+                  _c("div", { staticClass: "linea lineacont" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "seleccion" }, [_vm._v("2")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "opciones" }, [_vm._v("3")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content-row row-centered" }, [
+                  _c("div", { staticClass: "title-step" }, [
+                    _c("h1", [_vm._v(_vm._s(_vm.steps.step[2]))])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "deal-info" }, [
+                    _c("p", [
+                      _c("strong", [
+                        _vm._v("PromoÃ§Ã£o de 600 gr de Brigadeiros")
+                      ]),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("50% de descuento")])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "deal-info deal-white" }, [
+                    _c("p", [
+                      _c("strong", [_vm._v("Verifique")]),
+                      _vm._v(
+                        " se tudo está em ordem e é a oferta que\r\n                        você deseja. Se tudo estiver correto, você pode\r\n                        "
+                      ),
+                      _c("strong", [_vm._v("continuar")]),
+                      _vm._v("*\r\n                    ")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        staticStyle: {
+                          "font-size": "13px",
+                          color: "#9a9a9a",
+                          "font-weight": "600"
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\r\n                        *Depois de continuar, você estará aceitando os termos e condições.\r\n                    "
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "next-selection" }, [
+                    _c("h2", [_vm._v(_vm._s(_vm.steps.Next))])
+                  ])
+                ])
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "slide" } }, [
+        _vm.stepactual == 3
+          ? _c("div", { staticClass: "steps", attrs: { id: "step3" } }, [
+              _c("div", { staticClass: "content-step" }, [
+                _c("div", { staticClass: "content-row row-linea" }, [
+                  _c("div", { staticClass: "linea lineacont" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "seleccion" }, [_vm._v("3")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content-row row-centered" }, [
+                  _c("div", { staticClass: "title-step" }, [
+                    _c("h1", [_vm._v(_vm._s(_vm.steps.step[3]))])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "deal-info" }, [
+                    _c("p", [
+                      _c("strong", [
+                        _vm._v("PromoÃ§Ã£o de 600 gr de Brigadeiros")
+                      ]),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("50% de descuento")])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "deal-info deal-white" }, [
+                    _c("p", [
+                      _c("strong", [_vm._v("Verifique")]),
+                      _vm._v(
+                        " se tudo está em ordem e é a oferta que\r\n                        você deseja. Se tudo estiver correto, você pode\r\n                        "
+                      ),
+                      _c("strong", [_vm._v("continuar")]),
+                      _vm._v("*\r\n                    ")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        staticStyle: {
+                          "font-size": "13px",
+                          color: "#9a9a9a",
+                          "font-weight": "600"
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\r\n                        *Depois de continuar, você estará aceitando os termos e condições.\r\n                    "
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "modal-footer" }, [
+        _c(
+          "a",
+          {
+            staticClass: "button footer-btn",
+            attrs: { id: "continue-btn" },
+            on: {
+              click: function($event) {
+                _vm.stepactual += 1
+              }
+            }
+          },
+          [_vm._v("Continuar")]
+        )
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { attrs: { id: "dealsubmit" } }, [
-      _c("div", { staticClass: "modal-header" }, [
-        _c("span", { staticClass: "close" }),
-        _vm._v(" "),
-        _c("h2", { staticClass: "titulomodal" }, [_vm._v("Complete o pedido")])
-      ]),
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("span", { staticClass: "close" }),
       _vm._v(" "),
-      _c("div", { staticClass: "steps", attrs: { id: "step1" } }, [
-        _c("div", { staticClass: "animated fadeIn content-step" }, [
-          _c("div", { staticClass: "content-row row-linea" }, [
-            _c("div", { staticClass: "linea" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "seleccion" }, [_vm._v("1")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "opciones" }, [_vm._v("2")])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "content-row row-centered" }, [
-            _c("div", { staticClass: "title-step" }, [
-              _c("h1", [_vm._v("Verifique los datos:")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "deal-info2" }, [
-              _c("p", [
-                _c("strong", [_vm._v("Verifique")]),
-                _vm._v(
-                  " se tudo está em ordem e é a oferta que\r\n                        você deseja. Se tudo estiver correto, você pode\r\n                        "
-                ),
-                _c("strong", [_vm._v("continuar")]),
-                _vm._v("*\r\n                    ")
-              ]),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticStyle: {
-                    "font-size": "13px",
-                    color: "#9a9a9a",
-                    "font-weight": "600"
-                  }
-                },
-                [
-                  _vm._v(
-                    "\r\n                        *Depois de continuar, você estará aceitando os termos e condições.\r\n                    "
-                  )
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", [
-              _c("div", [
-                _c("a", { staticClass: "button blue modal-continue" }, [
-                  _vm._v("Vou continuar")
-                ])
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "steps", attrs: { id: "step2" } }, [
-        _c("div", { staticClass: "buss-info-container" }, [
-          _c("div", { staticClass: "deal-info-metadata" }, [
-            _c("div", { staticClass: "deal-info-name" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "deal-info-box" })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "deal-info1" }, [
-          _c("p", [
-            _vm._v("Anote bem ou "),
-            _c("strong", [_vm._v("salve o lugar")]),
-            _vm._v(" onde você tem que ir depois de ter seu código")
-          ]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v("Se você tem tudo pronto, você pode "),
-            _c("strong", [_vm._v("continuar")])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", [
-          _c("div", [
-            _c("a", { staticClass: "button blue modal-continue" }, [
-              _vm._v("Vou continuar")
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "steps", attrs: { id: "step3" } }, [
-        _c("div", { staticClass: "header-insert" }, [
-          _vm._v("Em nome de quem este cupom incrível vai?")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "main-box admin-signup main-box-simple" }, [
-          _c("div", { staticClass: "nav-signup" }, [
-            _c(
-              "form",
-              {
-                attrs: {
-                  method: "POST",
-                  id: "insert-form",
-                  action:
-                    "./includes/insert-inc.php?id=<?php echo $post_url_id;?>"
-                }
-              },
-              [
-                _c("input", {
-                  attrs: {
-                    id: "first",
-                    type: "text",
-                    name: "first",
-                    placeholder: "Nome",
-                    autofocus: ""
-                  }
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  attrs: {
-                    id: "first",
-                    type: "text",
-                    name: "last",
-                    placeholder: "Apelido"
-                  }
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  attrs: {
-                    id: "first",
-                    type: "email",
-                    name: "email",
-                    placeholder: "E-mail"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "button red",
-                    attrs: {
-                      id: "btn_send",
-                      type: "submit",
-                      name: "signup-submit"
-                    }
-                  },
-                  [_vm._v("Ordem completa")]
-                ),
-                _vm._v(" "),
-                _c("span", { staticClass: "response" }),
-                _vm._v(" "),
-                _c("div", [
-                  _c("a", { staticClass: "cancelar" }, [_vm._v("Cancelar")])
-                ]),
-                _vm._v(" "),
-                _c("div", [
-                  _c("a", { staticClass: "volver" }, [_vm._v("Voltar")])
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c("canvas", {
-              staticStyle: { margin: "auto", display: "none" },
-              attrs: { id: "qr" }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div")
-        ]),
-        _vm._v(" "),
-        _c(
-          "p",
-          {
-            staticStyle: {
-              "font-size": "12px",
-              color: "#a0a0a0",
-              "font-weight": "600",
-              "text-align": "center"
-            }
-          },
-          [
-            _vm._v(
-              "Seus dados estão seguros conosco e nós mesmos não temos acesso a eles."
-            )
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "modal-footer" }, [
-        _c("div", { attrs: { id: "creditos" } }, [
-          _c("div", [
-            _c("a", { attrs: { href: "documents/terms.html" } }, [
-              _vm._v("Condições de Uso")
-            ]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "documents/privacy-policy.html" } }, [
-              _vm._v("Privacidade")
-            ]),
-            _c("a", { attrs: { href: "https://ckj.one" } }, [
-              _vm._v(" © Alvaro Gabriel Gomez")
-            ]),
-            _vm._v(". "),
-            _c("span", { attrs: { id: "rights" } }, [
-              _vm._v("TODOS OS DIREITOS RESERVADOS")
-            ])
-          ])
-        ])
-      ])
+      _c("h2", { staticClass: "titulomodal" }, [_vm._v("Complete o pedido")])
     ])
   }
 ]

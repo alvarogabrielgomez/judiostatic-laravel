@@ -196,7 +196,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', end
     .modal{
         padding-top: 1px!important;
     }
-    .modal-content{
+    #modal-content{
         width: 100%!important;
         margin: 0!important;
         height: fit-content;
@@ -234,7 +234,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', end
 }
 
 .modal-body{
-    min-height: 130vh!important;
+    min-height: 100vh!important;
     
 }
 

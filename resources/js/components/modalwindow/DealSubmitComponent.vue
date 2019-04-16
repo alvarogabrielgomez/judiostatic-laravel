@@ -7,10 +7,9 @@
           </div>
           
         <!-- AJAX content -->
-
-<div class="steps" id="step1">
-
-        <div class="animated fadeIn content-step">
+<transition name="slide">
+<div v-if="stepactual == 1" class="steps" id="step1">
+        <div class="content-step">
           <div class="content-row row-linea">
             <div class="linea"></div>
             <div class="seleccion">1</div>
@@ -18,10 +17,19 @@
           </div>
                     <div class="content-row row-centered">
                 <div class="title-step">
-                  <h1>Verifique los datos:</h1>
+                  <h1>{{ steps.step[1] }}</h1>
                 </div>
             
-                <div class="deal-info2">
+
+                <div class="deal-info">
+                    <p>
+                       <strong>PromoÃ§Ã£o de 600 gr de Brigadeiros</strong>
+                       <span>50% de descuento</span>
+                       <!-- <span style="display:none;">{{stepactual}}</span> -->
+                    </p>
+                </div>
+
+                <div class="deal-info deal-white">
                     <p>
                         <strong>Verifique</strong> se tudo está em ordem e é a oferta que
                         você deseja. Se tudo estiver correto, você pode
@@ -31,83 +39,195 @@
                         *Depois de continuar, você estará aceitando os termos e condições.
                     </p>
                 </div>
-                <div>
-                <div><a class="button blue modal-continue">Vou continuar</a></div>
+
+                <div class="next-selection">
+                <h2>{{steps.Next}}</h2>
                 </div>
                 </div>
-           
-        
-</div>
-</div>
+          </div>
 
+</div>
+</transition>
 
-<div class="steps" id="step2">
-            <div class="buss-info-container">
-                <div class="deal-info-metadata">
-                    <div class="deal-info-name"></div>
-                    <div class="deal-info-box"></div>
+<transition name="slide">
+<div v-if="stepactual == 2" class="steps" id="step2">
+
+        <div class="content-step">
+          <div class="content-row row-linea">
+            <div class="linea lineacont"></div>
+            <div class="seleccion">2</div>
+            <div class="opciones">3</div>
+          </div>
+                    <div class="content-row row-centered">
+                <div class="title-step">
+                  <h1>{{ steps.step[2] }}</h1>
                 </div>
-            </div>
-        
-            <div class="deal-info1">
-                <p>Anote bem ou <strong>salve o lugar</strong> onde você tem que ir depois de ter seu código</p>
-                <p>Se você tem tudo pronto, você pode <strong>continuar</strong></p>
-            </div>
-            <div>
-            <div><a class="button blue modal-continue">Vou continuar</a></div>
-            </div>
-</div>        
-        
-<div class="steps" id="step3">
+            
 
-<div class="header-insert">Em nome de quem este cupom incrível vai?</div>
+                <div class="deal-info">
+                    <p>
+                       <strong>PromoÃ§Ã£o de 600 gr de Brigadeiros</strong>
+                       <span>50% de descuento</span>
+                       <!-- <span style="display:none;">{{stepactual}}</span> -->
+                    </p>
+                </div>
 
-<div class="main-box admin-signup main-box-simple">
+                <div class="deal-info deal-white">
+                    <p>
+                        <strong>Verifique</strong> se tudo está em ordem e é a oferta que
+                        você deseja. Se tudo estiver correto, você pode
+                        <strong>continuar</strong>*
+                    </p>
+                    <p style="font-size: 13px; color: #9a9a9a; font-weight: 600;">
+                        *Depois de continuar, você estará aceitando os termos e condições.
+                    </p>
+                </div>
 
-<div class="nav-signup">
+                <div class="next-selection">
+                <h2>{{steps.Next}}</h2>
+                </div>
+                </div>
+          </div>
 
-<form method="POST" id="insert-form" action="./includes/insert-inc.php?id=<?php echo $post_url_id;?>" >
-    <input id="first" type="text" name="first"  placeholder="Nome" autofocus>
-    <input id="first" type="text" name="last"  placeholder="Apelido">
-    <input id="first" type="email" name="email"  placeholder="E-mail">
-    <button id="btn_send" type="submit" class="button red" name="signup-submit">Ordem completa</button>
-    <span style='' class="response"></span>
-    <div><a class="cancelar">Cancelar</a></div>
-<div><a class="volver">Voltar</a></div>
-
-</form>
-
-<canvas id="qr" style="margin: auto;display:none;"></canvas>
-
-</div> 
-<div>
-</div>      
 </div>
+</transition>
 
-<p style="font-size: 12px;color: #a0a0a0;font-weight: 600;text-align: center;">Seus dados estão seguros conosco e nós mesmos não temos acesso a eles.</p>
 
-        
+<transition name="slide">
+<div v-if="stepactual == 3" class="steps" id="step3">
+
+        <div class="content-step">
+          <div class="content-row row-linea">
+            <div class="linea lineacont"></div>
+            <div class="seleccion">3</div>
+          </div>
+                    <div class="content-row row-centered">
+                <div class="title-step">
+                  <h1>{{ steps.step[3] }}</h1>
+                </div>
+            
+
+                <div class="deal-info">
+                    <p>
+                       <strong>PromoÃ§Ã£o de 600 gr de Brigadeiros</strong>
+                       <span>50% de descuento</span>
+                       <!-- <span style="display:none;">{{stepactual}}</span> -->
+                    </p>
+                </div>
+
+                <div class="deal-info deal-white">
+                    <p>
+                        <strong>Verifique</strong> se tudo está em ordem e é a oferta que
+                        você deseja. Se tudo estiver correto, você pode
+                        <strong>continuar</strong>*
+                    </p>
+                    <p style="font-size: 13px; color: #9a9a9a; font-weight: 600;">
+                        *Depois de continuar, você estará aceitando os termos e condições.
+                    </p>
+                </div>
+                </div>
+          </div>
+  
 </div>
+</transition>
 
 
+<!-- <div class="continue-btn">
+<a class="button blue">▾</a>
+</div> -->
 
 
-
-<div class="modal-footer">
+<!-- <div class="modal-footer">
               
 <div id="creditos"><div><a href="documents/terms.html">Condições de Uso</a> <a href="documents/privacy-policy.html">Privacidade</a><a href="https://ckj.one"> © Alvaro Gabriel Gomez</a>. <span id="rights">TODOS OS DIREITOS RESERVADOS</span></div></div>
       
+</div> -->
+
+
+<div class="modal-footer">
+ <a v-on:click="stepactual += 1;" id="continue-btn" class="button footer-btn">Continuar</a>
 </div>
-
-
-
 
 
 </div> 
 </template>
 
 <style>
-.modal, #modalwindow, .modal-content{
+.steps{
+
+    position: absolute;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    height: 100%;
+    background-color: #FFF;
+}
+.slide-leave-active,
+.slide-enter-active {
+  transition: 1s;
+}
+
+.slide-enter {
+  transform: translate(0, 100%);
+}
+.slide-leave-to {
+  transform: translate(0, -100%);
+}
+
+.footer-btn{
+    border-radius: 0px;
+    width: 100%;
+    height: 56px;
+    line-height: 1.9em;
+}
+
+.footer-btn:hover{
+    background: #21a961;
+}
+.footer-btn:active{
+  	-webkit-transition: all .5s ease-in-out;
+transition: all .5s ease-in-out;
+background: #21a961;
+    box-shadow: inset 0 0 0px 1px #32d07c;
+}
+
+.next-selection{
+    z-index: 1000;
+    width: 100%;
+    position: absolute;
+    height: 50px;
+    bottom: 83px;
+
+}
+.next-selection h2{
+    line-height: 1em;
+    font-size: 1em;
+    font-family: 'Oxygen', sans-serif;
+    color: #484848;
+    text-align: left;
+    margin: 13px 1px!important;
+    font-weight: 400;
+}
+
+.continue-btn{
+    z-index: 10000;
+    position: absolute;
+    bottom: 56px;
+    left: calc(50% - 50px);
+}
+.continue-btn a{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 13px 16px;
+    text-decoration: none;
+    font-size: 24px;
+}
+.continue-btn a:hover{
+    text-decoration: none;
+}
+
+.modal, #modalwindow, #modal-content,{
 	-webkit-transition: all .5s ease-in-out;
 transition: transform .5s ease-in-out;
 
@@ -118,6 +238,12 @@ transition: transform .5s ease-in-out;
     height: 100%;
     position: absolute;
     border-right: 1px solid #c7c7c7;
+    top: 80px;
+}
+
+.lineacont{
+  height: 120%;
+  top: 0px;
 }
 
 .seleccion{
@@ -185,14 +311,7 @@ transition: transform .5s ease-in-out;
       flex: 2;
       position: relative;
 }
-.steps{
-    position: absolute;
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    height: 100%;
-    background-color: #FFF;
-}
+
 
 #step1, #step2, #step3{
     display: flex;
@@ -211,41 +330,11 @@ z-index: 10;
 }
 
 
-/* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 100000; /* Sit on top */
-    padding-top: 28px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.18);  
-    transition: all .2s ease-in-out;
-  }
+
   #modalwindow{
     transition: all .2s ease-in-out;
   }
-  /* Modal Content */
-  .modal-content {
-    transition: all .2s ease-in-out;
-    position: relative;
-    background-color: #fffefe;
-    margin: auto;
-    margin-bottom: 59px;
-    padding: 0;
-    border: 1px solid rgba(151, 37, 21, 0.45);
-    border-top: 0px;
-    width: 80%;
-    max-width: 677px;
-    min-height: 527px;
-    border-radius: 10px 10px 0px 0px;
-    box-shadow: 3px 3px 8px 1px rgba(0, 0, 0, 0.16), 1px 10px 20px 0px rgba(0, 0, 0, 0.1), 0px -3px 0px 0px #BC2D19;    animation-name: animatetop;
-    animation-duration: 0.4s;
-    overflow:hidden;
-  }
+
   
   /* Add Animation */
   @-webkit-keyframes animatetop {
@@ -307,7 +396,7 @@ z-index: 10;
   .modal-footer {
     margin-top: 5px;
     position: absolute;
-    bottom: 0px;
+    bottom: 0px!important;
     width: 100%;
     z-index: 1000;
   }
@@ -349,7 +438,10 @@ z-index: 10;
     display: flex;
 }
   
-
+.deal-submit{
+  width: 100%;
+  height: 100%;
+}
 
   .buss-info-metadata{
     padding: 0px 10PX;
@@ -373,16 +465,7 @@ z-index: 10;
     word-wrap: break-word;
   }
 
-  .deal-info1{
-    display: block;
-    max-width: 467px;
-    padding: 15px;
-    margin: auto;
-    margin-top: 18px;
-    background-color: #fbfbf2;
-    min-height: 101px;
-    overflow: auto;
-  }
+
 
   .modal-continue{
     box-sizing: border-box;
@@ -422,17 +505,20 @@ z-index: 10;
     word-wrap: break-word;
   }
 
-  .deal-info2{
+  .deal-info{
     display: block;
     max-width: 498px;
-    padding: 7px 27px;
-    margin: auto;
-    margin-top: 12px;
+    padding: 2px 23px;
     background-color: #fbfbf2;
-    min-height: 101px;
     overflow: auto;
     box-sizing: border-box;
   }
+
+.deal-white{
+background: #FFF;
+
+}
+
 
 .insert-page{
   MARGIN: AUTO;
@@ -462,50 +548,65 @@ z-index: 10;
 <script>
 
 export default {
-    created(){
+  data(){
+        return{
+            next: 2,
+            stepactual:1,
+            loading: true,
+            showing:false,
+            response: "",
+            deal:[],
+            steps: { "step":{
+                      "1":"Verifique los datos", 
+                      "2":"Ingrese su nombre", 
+                      "3":"Listo"
+                      },
+                      "Next":
+                      "Next Step"
+                    },
+                    
+        }
+  },
 
-    },
-//     data(){
-//         return{
-//             loading: true,
-//             showing:false,
-//             response: ""
-//         }
-//     },
-//     mounted(){
-//         axios
-//         .post("/dealsubmit", {
-//             data: from
-//         })
-//         .then(res =>{
-//             this.loading = false;
-//             this.response = res.data.response
-//         })
-//     },
-//     updated(){
-//     if(this.response == 'success'){
-//       this.showing = true;
-//     }else if(this.response == 'error'){
-//       this.showing = false;
-//     }
+  mounted(){
+  // Get the modal
+  var modal = document.getElementById('modalwindow');
+  
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+  
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+  var nextSelection = $(".next-selection")[0];
+  var continueBtn = $("#continue-btn")[0];
+  
+  this.steps.Next = this.steps.step[this.next];
+  },
 
-//   }
+  updated(){
+      this.next = this.stepactual+1 
+      this.steps.Next = this.steps.step[this.next];
 
+      if(this.response == 'success'){
+        this.showing = true;
+      }else if(this.response == 'error'){
+        this.showing = false;
+      }
 
-mounted(){
-        // Get the modal
-var modal = document.getElementById('modalwindow');
+  },
+  
+  computed:{
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+    stepactuallimit : function (){
+      if(this.stepactual > 3){
+        return false;
+      }
+      return true;
+    }
+  }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-},
-updated(){
-
-}
 };
+
 </script>
