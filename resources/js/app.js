@@ -26,6 +26,7 @@ Vue.component('pokemons-component', require('./components/PokemonsComponent.vue'
 Vue.component('add-pokemon-btn', require('./components/AddPokemonComponent.vue').default);
 Vue.component('dealsubmit-component', require('./components/modalwindow/DealSubmitComponent.vue').default);
 Vue.component('Spinner', require('./components/Spinner.vue').default);
+Vue.component('spinner-small', require('./components/Spinner-small.vue').default);
 Vue.component('carousel-component', require('./components/carousel/CarouselComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to

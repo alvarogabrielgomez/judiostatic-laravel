@@ -65,22 +65,37 @@
             
 
                 <div class="deal-info">
-                    <p>
-                       <strong>PromoÃ§Ã£o de 600 gr de Brigadeiros</strong>
-                       <span>50% de descuento</span>
+                    <p style="line-height: 20px;">
+                       Su cupon es para <strong>{{this.bussname}}</strong>
+                       <span></span>
                        <!-- <span style="display:none;">{{stepactual}}</span> -->
                     </p>
                 </div>
 
-                <div class="deal-info deal-white">
-                    <p>
-                        <strong>Verifique</strong> se tudo está em ordem e é a oferta que
-                        você deseja. Se tudo estiver correto, você pode
-                        <strong>continuar</strong>*
-                    </p>
-                    <p style="font-size: 13px; color: #9a9a9a; font-weight: 600;">
-                        *Depois de continuar, você estará aceitando os termos e condições.
-                    </p>
+                <div class="deal-info deal-white" style="padding: 0px;">
+
+                  <form method="POST" id="insert-form">
+
+                    <div class="group">
+                      <input id="first" type="text" name="first" required>
+                      <span class="highlight"></span>
+                      <span class="bar"></span>
+                      <label>Nombre</label>
+                    </div>
+                    <div class="group">
+                      <input id="first" type="text" name="last" required>
+                      <span class="highlight"></span>
+                      <span class="bar"></span>
+                      <label>Apellido</label>
+                    </div>
+                    <div class="group">
+                      <input id="first" type="email" name="email" required>
+                      <span class="highlight"></span>
+                      <span class="bar"></span>
+                      <label>Email</label>
+                    </div>
+
+                </form>
                 </div>
 
                 <div class="next-selection">
@@ -91,7 +106,8 @@
 
 </div>
 </transition>
-
+<!-- 
+https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 
 <transition name="slide">
 <div v-if="stepactual == 3" class="steps" id="step3">
@@ -105,26 +121,16 @@
                 <div class="title-step">
                   <h1>{{ steps.step[3] }}</h1>
                 </div>
-            
-
-                <div class="deal-info">
+            <div id="resultados">
+                <spinner-small v-show="loading"></spinner-small>
+                <div  v-if="showing" class="deal-info">
                     <p>
                        <strong>PromoÃ§Ã£o de 600 gr de Brigadeiros</strong>
                        <span>50% de descuento</span>
                        <!-- <span style="display:none;">{{stepactual}}</span> -->
                     </p>
                 </div>
-
-                <div class="deal-info deal-white">
-                    <p>
-                        <strong>Verifique</strong> se tudo está em ordem e é a oferta que
-                        você deseja. Se tudo estiver correto, você pode
-                        <strong>continuar</strong>*
-                    </p>
-                    <p style="font-size: 13px; color: #9a9a9a; font-weight: 600;">
-                        *Depois de continuar, você estará aceitando os termos e condições.
-                    </p>
-                </div>
+            </div>
                 </div>
           </div>
   
@@ -145,7 +151,8 @@
 
 
 <div class="modal-footer">
- <a v-on:click="passToNext" id="continue-btn" class="button footer-btn">Continuar</a>
+ <a v-if="botoncontinuar" v-on:click="passToNext" id="continue-btn" class="button footer-btn">Continuar</a>
+  <button type="submit" form="insert-form" v-if="botonsubmit" id="continue-btn" class="button footer-btn">Submit</button>
 </div>
 
 
@@ -153,6 +160,108 @@
 </template>
 
 <style>
+#resultados{
+    height: 100%;
+    max-height: 300px;
+}
+/* form starting stylings ------------------------------- */
+.group { 
+  position:relative; 
+  margin-bottom:27px; 
+}
+
+#insert-form{
+display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    flex-direction: column;
+    padding: 26px 0px 8px 1px;
+}
+
+input{
+  font-size:15px;
+  padding:10px 10px 10px 7px;
+  display:block;
+  width:285px;
+  border:none;
+    border-bottom: 1px solid rgb(210, 210, 210);
+}
+input:focus { outline:none; }
+/* LABEL ======================================= */
+label 				 {
+  color:#999; 
+  font-size:15px;
+  font-weight:normal;
+  position:absolute;
+  pointer-events:none;
+  left:5px;
+  top:9px;
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+/* active state */
+input:focus ~ label, input:valid ~ label {
+  top:-20px;
+  font-size:13px;
+  color:#5264AE;
+}
+
+/* BOTTOM BARS ================================= */
+.bar 	{ position:relative; display:block; width:300px; }
+.bar:before, .bar:after 	{
+  content:'';
+  height:2px; 
+  width:0;
+  bottom:1px; 
+  position:absolute;
+  background:#5264AE; 
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+.bar:before {
+  left:50%;
+}
+.bar:after {
+  right:50%; 
+}
+/* active state */
+input:focus ~ .bar:before, input:focus ~ .bar:after {
+  width:50%;
+}
+/* HIGHLIGHTER ================================== */
+.highlight {
+  position:absolute;
+  height:60%; 
+  width:100px; 
+  border-radius: 2px;
+  top:25%; 
+  left:0;
+  pointer-events:none;
+  opacity:0.5;
+}
+/* active state */
+input:focus ~ .highlight {
+  -webkit-animation:inputHighlighter 0.3s ease;
+  -moz-animation:inputHighlighter 0.3s ease;
+  animation:inputHighlighter 0.3s ease;
+}
+/* ANIMATIONS ================ */
+@-webkit-keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+@-moz-keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+@keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+
 .steps{
 
     position: absolute;
@@ -555,6 +664,8 @@ export default {
             stepactual:1,
             loading: true,
             showing:false,
+            botoncontinuar:true,
+            botonsubmit:false,
             response: "",
             deal:{"title":this.title},
             steps: { "step":{
@@ -570,7 +681,6 @@ export default {
   },
   mounted(){
 
-  
   // Get the modal
   var modal = document.getElementById('modalwindow');
   
@@ -581,14 +691,6 @@ export default {
   span.onclick = function() {
     modal.style.display = "none";
   }
-
-// window.onclick = function(event) {
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//     this.stepactual = 1;
-//   }
-// }
-
 
   var nextSelection = $(".next-selection")[0];
   var continueBtn = $("#continue-btn")[0];
@@ -601,11 +703,19 @@ export default {
 
       this.next = this.stepactual+1 
       this.steps.Next = this.steps.step[this.next];
+      if(this.stepactual == 2){
+        this.botoncontinuar = false;
+        this.botonsubmit = true;
+      }
 
       if(this.response == 'success'){
         this.showing = true;
+        this.loading = false;
       }else if(this.response == 'error'){
         this.showing = false;
+        this.loading = false;
+      }else if(this.response != 'success' || this.response != 'error'){
+        this.loading = true;
       }
 
   },
@@ -622,6 +732,24 @@ export default {
   methods:{
     passToNext: function(){
       this.stepactual += 1;
+    },
+
+    formSubmit(e) {
+      e.preventDefault();
+      passToNext;
+      let currentObj = this;
+      this.axios.get('/dealsubmit', {
+            first: this.first,
+            last: this.last,
+            email: this.email
+      })
+      .then(function (response) {
+            currentObj.output = response.data;
+
+      })
+      .catch(function (error) {
+            currentObj.output = error;
+      });
     }
   }
 
