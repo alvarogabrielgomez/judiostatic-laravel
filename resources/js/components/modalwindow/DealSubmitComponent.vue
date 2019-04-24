@@ -72,7 +72,7 @@
                     </p>
                 </div>
 
-                <div class="deal-info deal-white" style="padding: 0px;">
+                <div class="deal-info deal-white" style="padding: 0px; overflow: hidden;">
 
                   <form method="POST" id="insert-form">
 
@@ -94,7 +94,11 @@
                       <span class="bar"></span>
                       <label>Email</label>
                     </div>
-
+                    <transition name="fade" mode="out-in">
+                    <spinner-small v-if="loadingMss"></spinner-small>
+                    <p class="alert alert-danger" v-if = hasError>{{responseContent}}</p>
+                    <p class="alert alert-normal" v-if = hasResponse>{{responseContent}}</p>
+                    </transition>
                 </form>
                 </div>
 
@@ -122,7 +126,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                   <h1>{{ steps.step[3] }}</h1>
                 </div>
             <div id="resultados">
-                <spinner-small v-show="loading"></spinner-small>
+                <spinner-small size="48" v-show="loading"></spinner-small>
                 <div  v-if="showing" class="deal-info">
                     <p>
                        <strong>PromoÃ§Ã£o de 600 gr de Brigadeiros</strong>
@@ -151,8 +155,11 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 
 
 <div class="modal-footer">
+<transition name="fade" >
  <a v-if="botoncontinuar" v-on:click="passToNext" id="continue-btn" class="button footer-btn">Continuar</a>
-  <button type="submit" form="insert-form" v-if="botonsubmit" id="continue-btn" class="button footer-btn">Submit</button>
+<!-- <button type="submit" form="insert-form" v-if="botonsubmit" id="continue-btn" @click.prevent="formSubmit()" class="button footer-btn">Submit</button> -->
+<button v-if="botonsubmit" id="continue-btn" @click.prevent="formSubmit()" class="button footer-btn">MALDITO MADURO</button>
+</transition>
 </div>
 
 
@@ -160,6 +167,30 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 </template>
 
 <style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .26s!important;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+.alert{
+    position: relative;
+    top: -5px;
+    float: right;
+    margin: auto;
+    background-color: transparent;
+    padding: 5px 17px;
+ 
+}
+.alert-normal {
+border-bottom: 2px solid #22ba6a;
+   border-bottom: 2px solid #22ba6a;
+}
+
+.alert-danger{
+  color:#ff3d61;
+     border-bottom: 2px solid #e61e1e;
+}
 #resultados{
     height: 100%;
     max-height: 300px;
@@ -284,10 +315,12 @@ input:focus ~ .highlight {
 }
 
 .footer-btn{
+    position: absolute;
     border-radius: 0px;
     width: 100%;
     height: 56px;
     line-height: 1.9em;
+    bottom: 0px;
 }
 
 .footer-btn:hover{
@@ -318,23 +351,6 @@ background: #21a961;
     font-weight: 400;
 }
 
-.continue-btn{
-    z-index: 10000;
-    position: absolute;
-    bottom: 56px;
-    left: calc(50% - 50px);
-}
-.continue-btn a{
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    padding: 13px 16px;
-    text-decoration: none;
-    font-size: 24px;
-}
-.continue-btn a:hover{
-    text-decoration: none;
-}
 
 .modal, #modalwindow, #modal-content,{
 	-webkit-transition: all .5s ease-in-out;
@@ -508,6 +524,8 @@ z-index: 10;
     bottom: 0px!important;
     width: 100%;
     z-index: 1000;
+    height: 56px;
+    background:#fff;
   }
 
   .modal-footer div{
@@ -615,6 +633,7 @@ z-index: 10;
   }
 
   .deal-info{
+  
     display: block;
     max-width: 498px;
     padding: 2px 23px;
@@ -660,13 +679,16 @@ export default {
   props: ["title", "descuento", "bussname", "user"],
   data(){
         return{
+            spinnersize:48,
             next: 2,
             stepactual:1,
-            loading: true,
+            loading: false,
+            loadingMss: false,
             showing:false,
             botoncontinuar:true,
             botonsubmit:false,
-            response: "",
+            responseMss: "",
+            responseContent: "",
             deal:{"title":this.title},
             steps: { "step":{
                       "1":"Verifique los datos", 
@@ -676,6 +698,11 @@ export default {
                       "Next":
                       "Next Step"
                     },
+            userdata:[],
+            hasError:false,
+            hasResponse:false,
+            newUser:{'first':'', 'last':'', 'email':''},
+
                     
         }
   },
@@ -706,15 +733,18 @@ export default {
       if(this.stepactual == 2){
         this.botoncontinuar = false;
         this.botonsubmit = true;
+      }else{
+        this.botoncontinuar = true;
+        this.botonsubmit = false;
       }
 
-      if(this.response == 'success'){
+      if(this.responseMss == 'success'){
         this.showing = true;
         this.loading = false;
-      }else if(this.response == 'error'){
+      }else if(this.responseMss == 'error'){
         this.showing = false;
         this.loading = false;
-      }else if(this.response != 'success' || this.response != 'error'){
+      }else if(this.responseMss != 'success' || this.responseMss != 'error'){
         this.loading = true;
       }
 
@@ -734,23 +764,71 @@ export default {
       this.stepactual += 1;
     },
 
-    formSubmit(e) {
-      e.preventDefault();
-      passToNext;
-      let currentObj = this;
-      this.axios.get('/dealsubmit', {
-            first: this.first,
-            last: this.last,
-            email: this.email
-      })
-      .then(function (response) {
-            currentObj.output = response.data;
+    formSubmit: function formSubmit(){
+      const form = document.getElementById('insert-form');
+      const firstInput  = form.querySelector('input[name=first]');
+      const lastInput  = form.querySelector('input[name=last]');
+      const emailInput  = form.querySelector('input[name=email]');
+      this.newUser = {'first':firstInput.value, 'last':lastInput.value, 'email':emailInput.value};
+      this.loadingMss = true;
+      this.hasResponse = false;
+      var input = this.newUser;
+     
+      console.log(input);
 
-      })
-      .catch(function (error) {
-            currentObj.output = error;
-      });
-    }
+      if(input['first'] == '' || input['last'] == '' || input['email'] == ''){
+          this.hasError = true;
+          this.hasResponse = false;
+          this.responseContent = "Llene todos los campos"
+           this.loadingMss = false
+      }else{
+        this.hasError = false;
+        axios.post('/dealsubmit', input) 
+        .then((response) => {
+          this.hasResponse = true;
+          this.loadingMss = false
+          
+          if(response.data.response == 'error'){
+            this.hasError = true;
+            this.responseMss = "error";
+            this.responseContent = response.data.responseContent;
+          }else if(response.data.response == 'success'){
+            this.hasError = false;
+            this.responseMss = "success";
+            this.responseContent = response.data.responseContent;
+            this.passToNext();
+            this.getVueItems();
+          }
+
+
+
+
+        })
+        .catch((error) => {
+          this.hasError = true;
+          this.responseContent = error;
+          this.loadingMss = false
+        })
+
+      }
+    },
+
+    // formSubmit: function formSubmit(){
+      
+    //   let currentObj = this;
+    //   this.axios.get('/dealsubmit', {
+    //         first: this.first,
+    //         last: this.last,
+    //         email: this.email
+    //   })
+    //   .then(function (response) {
+    //         currentObj.output = response.data;
+    //         passToNext();
+    //   })
+    //   .catch(function (error) {
+    //         currentObj.output = error;
+    //   });
+    // }
   }
 
 

@@ -35,7 +35,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => judiostatic\User::class,
+        'model' => judiostatic\Client::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
         'webhook' => [

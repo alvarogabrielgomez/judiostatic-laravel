@@ -7,7 +7,16 @@
 
 <script>
 export default {
-    name: 'spinner'
+    name: 'spinner-small',
+    props: ['size'],
+    data(){
+      return{
+        sizing: this.size+"px"
+      };
+    },
+    mounted(){
+    $(".loader-small")[0].style.fontSize = this.sizing+'!important';
+    }
 }
 </script>
 
@@ -19,7 +28,7 @@ export default {
   height: 10em;
 }
 .loader-small-container{
-    display: flex!important;
+    display: flex;
     padding-top: 0;
     height: 100%;
 }

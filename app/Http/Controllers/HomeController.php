@@ -11,18 +11,6 @@ class HomeController extends Controller
         return view ('home');
     }
 
-    public function carousel(Request $request)
-    {
-
-            return response()->json([
-            ['id' => 1, 'title' => 'Lorem', 'description' => 'Desc', 'buss_name' => 'Tumamaeshombre'],
-            ['id' => 2, 'title' => 'Lorem', 'description' => 'Desc', 'buss_name' => 'Tumamaeshombre'],
-            ['id' => 3, 'title' => 'Lorem', 'description' => 'Desc', 'buss_name' => 'Tumamaeshombre'],
-            ['id' => 4, 'title' => 'Lorem', 'description' => 'Desc', 'buss_name' => 'Tumamaeshombre'],
-            ]);
-        
-
-    }
 }
 
     // public function __construct()
