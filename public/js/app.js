@@ -2727,6 +2727,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["title", "descuento", "bussname", "user"],
   data: function data() {
@@ -2739,7 +2780,7 @@ __webpack_require__.r(__webpack_exports__);
       showing: false,
       botoncontinuar: true,
       botonsubmit: false,
-      responseMss: "",
+      responseMss: "success",
       responseContent: "",
       deal: {
         "title": this.title
@@ -2748,17 +2789,19 @@ __webpack_require__.r(__webpack_exports__);
         "step": {
           "1": "Verifique los datos",
           "2": "Ingrese su nombre",
-          "3": "Listo"
+          "3": "Listo",
+          "4": "Inicia Sesion"
         },
         "Next": "Next Step"
       },
-      userdata: [],
+      userdata: {},
+      resume: false,
       hasError: false,
       hasResponse: false,
       newUser: {
-        'first': '',
-        'last': '',
-        'email': ''
+        'client_first': '',
+        'client_last': '',
+        'client_email': ''
       }
     };
   },
@@ -2794,7 +2837,7 @@ __webpack_require__.r(__webpack_exports__);
     } else if (this.responseMss == 'error') {
       this.showing = false;
       this.loading = false;
-    } else if (this.responseMss != 'success' || this.responseMss != 'error') {
+    } else if (this.responseMss != 'success' || this.responseMss != 'error' || this.responseMss != 'successNoSession') {
       this.loading = true;
     }
   },
@@ -2811,24 +2854,27 @@ __webpack_require__.r(__webpack_exports__);
     passToNext: function passToNext() {
       this.stepactual += 1;
     },
+    passToPWD: function passToPWD() {
+      this.stepactual = 4;
+    },
     formSubmit: function formSubmit() {
       var _this = this;
 
       var form = document.getElementById('insert-form');
-      var firstInput = form.querySelector('input[name=first]');
-      var lastInput = form.querySelector('input[name=last]');
-      var emailInput = form.querySelector('input[name=email]');
+      var firstInput = form.querySelector('input[name=client_first]');
+      var lastInput = form.querySelector('input[name=client_last]');
+      var emailInput = form.querySelector('input[name=client_email]');
       this.newUser = {
-        'first': firstInput.value,
-        'last': lastInput.value,
-        'email': emailInput.value
+        'client_first': firstInput.value,
+        'client_last': lastInput.value,
+        'client_email': emailInput.value
       };
       this.loadingMss = true;
       this.hasResponse = false;
       var input = this.newUser;
       console.log(input);
 
-      if (input['first'] == '' || input['last'] == '' || input['email'] == '') {
+      if (input['client_first'] == '' || input['client_last'] == '' || input['client_email'] == '') {
         this.hasError = true;
         this.hasResponse = false;
         this.responseContent = "Llene todos los campos";
@@ -2838,6 +2884,7 @@ __webpack_require__.r(__webpack_exports__);
         axios.post('/dealsubmit', input).then(function (response) {
           _this.hasResponse = true;
           _this.loadingMss = false;
+          _this.newUser = {};
 
           if (response.data.response == 'error') {
             _this.hasError = true;
@@ -2851,6 +2898,18 @@ __webpack_require__.r(__webpack_exports__);
             _this.passToNext();
 
             _this.getVueItems();
+          } else if (response.data.response == 'successNoSession') {
+            _this.hasError = false;
+            _this.responseMss = "success";
+            _this.responseContent = response.data.responseContent;
+
+            _this.passToPWD();
+
+            _this.userdata = response.data;
+            _this.resume = true;
+            _this.showing = true;
+            _this.loading = false;
+            console.log(userdata);
           }
         }).catch(function (error) {
           _this.hasError = true;
@@ -2967,7 +3026,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.fade-enter-active, .fade-leave-active {\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n.alert{\r\n    position: relative;\r\n    top: -5px;\r\n    float: right;\r\n    margin: auto;\r\n    background-color: transparent;\r\n    padding: 5px 17px;\n}\n.alert-normal {\r\nborder-bottom: 2px solid #22ba6a;\r\n   border-bottom: 2px solid #22ba6a;\n}\n.alert-danger{\r\n  color:#ff3d61;\r\n     border-bottom: 2px solid #e61e1e;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\r\n/* form starting stylings ------------------------------- */\n.group { \r\n  position:relative; \r\n  margin-bottom:27px;\n}\n#insert-form{\r\ndisplay: flex;\r\n    width: 100%;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    flex-direction: column;\r\n    padding: 26px 0px 8px 1px;\n}\ninput{\r\n  font-size:15px;\r\n  padding:10px 10px 10px 7px;\r\n  display:block;\r\n  width:285px;\r\n  border:none;\r\n    border-bottom: 1px solid rgb(210, 210, 210);\n}\ninput:focus { outline:none;\n}\r\n/* LABEL ======================================= */\nlabel \t\t\t\t {\r\n  color:#999; \r\n  font-size:15px;\r\n  font-weight:normal;\r\n  position:absolute;\r\n  pointer-events:none;\r\n  left:5px;\r\n  top:9px;\r\n  transition:0.2s ease all; \r\n  -moz-transition:0.2s ease all; \r\n  -webkit-transition:0.2s ease all;\n}\r\n/* active state */\ninput:focus ~ label, input:valid ~ label {\r\n  top:-20px;\r\n  font-size:13px;\r\n  color:#5264AE;\n}\r\n\r\n/* BOTTOM BARS ================================= */\n.bar \t{ position:relative; display:block; width:300px;\n}\n.bar:before, .bar:after \t{\r\n  content:'';\r\n  height:2px; \r\n  width:0;\r\n  bottom:1px; \r\n  position:absolute;\r\n  background:#5264AE; \r\n  transition:0.2s ease all; \r\n  -moz-transition:0.2s ease all; \r\n  -webkit-transition:0.2s ease all;\n}\n.bar:before {\r\n  left:50%;\n}\n.bar:after {\r\n  right:50%;\n}\r\n/* active state */\ninput:focus ~ .bar:before, input:focus ~ .bar:after {\r\n  width:50%;\n}\r\n/* HIGHLIGHTER ================================== */\n.highlight {\r\n  position:absolute;\r\n  height:60%; \r\n  width:100px; \r\n  border-radius: 2px;\r\n  top:25%; \r\n  left:0;\r\n  pointer-events:none;\r\n  opacity:0.5;\n}\r\n/* active state */\ninput:focus ~ .highlight {\r\n  -webkit-animation:inputHighlighter 0.3s ease;\r\n  animation:inputHighlighter 0.3s ease;\n}\r\n/* ANIMATIONS ================ */\n@-webkit-keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n@keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content,{\r\ntransition: -webkit-transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out, -webkit-transform .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    margin-top: 71px;\r\n    margin-left: 49px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n    vertical-align: middle;\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 85px;\r\n    margin-left: 49px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n    vertical-align: middle;\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    flex: 10;\n}\n.row-centered{\r\n    display: flex;\r\n    flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: center;\n}\n.row-linea{\r\n      flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3{\r\n    display: flex;\r\n    flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-body {\r\n  \r\n    overflow: auto;\r\n    max-height: 523px;\r\n    \r\n    min-height: 355px;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  align-items: center;\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n#continuar-anterior{\r\n    position: absolute;\r\n    right: 13px;\r\n    bottom: 68px;\r\n    font-size: 12px;\n}\n#continuar-anterior a{\r\n      color: #ba2d2b;\n}\n.fade-enter-active, .fade-leave-active {\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n.alert{\r\n    position: relative;\r\n    top: -5px;\r\n    float: right;\r\n    margin: auto;\r\n    background-color: transparent;\r\n    padding: 5px 17px;\n}\n.alert-normal {\r\nborder-bottom: 2px solid #22ba6a;\r\n   border-bottom: 2px solid #22ba6a;\n}\n.alert-danger{\r\n  color:#ff3d61;\r\n     border-bottom: 2px solid #e61e1e;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\r\n/* form starting stylings ------------------------------- */\n.group { \r\n  position:relative; \r\n  margin-bottom:27px;\n}\n#insert-form{\r\ndisplay: flex;\r\n    width: 100%;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    flex-direction: column;\r\n    padding: 26px 0px 8px 1px;\n}\ninput{\r\n  font-size:15px;\r\n  padding:10px 10px 10px 7px;\r\n  display:block;\r\n  width:285px;\r\n  border:none;\r\n    border-bottom: 1px solid rgb(210, 210, 210);\n}\ninput:focus { outline:none;\n}\r\n/* LABEL ======================================= */\nlabel \t\t\t\t {\r\n  color:#999; \r\n  font-size:15px;\r\n  font-weight:normal;\r\n  position:absolute;\r\n  pointer-events:none;\r\n  left:5px;\r\n  top:9px;\r\n  transition:0.2s ease all; \r\n  -moz-transition:0.2s ease all; \r\n  -webkit-transition:0.2s ease all;\n}\r\n/* active state */\ninput:focus ~ label, input:valid ~ label {\r\n  top:-20px;\r\n  font-size:13px;\r\n  color:#5264AE;\n}\r\n\r\n/* BOTTOM BARS ================================= */\n.bar \t{ position:relative; display:block; width:300px;\n}\n.bar:before, .bar:after \t{\r\n  content:'';\r\n  height:2px; \r\n  width:0;\r\n  bottom:1px; \r\n  position:absolute;\r\n  background:#5264AE; \r\n  transition:0.2s ease all; \r\n  -moz-transition:0.2s ease all; \r\n  -webkit-transition:0.2s ease all;\n}\n.bar:before {\r\n  left:50%;\n}\n.bar:after {\r\n  right:50%;\n}\r\n/* active state */\ninput:focus ~ .bar:before, input:focus ~ .bar:after {\r\n  width:50%;\n}\r\n/* HIGHLIGHTER ================================== */\n.highlight {\r\n  position:absolute;\r\n  height:60%; \r\n  width:100px; \r\n  border-radius: 2px;\r\n  top:25%; \r\n  left:0;\r\n  pointer-events:none;\r\n  opacity:0.5;\n}\r\n/* active state */\ninput:focus ~ .highlight {\r\n  -webkit-animation:inputHighlighter 0.3s ease;\r\n  animation:inputHighlighter 0.3s ease;\n}\r\n/* ANIMATIONS ================ */\n@-webkit-keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n@keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content,{\r\ntransition: -webkit-transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out, -webkit-transform .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    margin-top: 71px;\r\n    margin-left: 49px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n    vertical-align: middle;\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 85px;\r\n    margin-left: 49px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n    vertical-align: middle;\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    flex: 10;\n}\n.row-centered{\r\n    display: flex;\r\n    flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: center;\n}\n.row-linea{\r\n      flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3{\r\n    display: flex;\r\n    flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-body {\r\n  \r\n    overflow: auto;\r\n    max-height: 523px;\r\n    \r\n    min-height: 355px;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  align-items: center;\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -4609,7 +4668,9 @@ var render = function() {
           staticClass: "close",
           on: {
             click: function($event) {
-              _vm.stepactual = 1
+              ;(_vm.stepactual = 1),
+                (_vm.hasError = false),
+                (_vm.hasResponse = false)
             }
           }
         }),
@@ -4699,12 +4760,29 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "deal-info" }, [
                     _c("p", { staticStyle: { "line-height": "20px" } }, [
-                      _vm._v("\r\n                       Su cupon es para "),
+                      _vm._v("Su cupon es para "),
                       _c("strong", [_vm._v(_vm._s(this.bussname))]),
                       _vm._v(" "),
                       _c("span")
                     ])
                   ]),
+                  _vm._v(" "),
+                  _vm.resume
+                    ? _c("div", { attrs: { id: "continuar-anterior" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticStyle: { cursor: "pointer" },
+                            on: {
+                              click: function($event) {
+                                _vm.stepactual = 4
+                              }
+                            }
+                          },
+                          [_vm._v("Continuar Anterior Operacion.")]
+                        )
+                      ])
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -4720,9 +4798,9 @@ var render = function() {
                           _c("div", { staticClass: "group" }, [
                             _c("input", {
                               attrs: {
-                                id: "first",
+                                id: "clientfirst",
                                 type: "text",
-                                name: "first",
+                                name: "client_first",
                                 required: ""
                               }
                             }),
@@ -4737,9 +4815,9 @@ var render = function() {
                           _c("div", { staticClass: "group" }, [
                             _c("input", {
                               attrs: {
-                                id: "first",
+                                id: "clientlast",
                                 type: "text",
-                                name: "last",
+                                name: "client_last",
                                 required: ""
                               }
                             }),
@@ -4754,9 +4832,9 @@ var render = function() {
                           _c("div", { staticClass: "group" }, [
                             _c("input", {
                               attrs: {
-                                id: "first",
+                                id: "clientemail",
                                 type: "email",
-                                name: "email",
+                                name: "client_email",
                                 required: ""
                               }
                             }),
@@ -4846,6 +4924,59 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("span", [_vm._v("50% de descuento")])
+                            ])
+                          ])
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ])
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "slide" } }, [
+        _vm.stepactual == 4
+          ? _c("div", { staticClass: "steps", attrs: { id: "step3" } }, [
+              _c("div", { staticClass: "content-step" }, [
+                _c("div", { staticClass: "content-row row-linea" }, [
+                  _c("div", { staticClass: "linea lineacont" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "seleccion" }, [_vm._v("!")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content-row row-centered" }, [
+                  _c("div", { staticClass: "title-step" }, [
+                    _c("h1", [_vm._v(_vm._s(_vm.steps.step[4]))])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { attrs: { id: "resultados" } },
+                    [
+                      _c("spinner-small", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.loading,
+                            expression: "loading"
+                          }
+                        ],
+                        attrs: { size: "48" }
+                      }),
+                      _vm._v(" "),
+                      _vm.showing
+                        ? _c("div", { staticClass: "deal-info" }, [
+                            _c("p", [
+                              _c("strong", [
+                                _vm._v(
+                                  "Bienvenido de nuevo, " +
+                                    _vm._s(_vm.userdata.client_first) +
+                                    "!"
+                                )
+                              ])
                             ])
                           ])
                         : _vm._e()

@@ -2,7 +2,7 @@
   
 <div id="dealsubmit">
               <div class="modal-header">
-            <span v-on:click="stepactual = 1" class="close"></span>
+            <span v-on:click="stepactual = 1, hasError = false, hasResponse = false" class="close"></span>
             <h2 class = "titulomodal">Complete o pedido</h2>
           </div>
           
@@ -65,11 +65,14 @@
             
 
                 <div class="deal-info">
-                    <p style="line-height: 20px;">
-                       Su cupon es para <strong>{{this.bussname}}</strong>
+                    <p style="line-height: 20px;">Su cupon es para <strong>{{this.bussname}}</strong>
                        <span></span>
-                       <!-- <span style="display:none;">{{stepactual}}</span> -->
+                       
                     </p>
+                </div>
+
+                <div v-if="resume" id="continuar-anterior">
+                  <a style="cursor:pointer;" v-on:click="stepactual = 4" >Continuar Anterior Operacion.</a>
                 </div>
 
                 <div class="deal-info deal-white" style="padding: 0px; overflow: hidden;">
@@ -77,19 +80,19 @@
                   <form method="POST" id="insert-form">
 
                     <div class="group">
-                      <input id="first" type="text" name="first" required>
+                      <input id="clientfirst" type="text" name="client_first" required>
                       <span class="highlight"></span>
                       <span class="bar"></span>
                       <label>Nombre</label>
                     </div>
                     <div class="group">
-                      <input id="first" type="text" name="last" required>
+                      <input id="clientlast" type="text" name="client_last" required>
                       <span class="highlight"></span>
                       <span class="bar"></span>
                       <label>Apellido</label>
                     </div>
                     <div class="group">
-                      <input id="first" type="email" name="email" required>
+                      <input id="clientemail" type="email" name="client_email" required>
                       <span class="highlight"></span>
                       <span class="bar"></span>
                       <label>Email</label>
@@ -127,11 +130,39 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                 </div>
             <div id="resultados">
                 <spinner-small size="48" v-show="loading"></spinner-small>
-                <div  v-if="showing" class="deal-info">
+                <div v-if="showing" class="deal-info">
                     <p>
                        <strong>PromoÃ§Ã£o de 600 gr de Brigadeiros</strong>
                        <span>50% de descuento</span>
                        <!-- <span style="display:none;">{{stepactual}}</span> -->
+                    </p>
+                </div>
+            </div>
+                </div>
+          </div>
+  
+</div>
+</transition>
+
+
+<transition name="slide">
+<div v-if="stepactual == 4" class="steps" id="step3">
+
+        <div class="content-step">
+          <div class="content-row row-linea">
+            <div class="linea lineacont"></div>
+            <div class="seleccion">!</div>
+          </div>
+                    <div class="content-row row-centered">
+                <div class="title-step">
+                  <h1>{{ steps.step[4] }}</h1>
+                </div>
+            <div id="resultados">
+                <spinner-small size="48" v-show="loading"></spinner-small>
+                <div v-if="showing" class="deal-info">
+                    <p>
+                       <strong>Bienvenido de nuevo, {{userdata.client_first}}!</strong>
+
                     </p>
                 </div>
             </div>
@@ -167,6 +198,16 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 </template>
 
 <style>
+#continuar-anterior{
+    position: absolute;
+    right: 13px;
+    bottom: 68px;
+    font-size: 12px;
+}
+#continuar-anterior a{
+      color: #ba2d2b;
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity .26s!important;
 }
@@ -687,21 +728,23 @@ export default {
             showing:false,
             botoncontinuar:true,
             botonsubmit:false,
-            responseMss: "",
+            responseMss: "success",
             responseContent: "",
             deal:{"title":this.title},
             steps: { "step":{
                       "1":"Verifique los datos", 
                       "2":"Ingrese su nombre", 
-                      "3":"Listo"
+                      "3":"Listo",
+                      "4":"Inicia Sesion"
                       },
                       "Next":
                       "Next Step"
                     },
-            userdata:[],
+            userdata:{},
+            resume:false,
             hasError:false,
             hasResponse:false,
-            newUser:{'first':'', 'last':'', 'email':''},
+            newUser:{'client_first':'', 'client_last':'', 'client_email':''},
 
                     
         }
@@ -744,7 +787,7 @@ export default {
       }else if(this.responseMss == 'error'){
         this.showing = false;
         this.loading = false;
-      }else if(this.responseMss != 'success' || this.responseMss != 'error'){
+      }else if(this.responseMss != 'success' || this.responseMss != 'error' || this.responseMss != 'successNoSession'){
         this.loading = true;
       }
 
@@ -763,20 +806,23 @@ export default {
     passToNext: function(){
       this.stepactual += 1;
     },
+    passToPWD: function(){
+      this.stepactual = 4;
+    },
 
     formSubmit: function formSubmit(){
       const form = document.getElementById('insert-form');
-      const firstInput  = form.querySelector('input[name=first]');
-      const lastInput  = form.querySelector('input[name=last]');
-      const emailInput  = form.querySelector('input[name=email]');
-      this.newUser = {'first':firstInput.value, 'last':lastInput.value, 'email':emailInput.value};
+      const firstInput  = form.querySelector('input[name=client_first]');
+      const lastInput  = form.querySelector('input[name=client_last]');
+      const emailInput  = form.querySelector('input[name=client_email]');
+      this.newUser = {'client_first':firstInput.value, 'client_last':lastInput.value, 'client_email':emailInput.value};
       this.loadingMss = true;
       this.hasResponse = false;
       var input = this.newUser;
      
       console.log(input);
 
-      if(input['first'] == '' || input['last'] == '' || input['email'] == ''){
+      if(input['client_first'] == '' || input['client_last'] == '' || input['client_email'] == ''){
           this.hasError = true;
           this.hasResponse = false;
           this.responseContent = "Llene todos los campos"
@@ -787,7 +833,7 @@ export default {
         .then((response) => {
           this.hasResponse = true;
           this.loadingMss = false
-          
+          this.newUser = {};
           if(response.data.response == 'error'){
             this.hasError = true;
             this.responseMss = "error";
@@ -798,11 +844,17 @@ export default {
             this.responseContent = response.data.responseContent;
             this.passToNext();
             this.getVueItems();
+          }else if(response.data.response == 'successNoSession'){
+            this.hasError = false;
+            this.responseMss = "success";
+            this.responseContent = response.data.responseContent;
+            this.passToPWD();
+            this.userdata = response.data
+            this.resume = true;
+            this.showing = true;
+            this.loading = false;
+            console.log(userdata);
           }
-
-
-
-
         })
         .catch((error) => {
           this.hasError = true;

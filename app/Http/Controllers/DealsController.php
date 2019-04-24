@@ -51,33 +51,39 @@ class DealsController extends Controller
 
     public function dealsubmit(Request $request){
     //Primero se Revisa si existe el usuario
-        $clients = Client::where('client_email', '=', $request->email)
+        $clients = Client::where('client_email', '=', $request->client_email)
         ->first();
+        $client_first = "";
+        $client_last = "";
         // El usuario si existia en la tabla clients
         if($clients != null){
+            
             if($clients->active != 1){
                 // Si el usuario no esta activo
                 $response = "error";
                 $responseContent = "Usuário Banido ou desativado";
             }else if($clients->active == 1){
                 // Si el usuario esta activo
+                $client_first = $clients->client_first;
+                $client_last = $clients->client_last;
+
                 $this->validate($request, [
                     'client_email' =>  'required|email',
-                    // 'password' => 'required|alphaNum|min:3'
+                   // 'client_pwd' => 'required|min:3'
                 ]);
-                $user_data = array(
-                    'client_email' => $request->email
-                );
-                if(Auth::attempt($user_data)){
-
+                //Aca se tiene que revisar si esta en sesion
+                if(Auth::check()){
+                    $response = "success";
+                    $responseContent = "Esta en Session";     
                 }else{
-                //No se pudo logear
-                $response = "error";
-                $responseContent = "No se pudo hacer login";
+                    $response = "successNoSession";
+                    $responseContent = "No esta en Session"; 
                 }
             }
         }else{
           // El usuario no existia en la tabla clients 
+          $response = "error";
+          $responseContent = "Usuario No existe";
         }
 
     //   $clients = new Clients();
@@ -85,20 +91,24 @@ class DealsController extends Controller
     //   $clients->client_last = $request->last;
     //   $clients->client_email = $request->email;
 
-    return response()->json(array('responseContent' => $responseContent, 'response' => $response));
+    return response()->json(array('responseContent' => $responseContent, 'response' => $response, 'client_first' => $client_first, 'client_last' => $client_last));
     }
     
 
     function checklogin(Request $request){
-        $this->validate($request, [
-            'email' =>  'required|email',
-            // 'password' => 'required|alphaNum|min:3'
-        ]);
         $user_data = array(
-            'email' => $request->get('email'),
-            'first' => $request->get('first'),
-            'last' => $request->get('last')
+            'client_email' => $request->client_email, 
+            'client_pwd' => $request->client_pwd
         );
+        
+        if(Auth::attempt($user_data)){
+
+        }else{
+        //No se pudo logear
+        $response = "error";
+        $responseContent = "No se pudo hacer login";
+        }
+        return response()->json(array('responseContent' => $responseContent, 'response' => $response));
     }
 
     public function update(Request $request, $slug)
