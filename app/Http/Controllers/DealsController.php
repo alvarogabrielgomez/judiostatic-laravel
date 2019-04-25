@@ -5,7 +5,7 @@ namespace judiostatic\Http\Controllers;
 use Illuminate\Http\Request;
 use judiostatic\Post;
 use judiostatic\Buss;
-use judiostatic\Client;
+use judiostatic\User;
 use Validator;
 use Auth;
 
@@ -53,25 +53,28 @@ class DealsController extends Controller
         $response = "";
         $responseContent = "";
         $request->validate([
-            'client_email' =>  'required|email',
+            'email' =>  'required|email',
         ]);
     //Primero se Revisa si existe el usuario
-        $clients = Client::where('client_email', '=', $request->client_email)
+        $users = User::where('email', '=', $request->email)
         ->first();
         $client_first = "";
         $client_last = "";
-        // El usuario si existia en la tabla clients
-        if($clients != null){
+        // El usuario si existia en la tabla Users
+        if($users != null){
             
-            if($clients->active != 1){
+            if($users->active != 1){
                 // Si el usuario no esta activo
+                $client_first = $users->client_first;
+                $client_last = $users->client_last;
+                $email = $users->email;
                 $response = "error";
                 $responseContent = "Usuário Banido ou desativado";
-            }else if($clients->active == 1){
+            }else if($users->active == 1){
                 // Si el usuario esta activo
-                $client_first = $clients->client_first;
-                $client_last = $clients->client_last;
-                $client_email = $clients->client_email;
+                $client_first = $users->client_first;
+                $client_last = $users->client_last;
+                $email = $users->email;
 
                 //Aca se tiene que revisar si esta en sesion
                 if(Auth::check()){
@@ -83,31 +86,37 @@ class DealsController extends Controller
                 }
             }
         }else{
-          // El usuario no existia en la tabla clients 
-          $client_email = "";
+          // El usuario no existia en la tabla Users 
+          $email = "";
           $response = "error";
           $responseContent = "Usuario No existe";
         }
 
-    //   $clients = new Clients();
-    //   $clients->client_first = $request->first;
-    //   $clients->client_last = $request->last;
-    //   $clients->client_email = $request->email;
+    //   $Users = new Users();
+    //   $Users->User_first = $request->first;
+    //   $Users->User_last = $request->last;
+    //   $Users->email = $request->email;
 
 
-    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response, 'client_first' => $client_first, 'client_last' => $client_last, 'client_email' => $client_email), 200);
+    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
     
 }
     
 
-    function checklogin(Request $request){
-        $user_data = array(
-            'client_email' => $request->client_email, 
-            'client_pwd' => $request->client_pwd
-        );
+    function dealsubmituser(Request $request){
+        $response = "";
+        $responseContent = "";
+        $request->validate([
+            'email' =>  'required|email',
+            'password' =>  'required|min:3',
+        ]);
         
-        if(Auth::attempt($user_data)){
+        $user_data = array('email' => $request->email, 'password' => $request->password);
 
+        if(Auth::attempt($user_data)){
+        //logued
+        $response = "success";
+        $responseContent = "Logued";
         }else{
         //No se pudo logear
         $response = "error";

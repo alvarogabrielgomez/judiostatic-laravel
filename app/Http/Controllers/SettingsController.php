@@ -4,15 +4,15 @@ namespace judiostatic\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class SettingsController extends Controller
 {
-    public function index(Request $request){
-
-        return view ('home');
-    }
-
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function index()
+    {
+        return view('settings');
     }
 }

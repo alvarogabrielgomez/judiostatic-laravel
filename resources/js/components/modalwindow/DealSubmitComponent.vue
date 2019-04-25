@@ -92,7 +92,7 @@
                       <label>Apellido</label>
                     </div>
                     <div class="group">
-                      <input id="clientemail" type="email" name="client_email" required>
+                      <input id="clientemail" type="email" name="email" required>
                       <span class="highlight"></span>
                       <span class="bar"></span>
                       <label>Email</label>
@@ -168,7 +168,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                   <form method="POST" id="pwd-form">
 
                     <div class="group" style="margin: auto;">
-                      <input id="clientpwd" type="password" name="client_pwd" required>
+                      <input id="clientpwd" type="password" name="password" required>
                       <span class="highlight"></span>
                       <span class="bar"></span>
                       <label>Password</label>
@@ -205,7 +205,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 <transition name="fade" >
  <a v-if="botoncontinuar" id="continue-btn" v-on:click="passToNext"  class="button footer-btn">Continuar</a>
 <button v-if="botonsubmit" id="continue-btn" @click.prevent="formSubmit()" class="button footer-btn">MALDITO MADURO</button>
-<a v-if="botonterminar" id="continue-btn" v-on:click="passToNext" class="button footer-btn">Terminar</a>
+<a v-if="botonterminar" id="continue-btn" class="button footer-btn">Terminar</a>
 </transition>
 </div>
 
@@ -769,7 +769,7 @@ export default {
             resume:false,
             hasError:false,
             hasResponse:false,
-            newUser:{'client_first':'', 'client_last':'', 'client_email':''},
+            newUser:{'client_first':'', 'client_last':'', 'email':''},
             formselected:"insert-form"
                     
         }
@@ -855,15 +855,15 @@ export default {
       const form = document.getElementById(this.formselected);
       const firstInput  = form.querySelector('input[name=client_first]');
       const lastInput  = form.querySelector('input[name=client_last]');
-      const emailInput  = form.querySelector('input[name=client_email]');
-      this.newUser = {'client_first':firstInput.value, 'client_last':lastInput.value, 'client_email':emailInput.value};
+      const emailInput  = form.querySelector('input[name=email]');
+      this.newUser = {'client_first':firstInput.value, 'client_last':lastInput.value, 'email':emailInput.value};
       
 
       this.loadingMss = true;
       this.hasResponse = false;
       var input = this.newUser;
 
-      if(input['client_first'] == '' || input['client_last'] == '' || input['client_email'] == ''){
+      if(input['client_first'] == '' || input['client_last'] == '' || input['email'] == ''){
           this.hasError = true;
           this.hasResponse = false;
           this.responseContent = "Llene todos los campos";
@@ -914,20 +914,20 @@ export default {
 
     formPwdSubmit: function formPwdSubmit(){
       const form = document.getElementById(this.formselected);
-      const pwdInput  = form.querySelector('input[name=client_pwd]');
+      const pwdInput  = form.querySelector('input[name=password]');
       //El resto de los datos ya estan en memoria en userdata.
       this.loadingMss = true;
       this.hasResponse = false;
-      var input = {'client_first':this.userdata.client_first, 'client_last':this.userdata.client_last, 'client_email':this.userdata.client_email, 'client_pwd': pwdInput.value};
+      var input = {'client_first':this.userdata.client_first, 'client_last':this.userdata.client_last, 'email':this.userdata.email, 'password': pwdInput.value};
 
-      if(input['client_first'] == '' || input['client_last'] == '' || input['client_email'] == '' || input['client_pwd'] == ''){
+      if(input['client_first'] == '' || input['client_last'] == '' || input['email'] == '' || input['password'] == ''){
           this.hasError = true;
           this.hasResponse = false;
           this.responseContent = "Llene todos los campos";
            this.loadingMss = false;
       }else{
         this.hasError = false;
-        axios.post('/dealsubmit', input) 
+        axios.post('/dealsubmituser', input) 
         .then((response) => {
           this.hasResponse = true;
           this.loadingMss = false;
@@ -944,18 +944,6 @@ export default {
             this.responseContent = response.data.responseContent;
             this.passToNext();
 
-          }else if(response.data.response == 'successNoSession'){
-            this.formselected = "pwd-form";
-            this.hasError = false;
-            this.responseMss = "success";
-            this.userdata = response.data;
-            this.responseContent = response.data.responseContent;
-            this.resume = true;
-            this.showing = true;
-            this.loading = false;
-            this.passToPWD();
-
-            console.log(this.userdata);
           }
         })
         .catch((error) => {

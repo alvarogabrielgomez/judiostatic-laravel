@@ -2,6 +2,7 @@
 
 namespace judiostatic\Providers;
 
+use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
