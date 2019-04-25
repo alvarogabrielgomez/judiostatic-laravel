@@ -162,8 +162,24 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                 <div v-if="showing" class="deal-info">
                     <p>
                        <strong>Bienvenido de nuevo, {{userdata.client_first}}!</strong>
-
                     </p>
+                </div>
+                <div id="pwd-form-container">
+                  <form method="POST" id="pwd-form">
+
+                    <div class="group" style="margin: auto;">
+                      <input id="clientpwd" type="password" name="client_pwd" required>
+                      <span class="highlight"></span>
+                      <span class="bar"></span>
+                      <label>Password</label>
+                    </div>
+                  
+                    <transition name="fade" mode="out-in">
+                    <spinner-small style = "margin-top:30px;" v-if="loadingMss"></spinner-small>
+                    <p style="top:44px;" class="alert alert-danger" v-if = hasError>{{responseContent}}</p>
+                    <p style="top:44px;" class="alert alert-normal" v-if = hasResponse>{{responseContent}}</p>
+                    </transition>
+                </form>
                 </div>
             </div>
                 </div>
@@ -187,9 +203,9 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 
 <div class="modal-footer">
 <transition name="fade" >
- <a v-if="botoncontinuar" v-on:click="passToNext" id="continue-btn" class="button footer-btn">Continuar</a>
-<!-- <button type="submit" form="insert-form" v-if="botonsubmit" id="continue-btn" @click.prevent="formSubmit()" class="button footer-btn">Submit</button> -->
+ <a v-if="botoncontinuar" id="continue-btn" v-on:click="passToNext"  class="button footer-btn">Continuar</a>
 <button v-if="botonsubmit" id="continue-btn" @click.prevent="formSubmit()" class="button footer-btn">MALDITO MADURO</button>
+<a v-if="botonterminar" id="continue-btn" v-on:click="passToNext" class="button footer-btn">Terminar</a>
 </transition>
 </div>
 
@@ -198,6 +214,14 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 </template>
 
 <style>
+#pwd-form-container{
+    margin: 17px 21px 0;
+    padding: 42px 42px 36px;
+    border: 1px solid #eaeced;
+    max-width: 377px;
+    overflow: hidden;
+    min-height: 109px;
+}
 #continuar-anterior{
     position: absolute;
     right: 13px;
@@ -242,7 +266,7 @@ border-bottom: 2px solid #22ba6a;
   margin-bottom:27px; 
 }
 
-#insert-form{
+#insert-form, #pwd-form{
 display: flex;
     width: 100%;
     box-sizing: border-box;
@@ -728,6 +752,7 @@ export default {
             showing:false,
             botoncontinuar:true,
             botonsubmit:false,
+            botonterminar:false,
             responseMss: "success",
             responseContent: "",
             deal:{"title":this.title},
@@ -745,7 +770,7 @@ export default {
             hasError:false,
             hasResponse:false,
             newUser:{'client_first':'', 'client_last':'', 'client_email':''},
-
+            formselected:"insert-form"
                     
         }
   },
@@ -770,17 +795,29 @@ export default {
 
   updated(){
 
-
+// Swicher de Boton
       this.next = this.stepactual+1 
       this.steps.Next = this.steps.step[this.next];
-      if(this.stepactual == 2){
+      if(this.stepactual == 2 || this.stepactual == 4){
+        if(this.stepactual == 2){
+          this.formselected = "insert-form";
+        }else if (this.stepactual == 4){
+          this.formselected = "pwd-form";
+        }
         this.botoncontinuar = false;
         this.botonsubmit = true;
-      }else{
+        this.botonterminar = false;
+      }else if(this.stepactual == 3){
+        this.botoncontinuar = false;
+        this.botonsubmit = false;
+        this.botonterminar = true;
+      }
+        else{
         this.botoncontinuar = true;
         this.botonsubmit = false;
+        this.botonterminar = false;
       }
-
+// Switcher de Spinner
       if(this.responseMss == 'success'){
         this.showing = true;
         this.loading = false;
@@ -811,58 +848,125 @@ export default {
     },
 
     formSubmit: function formSubmit(){
-      const form = document.getElementById('insert-form');
+      if(this.formselected == "pwd-form"){
+        this.formPwdSubmit();
+      }
+      else if(this.formselected == "insert-form"){
+      const form = document.getElementById(this.formselected);
       const firstInput  = form.querySelector('input[name=client_first]');
       const lastInput  = form.querySelector('input[name=client_last]');
       const emailInput  = form.querySelector('input[name=client_email]');
       this.newUser = {'client_first':firstInput.value, 'client_last':lastInput.value, 'client_email':emailInput.value};
+      
+
       this.loadingMss = true;
       this.hasResponse = false;
       var input = this.newUser;
-     
-      console.log(input);
 
       if(input['client_first'] == '' || input['client_last'] == '' || input['client_email'] == ''){
           this.hasError = true;
           this.hasResponse = false;
-          this.responseContent = "Llene todos los campos"
-           this.loadingMss = false
+          this.responseContent = "Llene todos los campos";
+           this.loadingMss = false;
       }else{
         this.hasError = false;
         axios.post('/dealsubmit', input) 
         .then((response) => {
           this.hasResponse = true;
-          this.loadingMss = false
+          this.loadingMss = false;
           this.newUser = {};
           if(response.data.response == 'error'){
             this.hasError = true;
             this.responseMss = "error";
             this.responseContent = response.data.responseContent;
+
           }else if(response.data.response == 'success'){
             this.hasError = false;
             this.responseMss = "success";
+            this.userdata = response.data;
             this.responseContent = response.data.responseContent;
             this.passToNext();
-            this.getVueItems();
+
           }else if(response.data.response == 'successNoSession'){
+            this.formselected = "pwd-form";
             this.hasError = false;
             this.responseMss = "success";
+            this.userdata = response.data;
             this.responseContent = response.data.responseContent;
-            this.passToPWD();
-            this.userdata = response.data
             this.resume = true;
             this.showing = true;
             this.loading = false;
-            console.log(userdata);
+            this.passToPWD();
+
+            console.log(this.userdata);
           }
         })
         .catch((error) => {
           this.hasError = true;
           this.responseContent = error;
-          this.loadingMss = false
+          this.loadingMss = false;
         })
 
       }
+
+    } 
+    },
+
+    formPwdSubmit: function formPwdSubmit(){
+      const form = document.getElementById(this.formselected);
+      const pwdInput  = form.querySelector('input[name=client_pwd]');
+      //El resto de los datos ya estan en memoria en userdata.
+      this.loadingMss = true;
+      this.hasResponse = false;
+      var input = {'client_first':this.userdata.client_first, 'client_last':this.userdata.client_last, 'client_email':this.userdata.client_email, 'client_pwd': pwdInput.value};
+
+      if(input['client_first'] == '' || input['client_last'] == '' || input['client_email'] == '' || input['client_pwd'] == ''){
+          this.hasError = true;
+          this.hasResponse = false;
+          this.responseContent = "Llene todos los campos";
+           this.loadingMss = false;
+      }else{
+        this.hasError = false;
+        axios.post('/dealsubmit', input) 
+        .then((response) => {
+          this.hasResponse = true;
+          this.loadingMss = false;
+          this.newUser = {};
+          if(response.data.response == 'error'){
+            this.hasError = true;
+            this.responseMss = "error";
+            this.responseContent = response.data.responseContent;
+
+          }else if(response.data.response == 'success'){
+            this.hasError = false;
+            this.responseMss = "success";
+            this.userdata = response.data;
+            this.responseContent = response.data.responseContent;
+            this.passToNext();
+
+          }else if(response.data.response == 'successNoSession'){
+            this.formselected = "pwd-form";
+            this.hasError = false;
+            this.responseMss = "success";
+            this.userdata = response.data;
+            this.responseContent = response.data.responseContent;
+            this.resume = true;
+            this.showing = true;
+            this.loading = false;
+            this.passToPWD();
+
+            console.log(this.userdata);
+          }
+        })
+        .catch((error) => {
+          this.hasError = true;
+          this.responseContent = error;
+          this.loadingMss = false;
+        })
+
+      }
+
+    
     },
 
     // formSubmit: function formSubmit(){

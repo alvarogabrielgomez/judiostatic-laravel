@@ -50,6 +50,11 @@ class DealsController extends Controller
     }
 
     public function dealsubmit(Request $request){
+        $response = "";
+        $responseContent = "";
+        $request->validate([
+            'client_email' =>  'required|email',
+        ]);
     //Primero se Revisa si existe el usuario
         $clients = Client::where('client_email', '=', $request->client_email)
         ->first();
@@ -66,22 +71,20 @@ class DealsController extends Controller
                 // Si el usuario esta activo
                 $client_first = $clients->client_first;
                 $client_last = $clients->client_last;
+                $client_email = $clients->client_email;
 
-                $this->validate($request, [
-                    'client_email' =>  'required|email',
-                   // 'client_pwd' => 'required|min:3'
-                ]);
                 //Aca se tiene que revisar si esta en sesion
                 if(Auth::check()){
                     $response = "success";
                     $responseContent = "Esta en Session";     
                 }else{
                     $response = "successNoSession";
-                    $responseContent = "No esta en Session"; 
+                    $responseContent = "Escriba su contrasena para continuar."; 
                 }
             }
         }else{
           // El usuario no existia en la tabla clients 
+          $client_email = "";
           $response = "error";
           $responseContent = "Usuario No existe";
         }
@@ -91,8 +94,10 @@ class DealsController extends Controller
     //   $clients->client_last = $request->last;
     //   $clients->client_email = $request->email;
 
-    return response()->json(array('responseContent' => $responseContent, 'response' => $response, 'client_first' => $client_first, 'client_last' => $client_last));
-    }
+
+    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response, 'client_first' => $client_first, 'client_last' => $client_last, 'client_email' => $client_email), 200);
+    
+}
     
 
     function checklogin(Request $request){
