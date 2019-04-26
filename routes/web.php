@@ -1,5 +1,6 @@
 <?php
 
+use Laravel\Passport\Passport;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('/');
 
+// Route::group(['middleware' => 'cors'], function(){
+//     Passport::routes();
+// });
 
 Route::resource('pokemons', 'PokemonController');
 Route::resource('trainers', 'TrainerController');

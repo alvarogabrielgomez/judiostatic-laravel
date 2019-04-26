@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => judiostatic\Client::class,
+            'model' => judiostatic\User::class,
         ],
 
         // 'users' => [

@@ -903,7 +903,11 @@ export default {
         })
         .catch((error) => {
           this.hasError = true;
-          this.responseContent = error;
+          if(error.response.data.errors.email != ""){
+            this.responseContent = "Tiene que introducir un Email válido";
+          }else{
+            this.responseContent = error.response.data.message;
+          }
           this.loadingMss = false;
         })
 
@@ -914,7 +918,7 @@ export default {
 
     formPwdSubmit: function formPwdSubmit(){
       const form = document.getElementById(this.formselected);
-      const pwdInput  = form.querySelector('input[name=password]');
+      var pwdInput  = form.querySelector('input[name=password]');
       //El resto de los datos ya estan en memoria en userdata.
       this.loadingMss = true;
       this.hasResponse = false;
@@ -927,34 +931,52 @@ export default {
            this.loadingMss = false;
       }else{
         this.hasError = false;
-        axios.post('/dealsubmituser', input) 
+
+      let axiosConfig = {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          "X-Requested-With": "XMLHttpRequest",
+        }
+      };
+
+        axios.post(process.env.MIX_APP_URL + ':8000' + '/oauth/token',{
+          grant_type: process.env.MIX_GRANT_TYPE,
+          client_id: process.env.MIX_CLIENT_ID,
+          client_secret: process.env.MIX_CLIENT_SECRET,
+          username: this.userdata.email,
+          password: pwdInput.value,
+        }) 
         .then((response) => {
           this.hasResponse = true;
           this.loadingMss = false;
           this.newUser = {};
-          if(response.data.response == 'error'){
-            this.hasError = true;
-            this.responseMss = "error";
-            this.responseContent = response.data.responseContent;
-
-          }else if(response.data.response == 'success'){
+          if(response.data.access_token != ''){
             this.hasError = false;
             this.responseMss = "success";
-            this.userdata = response.data;
-            this.responseContent = response.data.responseContent;
-            this.passToNext();
+            var response = response.data;
+            this.responseContent = "Token Listo";
+            this.storeAccessToken(response.data.access_token);
+           // this.passToNext();
+
 
           }
         })
         .catch((error) => {
           this.hasError = true;
-          this.responseContent = error;
+          if (error.response.data.error == "invalid_credentials"){
+            this.responseContent = "Contrasena Incorrecta"
+          }else{
+            this.responseContent = error.response.data.message;
+          }
           this.loadingMss = false;
         })
 
       }
 
     
+    },
+    storeAccessToken: function storeAccessToken(token){
+      
     },
 
     // formSubmit: function formSubmit(){

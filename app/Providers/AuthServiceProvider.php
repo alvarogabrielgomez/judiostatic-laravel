@@ -14,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'judiostatic\Model' => 'judiostatic\Policies\ModelPolicy',
+        'judiostatic\Model' => 'judiostatic\Policies\ModelPolicy',
     ];
 
     /**

@@ -2023,7 +2023,7 @@ function cargado() {
       _this.loading = false;
       _this.response = res.data.response;
       _this.empty = false;
-    }).catch(function (err) {
+    })["catch"](function (err) {
       console.log(err);
     });
     return this.posts;
@@ -2953,9 +2953,15 @@ __webpack_require__.r(__webpack_exports__);
 
               console.log(_this.userdata);
             }
-          }).catch(function (error) {
+          })["catch"](function (error) {
             _this.hasError = true;
-            _this.responseContent = error;
+
+            if (error.response.data.errors.email != "") {
+              _this.responseContent = "Tiene que introducir un Email válido";
+            } else {
+              _this.responseContent = error.response.data.message;
+            }
+
             _this.loadingMss = false;
           });
         }
@@ -2983,30 +2989,46 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingMss = false;
       } else {
         this.hasError = false;
-        axios.post('/dealsubmituser', input).then(function (response) {
+        var axiosConfig = {
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "X-Requested-With": "XMLHttpRequest"
+          }
+        };
+        axios.post("http://localhost" + ':8000' + '/oauth/token', {
+          grant_type: "password",
+          client_id: "2",
+          client_secret: "GMM1YyzH8SeyW5IfK1JMTeIBJSY8vWoZ86h5pf6e",
+          username: this.userdata.email,
+          password: pwdInput.value
+        }).then(function (response) {
           _this2.hasResponse = true;
           _this2.loadingMss = false;
           _this2.newUser = {};
 
-          if (response.data.response == 'error') {
-            _this2.hasError = true;
-            _this2.responseMss = "error";
-            _this2.responseContent = response.data.responseContent;
-          } else if (response.data.response == 'success') {
+          if (response.data.access_token != '') {
             _this2.hasError = false;
             _this2.responseMss = "success";
-            _this2.userdata = response.data;
-            _this2.responseContent = response.data.responseContent;
+            var response = response.data;
+            _this2.responseContent = "Token Listo";
 
-            _this2.passToNext();
+            _this2.storeAccessToken(response.data.access_token); // this.passToNext();
+
           }
-        }).catch(function (error) {
+        })["catch"](function (error) {
           _this2.hasError = true;
-          _this2.responseContent = error;
+
+          if (error.response.data.error == "invalid_credentials") {
+            _this2.responseContent = "Contrasena Incorrecta";
+          } else {
+            _this2.responseContent = error.response.data.message;
+          }
+
           _this2.loadingMss = false;
         });
       }
-    } // formSubmit: function formSubmit(){
+    },
+    storeAccessToken: function storeAccessToken(token) {} // formSubmit: function formSubmit(){
     //   let currentObj = this;
     //   this.axios.get('/dealsubmit', {
     //         first: this.first,
@@ -3136,7 +3158,7 @@ __webpack_require__.r(__webpack_exports__);
     revoke: function revoke(token) {
       var _this2 = this;
 
-      axios.delete('/oauth/tokens/' + token.id).then(function (response) {
+      axios["delete"]('/oauth/tokens/' + token.id).then(function (response) {
         _this2.getTokens();
       });
     }
@@ -3471,7 +3493,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         form.redirect = '';
         form.errors = [];
         $(modal).modal('hide');
-      }).catch(function (error) {
+      })["catch"](function (error) {
         if (_typeof(error.response.data) === 'object') {
           form.errors = _.flatten(_.toArray(error.response.data.errors));
         } else {
@@ -3486,7 +3508,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     destroy: function destroy(client) {
       var _this3 = this;
 
-      axios.delete('/oauth/clients/' + client.id).then(function (response) {
+      axios["delete"]('/oauth/clients/' + client.id).then(function (response) {
         _this3.getClients();
       });
     }
@@ -3749,7 +3771,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         _this3.tokens.push(response.data.token);
 
         _this3.showAccessToken(response.data.accessToken);
-      }).catch(function (error) {
+      })["catch"](function (error) {
         if (_typeof(error.response.data) === 'object') {
           _this3.form.errors = _.flatten(_.toArray(error.response.data.errors));
         } else {
@@ -3793,7 +3815,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     revoke: function revoke(token) {
       var _this4 = this;
 
-      axios.delete('/oauth/personal-access-tokens/' + token.id).then(function (response) {
+      axios["delete"]('/oauth/personal-access-tokens/' + token.id).then(function (response) {
         _this4.getTokens();
       });
     }
@@ -19321,22 +19343,22 @@ window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
-Vue.component('pokemons-component', __webpack_require__(/*! ./components/PokemonsComponent.vue */ "./resources/js/components/PokemonsComponent.vue").default);
-Vue.component('add-pokemon-btn', __webpack_require__(/*! ./components/AddPokemonComponent.vue */ "./resources/js/components/AddPokemonComponent.vue").default);
-Vue.component('dealsubmit-component', __webpack_require__(/*! ./components/modalwindow/DealSubmitComponent.vue */ "./resources/js/components/modalwindow/DealSubmitComponent.vue").default);
-Vue.component('Spinner', __webpack_require__(/*! ./components/Spinner.vue */ "./resources/js/components/Spinner.vue").default);
-Vue.component('spinner-small', __webpack_require__(/*! ./components/Spinner-small.vue */ "./resources/js/components/Spinner-small.vue").default);
-Vue.component('carousel-component', __webpack_require__(/*! ./components/carousel/CarouselComponent.vue */ "./resources/js/components/carousel/CarouselComponent.vue").default);
+Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
+Vue.component('pokemons-component', __webpack_require__(/*! ./components/PokemonsComponent.vue */ "./resources/js/components/PokemonsComponent.vue")["default"]);
+Vue.component('add-pokemon-btn', __webpack_require__(/*! ./components/AddPokemonComponent.vue */ "./resources/js/components/AddPokemonComponent.vue")["default"]);
+Vue.component('dealsubmit-component', __webpack_require__(/*! ./components/modalwindow/DealSubmitComponent.vue */ "./resources/js/components/modalwindow/DealSubmitComponent.vue")["default"]);
+Vue.component('Spinner', __webpack_require__(/*! ./components/Spinner.vue */ "./resources/js/components/Spinner.vue")["default"]);
+Vue.component('spinner-small', __webpack_require__(/*! ./components/Spinner-small.vue */ "./resources/js/components/Spinner-small.vue")["default"]);
+Vue.component('carousel-component', __webpack_require__(/*! ./components/carousel/CarouselComponent.vue */ "./resources/js/components/carousel/CarouselComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('passport-authorized-clients', __webpack_require__(/*! ./components/passport/AuthorizedClients.vue */ "./resources/js/components/passport/AuthorizedClients.vue").default);
-Vue.component('passport-clients', __webpack_require__(/*! ./components/passport/Clients.vue */ "./resources/js/components/passport/Clients.vue").default);
-Vue.component('passport-personal-access-tokens', __webpack_require__(/*! ./components/passport/PersonalAccessTokens.vue */ "./resources/js/components/passport/PersonalAccessTokens.vue").default);
+Vue.component('passport-authorized-clients', __webpack_require__(/*! ./components/passport/AuthorizedClients.vue */ "./resources/js/components/passport/AuthorizedClients.vue")["default"]);
+Vue.component('passport-clients', __webpack_require__(/*! ./components/passport/Clients.vue */ "./resources/js/components/passport/Clients.vue")["default"]);
+Vue.component('passport-personal-access-tokens', __webpack_require__(/*! ./components/passport/PersonalAccessTokens.vue */ "./resources/js/components/passport/PersonalAccessTokens.vue")["default"]);
 var app = new Vue({
   el: '#app'
 });
