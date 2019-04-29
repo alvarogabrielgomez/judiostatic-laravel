@@ -2,7 +2,7 @@
 window.Vuex = require('vuex');
 window.Vue = require('vue');
 window.axios = require('axios');
-
+import {store} from './store/store'
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -42,5 +42,6 @@ Vue.component('passport-personal-access-tokens', require('./components/passport/
 
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    store: store,
 });

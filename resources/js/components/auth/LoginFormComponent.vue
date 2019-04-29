@@ -127,9 +127,11 @@ data(){
         password:''
     }
 },
-methods(){
-
-},
+methods:{
+  login(){
+    
+  }
+}
 };
 </script>
 

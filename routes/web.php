@@ -21,8 +21,6 @@ Route::get('/', function () {
 //     Passport::routes();
 // });
 
-Route::resource('pokemons', 'PokemonController');
-Route::resource('trainers', 'TrainerController');
 Route::resource('deals', 'DealsController');
 Route::resource('modalwindow', 'ModalwindowController');
 
@@ -38,9 +36,6 @@ Route::get('deals', 'DealsController@index');
 Route::get('modalwindow', 'ModalwindowController@index');
 Route::get('modalwindow/deals/{id}', 'ModalwindowController@show');
 Route::get('/settings', 'SettingsController@index')->name('settings');
-
-
-
 
 Auth::routes();
 

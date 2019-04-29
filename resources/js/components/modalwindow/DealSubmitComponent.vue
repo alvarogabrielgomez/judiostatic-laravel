@@ -796,6 +796,7 @@ export default {
 
   updated(){
 
+
 // Swicher de Boton
       this.next = this.stepactual+1 
       this.steps.Next = this.steps.step[this.next];
@@ -884,7 +885,7 @@ export default {
           }else if(response.data.response == 'success'){
             this.hasError = false;
             this.responseMss = "success";
-            this.userdata = response.data;
+            this.$store.state.userdata = response.data;
             this.responseContent = response.data.responseContent;
             this.passToNext();
 
@@ -892,14 +893,14 @@ export default {
             this.formselected = "pwd-form";
             this.hasError = false;
             this.responseMss = "success";
-            this.userdata = response.data;
+            this.$store.state.userdata = response.data;
             this.responseContent = response.data.responseContent;
             this.resume = true;
             this.showing = true;
             this.loading = false;
             this.passToPWD();
 
-            console.log(this.userdata);
+            console.log(this.$store.state.userdata);
           }
         })
         .catch((error) => {
@@ -923,7 +924,7 @@ export default {
       //El resto de los datos ya estan en memoria en userdata.
       this.loadingMss = true;
       this.hasResponse = false;
-      var input = {'client_first':this.userdata.client_first, 'client_last':this.userdata.client_last, 'email':this.userdata.email, 'password': pwdInput.value};
+      var input = {'client_first':this.$store.state.userdata.client_first, 'client_last':this.$store.state.userdata.client_last, 'email':this.$store.state.userdata.email, 'password': pwdInput.value};
 
       if(input['client_first'] == '' || input['client_last'] == '' || input['email'] == '' || input['password'] == ''){
           this.hasError = true;
@@ -941,7 +942,7 @@ export default {
       };
 
         axios.post(process.env.MIX_APP_URL + ':8000' + '/api/login',{
-          username: this.userdata.email,
+          username: this.$store.state.userdata.email,
           password: pwdInput.value,
         }) 
         .then((response) => {

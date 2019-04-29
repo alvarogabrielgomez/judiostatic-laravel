@@ -2047,7 +2047,9 @@ __webpack_require__.r(__webpack_exports__);
       password: ''
     };
   },
-  methods: function methods() {}
+  methods: {
+    login: function login() {}
+  }
 });
 
 /***/ }),
@@ -2165,7 +2167,7 @@ function cargado() {
       _this.loading = false;
       _this.response = res.data.response;
       _this.empty = false;
-    }).catch(function (err) {
+    })["catch"](function (err) {
       console.log(err);
     });
     return this.posts;
@@ -3078,7 +3080,7 @@ __webpack_require__.r(__webpack_exports__);
             } else if (response.data.response == 'success') {
               _this.hasError = false;
               _this.responseMss = "success";
-              _this.userdata = response.data;
+              _this.$store.state.userdata = response.data;
               _this.responseContent = response.data.responseContent;
 
               _this.passToNext();
@@ -3086,7 +3088,7 @@ __webpack_require__.r(__webpack_exports__);
               _this.formselected = "pwd-form";
               _this.hasError = false;
               _this.responseMss = "success";
-              _this.userdata = response.data;
+              _this.$store.state.userdata = response.data;
               _this.responseContent = response.data.responseContent;
               _this.resume = true;
               _this.showing = true;
@@ -3094,9 +3096,9 @@ __webpack_require__.r(__webpack_exports__);
 
               _this.passToPWD();
 
-              console.log(_this.userdata);
+              console.log(_this.$store.state.userdata);
             }
-          }).catch(function (error) {
+          })["catch"](function (error) {
             _this.hasError = true;
 
             if (error.response.data.errors.email != "") {
@@ -3119,9 +3121,9 @@ __webpack_require__.r(__webpack_exports__);
       this.loadingMss = true;
       this.hasResponse = false;
       var input = {
-        'client_first': this.userdata.client_first,
-        'client_last': this.userdata.client_last,
-        'email': this.userdata.email,
+        'client_first': this.$store.state.userdata.client_first,
+        'client_last': this.$store.state.userdata.client_last,
+        'email': this.$store.state.userdata.email,
         'password': pwdInput.value
       };
 
@@ -3139,7 +3141,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         };
         axios.post("http://localhost" + ':8000' + '/api/login', {
-          username: this.userdata.email,
+          username: this.$store.state.userdata.email,
           password: pwdInput.value
         }).then(function (response) {
           _this2.hasResponse = true;
@@ -3153,7 +3155,7 @@ __webpack_require__.r(__webpack_exports__);
             _this2.responseContent = "Token Listo"; //this.storeAccessToken(response.data.access_token);
             // this.passToNext();
           }
-        }).catch(function (error) {
+        })["catch"](function (error) {
           _this2.hasError = true;
 
           if (error.response.data.error == "invalid_credentials") {
@@ -3296,7 +3298,7 @@ __webpack_require__.r(__webpack_exports__);
     revoke: function revoke(token) {
       var _this2 = this;
 
-      axios.delete('/oauth/tokens/' + token.id).then(function (response) {
+      axios["delete"]('/oauth/tokens/' + token.id).then(function (response) {
         _this2.getTokens();
       });
     }
@@ -3631,7 +3633,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         form.redirect = '';
         form.errors = [];
         $(modal).modal('hide');
-      }).catch(function (error) {
+      })["catch"](function (error) {
         if (_typeof(error.response.data) === 'object') {
           form.errors = _.flatten(_.toArray(error.response.data.errors));
         } else {
@@ -3646,7 +3648,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     destroy: function destroy(client) {
       var _this3 = this;
 
-      axios.delete('/oauth/clients/' + client.id).then(function (response) {
+      axios["delete"]('/oauth/clients/' + client.id).then(function (response) {
         _this3.getClients();
       });
     }
@@ -3909,7 +3911,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         _this3.tokens.push(response.data.token);
 
         _this3.showAccessToken(response.data.accessToken);
-      }).catch(function (error) {
+      })["catch"](function (error) {
         if (_typeof(error.response.data) === 'object') {
           _this3.form.errors = _.flatten(_.toArray(error.response.data.errors));
         } else {
@@ -3953,7 +3955,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     revoke: function revoke(token) {
       var _this4 = this;
 
-      axios.delete('/oauth/personal-access-tokens/' + token.id).then(function (response) {
+      axios["delete"]('/oauth/personal-access-tokens/' + token.id).then(function (response) {
         _this4.getTokens();
       });
     }
@@ -20729,12 +20731,16 @@ module.exports = g;
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _store_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./store/store */ "./resources/js/store/store.js");
 window.Vuex = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -20745,25 +20751,26 @@ window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
-Vue.component('pokemons-component', __webpack_require__(/*! ./components/PokemonsComponent.vue */ "./resources/js/components/PokemonsComponent.vue").default);
-Vue.component('add-pokemon-btn', __webpack_require__(/*! ./components/AddPokemonComponent.vue */ "./resources/js/components/AddPokemonComponent.vue").default);
-Vue.component('dealsubmit-component', __webpack_require__(/*! ./components/modalwindow/DealSubmitComponent.vue */ "./resources/js/components/modalwindow/DealSubmitComponent.vue").default);
-Vue.component('Spinner', __webpack_require__(/*! ./components/Spinner.vue */ "./resources/js/components/Spinner.vue").default);
-Vue.component('spinner-small', __webpack_require__(/*! ./components/Spinner-small.vue */ "./resources/js/components/Spinner-small.vue").default);
-Vue.component('carousel-component', __webpack_require__(/*! ./components/carousel/CarouselComponent.vue */ "./resources/js/components/carousel/CarouselComponent.vue").default);
-Vue.component('login-form-component', __webpack_require__(/*! ./components/auth/LoginFormComponent.vue */ "./resources/js/components/auth/LoginFormComponent.vue").default);
+Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
+Vue.component('pokemons-component', __webpack_require__(/*! ./components/PokemonsComponent.vue */ "./resources/js/components/PokemonsComponent.vue")["default"]);
+Vue.component('add-pokemon-btn', __webpack_require__(/*! ./components/AddPokemonComponent.vue */ "./resources/js/components/AddPokemonComponent.vue")["default"]);
+Vue.component('dealsubmit-component', __webpack_require__(/*! ./components/modalwindow/DealSubmitComponent.vue */ "./resources/js/components/modalwindow/DealSubmitComponent.vue")["default"]);
+Vue.component('Spinner', __webpack_require__(/*! ./components/Spinner.vue */ "./resources/js/components/Spinner.vue")["default"]);
+Vue.component('spinner-small', __webpack_require__(/*! ./components/Spinner-small.vue */ "./resources/js/components/Spinner-small.vue")["default"]);
+Vue.component('carousel-component', __webpack_require__(/*! ./components/carousel/CarouselComponent.vue */ "./resources/js/components/carousel/CarouselComponent.vue")["default"]);
+Vue.component('login-form-component', __webpack_require__(/*! ./components/auth/LoginFormComponent.vue */ "./resources/js/components/auth/LoginFormComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('passport-authorized-clients', __webpack_require__(/*! ./components/passport/AuthorizedClients.vue */ "./resources/js/components/passport/AuthorizedClients.vue").default);
-Vue.component('passport-clients', __webpack_require__(/*! ./components/passport/Clients.vue */ "./resources/js/components/passport/Clients.vue").default);
-Vue.component('passport-personal-access-tokens', __webpack_require__(/*! ./components/passport/PersonalAccessTokens.vue */ "./resources/js/components/passport/PersonalAccessTokens.vue").default);
+Vue.component('passport-authorized-clients', __webpack_require__(/*! ./components/passport/AuthorizedClients.vue */ "./resources/js/components/passport/AuthorizedClients.vue")["default"]);
+Vue.component('passport-clients', __webpack_require__(/*! ./components/passport/Clients.vue */ "./resources/js/components/passport/Clients.vue")["default"]);
+Vue.component('passport-personal-access-tokens', __webpack_require__(/*! ./components/passport/PersonalAccessTokens.vue */ "./resources/js/components/passport/PersonalAccessTokens.vue")["default"]);
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  store: _store_store__WEBPACK_IMPORTED_MODULE_0__["store"]
 });
 
 /***/ }),
@@ -21689,6 +21696,30 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/store/store.js":
+/*!*************************************!*\
+  !*** ./resources/js/store/store.js ***!
+  \*************************************/
+/*! exports provided: store */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "store", function() { return store; });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+  state: {
+    userdata: {}
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
@@ -21707,8 +21738,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laravel\judiostatic-laravel\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laravel\judiostatic-laravel\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\user\judiostatic-laravel\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\user\judiostatic-laravel\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
