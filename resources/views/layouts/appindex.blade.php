@@ -22,9 +22,13 @@
     <meta property="og:description"        content="Conte conosco para resolver o seu dia, e você pode dar o seu prazer quando quiser. Cupons online baratos e rápidos." />
     <meta property="og:image"              content="https://omeleth.com/{{ asset('images/omeleth_red_image.png')}}" />
     <meta property="fb:app_id"             content="238563567095772" />
+
     <link rel="preload" href="{{ asset('images/icons/main-box-loading.svg')}}" as="image">
-    <link rel="preload" href="{{ asset('css/style.css')}}" as= "style">
-    <link rel="preload" href="{{ asset('css/responsive.css')}}" as= "style">
+
+    {{-- <link rel="preload" href="{{ asset('css/style.css')}}" as= "style">
+    <link rel="preload" href="{{ asset('css/responsive.css')}}" as= "style"> --}}
+    <link rel="preload" href="{{ asset('css/app.css') }}" as= "style">
+
     <link rel="preload" href="{{ asset('images/hero/hero-img-mobile.jpg')}}" as="image"  media="(max-width: 799px)">
     <link rel="preload" href="{{ asset('images/hero/hero-img.jpg')}}" as="image"  media="(min-width: 800px)">
     <link rel="preload" href="{{ asset('slick/slick-theme.css')}}" as= "style">
@@ -47,8 +51,11 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#bc2b19">
 
-    <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.css') }}"> --}}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}"/>
+
     <link rel="stylesheet" type="text/css" href="{{ asset('slick/slick.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('slick/slick-theme.css') }}"/>
     

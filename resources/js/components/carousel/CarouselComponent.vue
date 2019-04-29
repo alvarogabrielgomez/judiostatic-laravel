@@ -91,6 +91,7 @@ function cargado(){
     
 }
 export default {
+  name:'carousel',
   data() {
     return {
       posts: [],

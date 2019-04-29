@@ -1,5 +1,7 @@
 <template>
   <div id="login-form">
+
+
     <div id="pwd-form-container" class="admin-login" style="padding: 20spx;">
       <div class="nav-login">
         <div
@@ -23,20 +25,22 @@
         </div>
         <div id="logo-form">
           <div class="trans-black-logo-form"></div>
+      <!-- <h1 class="title-login-center">Inicia sesion</h1> -->
         </div>
-        <!-- <h1 class="title-login-center">Inicia sesion</h1> -->
         <form action="#" @submit.prevent="login">
           <div class="group" style="margin: auto;">
             <input id="clientemail" type="email" name="email" required v-model="username">
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Email</label>
+          </div>
           <div class="group" style="margin: auto;">
                       <input id="clientpwd" type="password" name="password" required v-model="password">
                       <span class="highlight"></span>
                       <span class="bar"></span>
                       <label>Password</label>
           </div>
+          <div class="group" style="margin:13px auto 0px;;width: 81%;">          
             <a class="opcion-alt" href="iforgot/reset-password.php">Crear una nueva cuenta</a>
             <a class="opcion-alt" href="iforgot/reset-password.php">Olvide el password</a>
           </div>
@@ -50,12 +54,16 @@
 </template>
 
 <style>
+body::after{
+    position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
+    content:url(/images/omeleth_trans_black.png);
+}
+
 .title-login-center {
-  margin-bottom: 28px !important;
   padding: 1px 28px;
   text-align: center;
-  font-size: 2em;
-  margin-top: 8px !important;
+  font-size: 0.8em;
+
 }
 
 #logo-form {
@@ -103,7 +111,7 @@
   flex-direction: row;
   flex-flow: wrap;
   align-content: center;
-  height: 390px;
+  height: 420px;
 }
 .nav-login a {
   width: 100%;
@@ -114,7 +122,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 42px 0px;
+    margin: 28px 0px 10px 0px;
 }
 </style>
 
@@ -129,7 +137,7 @@ data(){
 },
 methods:{
   login(){
-    
+
   }
 }
 };

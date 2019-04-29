@@ -16,8 +16,9 @@
             <META NAME="Subject" CONTENT="Cupon Business">
                 <META NAME="Language" CONTENT="Portuguese">
                     
-                    <link rel="preload" href="{{ asset('css/style.css') }}" as= "style">
-                    <link rel="preload" href="{{ asset('css/responsive.css') }}" as= "style">
+                    {{-- <link rel="preload" href="{{ asset('css/style.css') }}" as= "style">
+                    <link rel="preload" href="{{ asset('css/responsive.css') }}" as= "style"> --}}
+                    <link rel="preload" href="{{ asset('css/app.css') }}" as= "style">
                     
                     <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('images/favicon/apple-touch-icon-60x60.png') }}">
                     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/favicon/apple-touch-icon-76x76.png') }}">
@@ -32,8 +33,9 @@
                     <meta name="msapplication-TileColor" content="#da532c">
                     <meta name="theme-color" content="#bc2b19">
                     
-                    <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }}">
-                    <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.css') }}">
+                    {{-- <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }}">
+                    <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.css') }}"> --}}
+                    <link rel="stylesheet" type="text/css" href=" {{ asset('css/app.css') }}">
                     <script src="{{ asset('js/app.js') }}" defer></script>
                     
     <link href="https://fonts.googleapis.com/css?family=Oxygen:400,700" rel="stylesheet">

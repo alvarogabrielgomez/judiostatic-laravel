@@ -19,9 +19,11 @@
     <META NAME="Subject" CONTENT="Cupon Business">
     <META NAME="Language" CONTENT="Portuguese">
 
-    <link rel="preload" href="{{ asset('css/style.css') }}" as= "style">
+    {{-- <link rel="preload" href="{{ asset('css/style.css') }}" as= "style">
     <link rel="preload" href="{{ asset('css/responsive.css') }}" as= "style">
-    <link rel="preload" href="{{ asset('css/modalwindow.css') }}" as= "style">
+    <link rel="preload" href="{{ asset('css/modalwindow.css') }}" as= "style"> --}}
+    <link rel="preload" href="{{ asset('css/app.css') }}" as= "style">
+
     <link rel="preload" href="{{ asset('images/icons/cupon-std.svg') }}" as="image">
     <link rel="preload" href="{{ asset('images/icons/loading.svg') }}" as="image">
 
@@ -38,10 +40,12 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#bc2b19">
    
-    <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/modalwindow.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/modalwindow.css') }}"> --}}
     
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}"/>
+
     <link href="https://fonts.googleapis.com/css?family=Oxygen:400,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/fontawesome.css" integrity="sha384-WK8BzK0mpgOdhCxq86nInFqSWLzR5UAsNg0MGX9aDaIIrFWQ38dGdhwnNCAoXFxL" crossorigin="anonymous"> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/regular.css" integrity="sha384-l+NpTtA08hNNeMp0aMBg/cqPh507w3OvQSRoGnHcVoDCS9OtgxqgR7u8mLQv8poF" crossorigin="anonymous">

@@ -161,7 +161,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                 <spinner-small size="48" v-show="loading"></spinner-small>
                 <div v-if="showing" class="deal-info">
                     <p>
-                       <strong>Bienvenido de nuevo, {{userdata.client_first}}!</strong>
+                       <strong>Bienvenido de nuevo, {{$store.state.userdata.client_first}}!</strong>
                     </p>
                 </div>
                 <div id="pwd-form-container">
@@ -263,7 +263,7 @@ border-bottom: 2px solid #22ba6a;
 /* form starting stylings ------------------------------- */
 .group { 
   position:relative; 
-  margin-bottom:27px; 
+  margin-bottom:17px; 
 }
 
 #insert-form, #pwd-form{
@@ -276,37 +276,49 @@ display: flex;
 }
 
 input{
+  border-radius: 4px;
   font-size:15px;
-  padding:10px 10px 10px 3px;
+  padding: 14px 10px 14px 10px;
   display:block;
   width:285px;
-  border:none;
+  border:1px solid #cacaca;
     border-bottom: 1px solid rgb(210, 210, 210);
+      transition:0.2s ease all; 
 }
-input:focus { outline:none; }
 /* LABEL ======================================= */
-label 				 {
+label{
+  padding: 0px 5px;
   color:#999; 
   font-size:15px;
   font-weight:normal;
   position:absolute;
   pointer-events:none;
   left:5px;
-  top:9px;
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
-  -webkit-transition:0.2s ease all;
+  top:11px;
+  transition:0.15s ease all; 
+  -moz-transition:0.15s ease all; 
+  -webkit-transition:0.15s ease all;
+      background-color:#fff;
 }
 /* active state */
+input:focus{
+    border: 1px solid var(--highlight-input);
+    transition: 0.2s ease all;
+    box-shadow: inset 0px 0 0 1px var(--highlight-input);
+  outline:none; 
+}
 input:focus ~ label, input:valid ~ label {
-top: -23px;
-    left: 3px;
-    font-size: 13px;
-    color: #5264AE;
+    top: -12px;
+    left: 8px;
+    font-size: 11.5px;
+}
+input:focus ~ label{
+    color: var(--highlight-input);
+
 }
 
 /* BOTTOM BARS ================================= */
-.bar 	{ position:relative; display:block; width:300px; }
+/* .bar 	{ position:relative; display:block; width:300px; }
 .bar:before, .bar:after 	{
   content:'';
   height:2px; 
@@ -323,21 +335,22 @@ top: -23px;
 }
 .bar:after {
   right:50%; 
-}
+} */
 /* active state */
 input:focus ~ .bar:before, input:focus ~ .bar:after {
   width:50%;
 }
 /* HIGHLIGHTER ================================== */
 .highlight {
-  position:absolute;
-  height:60%; 
-  width:100px; 
-  border-radius: 2px;
-  top:25%; 
-  left:0;
-  pointer-events:none;
-  opacity:0.5;
+    position: absolute;
+    height: 60%;
+    width: 100px;
+    border-radius: 2px;
+    top: 19%;
+    left: 11px;
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: 10;
 }
 /* active state */
 input:focus ~ .highlight {
@@ -742,6 +755,7 @@ background: #FFF;
 <script>
 
 export default {
+  name:'dealsubmit',
   props: ["title", "descuento", "bussname", "user"],
   data(){
         return{
@@ -766,7 +780,7 @@ export default {
                       "Next":
                       "Next Step"
                     },
-            userdata:{},
+            
             resume:false,
             hasError:false,
             hasResponse:false,
@@ -963,8 +977,12 @@ export default {
         .catch((error) => {
           this.hasError = true;
           if (error.response.data.error == "invalid_credentials"){
-            this.responseContent = "Contrasena Incorrecta"
-          }else{
+            this.responseContent = "Contrasena Incorrecta";
+          }
+          else if(error.response.data.error == "invalid_request"){
+            this.responseContent = "Hubo un problema en la respuesta";
+          }
+          else{
             this.responseContent = error.response.data.message;
           }
           this.loadingMss = false;
