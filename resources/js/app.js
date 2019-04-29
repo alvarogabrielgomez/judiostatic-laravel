@@ -1,13 +1,8 @@
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
-
+window.Vuex = require('vuex');
 window.Vue = require('vue');
 window.axios = require('axios');
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -28,11 +23,13 @@ Vue.component('dealsubmit-component', require('./components/modalwindow/DealSubm
 Vue.component('Spinner', require('./components/Spinner.vue').default);
 Vue.component('spinner-small', require('./components/Spinner-small.vue').default);
 Vue.component('carousel-component', require('./components/carousel/CarouselComponent.vue').default);
+Vue.component('login-form-component', require('./components/auth/LoginFormComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
 
 
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);

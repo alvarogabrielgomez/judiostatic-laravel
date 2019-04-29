@@ -2,7 +2,7 @@
 
 namespace judiostatic\Http\Controllers\Auth;
 
-use judiostatic\Client;
+use judiostatic\User;
 use judiostatic\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -50,8 +50,9 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'client_first' => ['required', 'string', 'max:255'],
-            'client_email' => ['required', 'string', 'email', 'max:255', 'unique:clients'],
-            'client_pwd' => ['required', 'string', 'min:8', 'confirmed'],
+            'client_last' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:clients'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
@@ -59,15 +60,15 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \judiostatic\Client
+     * @return \judiostatic\User
      */
     protected function create(array $data)
     {
-        return Client::create([
+        return User::create([
             'client_first' => $data['first'],
             'client_last' => $data['last'],
-            'client_email' => $data['email'],
-            'client_pwd' => Hash::make($data['password']),
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
         ]);
     }
 }

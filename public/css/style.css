@@ -179,7 +179,7 @@ nav ul li a{
 }
 
 #main-login{
-width: 376px;
+
 }
 #main-login-container{
 	min-height: 70vh;
@@ -452,22 +452,6 @@ abbr{
 	text-shadow: 1px 1px 0px rgba(209, 209, 209, 0.29);
 }
 
-.nav-login input{
-	border: 2px solid rgba(179, 179, 179, 0.603);
-    border-radius: 4px;
-    padding: 13px;
-    margin: 0 5px 10px 0;
-    -webkit-box-shadow: 0px 0px 4px 0px rgba(209,209,209,1);
-    -moz-box-shadow: 0px 0px 4px 0px rgba(209,209,209,1);
-    box-shadow: 0px 0px 4px 0px rgba(209,209,209,1);
-}
-.nav-login input[type=text] {
-    padding-left: 17px;
-}
-
-.nav-login input[type=password] {
-    padding-left: 17px;
-}
 
 .button {
     border-radius:50px;
@@ -535,48 +519,14 @@ abbr{
 
 }
 
-
-
-
-.nav-login{
-	display: flex;
-    flex-direction: row;
-    flex-flow: wrap;
-    align-content: center;
-}
-.nav-login a{
-	width: 100%;
-    margin-top: 9px;
-}
 .title-login{
     margin-bottom: 35px!important;
 	padding: 1px 28px;
 	margin-top:32px!important;
 }
 
-.title-login-left{
-	margin-bottom: 28px!important;
-	padding: 1px 28px;
-	text-align: left;
-    font-size: 2em;
-	margin-top:8px!important;
-}
 
-.admin-login{
-	width: 100%;
-	max-width: 325px;
-	min-width: 300px;
-	padding: 9%;
-}
 
-.admin-signup{
-	width: 100%;
-	max-width: 325px;
-	min-width: 300px;
-	transition-duration: 170ms;
-    transition-property:visibility, opacity;
-    transition-delay:1s;
-}
 
 .iforgot-box{
 	width: 100%;
@@ -587,12 +537,7 @@ abbr{
     transition-delay:1s;
 }
 
-.nav-login form{
-	display: flex;
-	flex-direction: column;
-	width: 100%;
 
-}
 .nav-signup form {
 	display: flex;
 	flex-direction: column;
@@ -2064,9 +2009,14 @@ padding: 17px 0px;
 }
 
 .login-img{
-	background-size: contain;
+    background-size: contain;
     background-position: center;
+    width: 100%;
     background-image: url(/images/Repeating-Triangles.svg);
+    height: 100%;
+    position: absolute;
+	z-index: -1;
+	opacity: 0.4;
 }
 
 .whenis{

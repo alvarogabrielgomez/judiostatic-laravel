@@ -77,7 +77,7 @@
 
                 <div class="deal-info deal-white" style="padding: 0px; overflow: hidden;">
 
-                  <form method="POST" id="insert-form">
+                  <form id="insert-form">
 
                     <div class="group">
                       <input id="clientfirst" type="text" name="client_first" required>
@@ -165,7 +165,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                     </p>
                 </div>
                 <div id="pwd-form-container">
-                  <form method="POST" id="pwd-form">
+                  <form id="pwd-form">
 
                     <div class="group" style="margin: auto;">
                       <input id="clientpwd" type="password" name="password" required>
@@ -277,7 +277,7 @@ display: flex;
 
 input{
   font-size:15px;
-  padding:10px 10px 10px 7px;
+  padding:10px 10px 10px 3px;
   display:block;
   width:285px;
   border:none;
@@ -299,9 +299,10 @@ label 				 {
 }
 /* active state */
 input:focus ~ label, input:valid ~ label {
-  top:-20px;
-  font-size:13px;
-  color:#5264AE;
+top: -23px;
+    left: 3px;
+    font-size: 13px;
+    color: #5264AE;
 }
 
 /* BOTTOM BARS ================================= */
@@ -446,7 +447,7 @@ transition: transform .5s ease-in-out;
     display: block;
     border-radius: 50%;
     text-align: center;
-    vertical-align: middle;
+
     line-height: 1.85em;
     border: 1px solid #d6d6d6;
     color: #fff;
@@ -463,7 +464,7 @@ transition: transform .5s ease-in-out;
     display: block;
     border-radius: 50%;
     text-align: center;
-    vertical-align: middle;
+
     line-height: 1.85em;
     border: 1px solid #d6d6d6;
 }
@@ -939,10 +940,7 @@ export default {
         }
       };
 
-        axios.post(process.env.MIX_APP_URL + ':8000' + '/oauth/token',{
-          grant_type: process.env.MIX_GRANT_TYPE,
-          client_id: process.env.MIX_CLIENT_ID,
-          client_secret: process.env.MIX_CLIENT_SECRET,
+        axios.post(process.env.MIX_APP_URL + ':8000' + '/api/login',{
           username: this.userdata.email,
           password: pwdInput.value,
         }) 
@@ -955,7 +953,7 @@ export default {
             this.responseMss = "success";
             var response = response.data;
             this.responseContent = "Token Listo";
-            this.storeAccessToken(response.data.access_token);
+            //this.storeAccessToken(response.data.access_token);
            // this.passToNext();
 
 

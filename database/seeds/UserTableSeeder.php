@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use judiostatic\Role;
 use judiostatic\User;
+use Faker\Generator as Faker;
 
 class UserTableSeeder extends Seeder
 {
@@ -13,21 +14,29 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $role_user = Role::where('name', 'user')->first();
-        $role_admin = Role::where('name', 'admin')->first();
+        $faker = new Faker;
+       // $role_user = Role::where('name', 'user')->first();
+       // $role_admin = Role::where('name', 'admin')->first();
 
         $user = new User();
-        $user->name = "User";
+        $user->client_first = "User";
+        $user->client_last = "Name";
         $user->email = "user@gmail.com";
         $user->password = bcrypt('query');
+        $user->email_verified_at = now();
+        $user->remember_token = Str::random(10);
         $user->save();
-        $user->roles()->attach($role_user);
+        //$user->roles()->attach($role_user);
         
         $user = new User();
-        $user->name = "Admin";
+        $user->client_first = "Admin";
+        $user->client_last= "User";
+        $user->active= "1";
         $user->email = "admin@gmail.com";
         $user->password = bcrypt('query');
+        $user->email_verified_at = now();
+        $user->remember_token = Str::random(10);
         $user->save();
-        $user->roles()->attach($role_admin);
+       // $user->roles()->attach($role_admin);
     }
 }

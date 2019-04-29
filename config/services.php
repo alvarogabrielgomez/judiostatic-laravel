@@ -35,7 +35,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => judiostatic\Client::class,
+        'model' => judiostatic\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
         'webhook' => [
@@ -43,5 +43,12 @@ return [
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
     ],
+
+    'passport' => [
+        'login_endpoint' => env('PASSPORT_LOGIN_ENDPOINT'),
+        'client_id' => env('PASSPORT_CLIENT_ID'),
+        'client_secret' => env('PASSPORT_CLIENT_SECRET')   
+    ],
+
 
 ];
