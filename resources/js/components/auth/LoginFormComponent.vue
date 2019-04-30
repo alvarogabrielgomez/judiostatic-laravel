@@ -291,15 +291,22 @@ methods:{
     })
     .then((response) => {
       console.log(response);
+      if(response.status == 200){
+        this.hasResponse = true;
+        this.hasError = false;
+        this.loadingMss = true;
+        this.responseContent = "Logued";
+        window.location.href = '/home';
+      }
     })
     .catch((error) => {
+      var clientpwd = document.getElementById('clientpwd');
+      clientpwd.className = "invalid-data";
       console.log(error.response);
       this.hasError = true;
       this.loadingMss = false;
       if(error.response.status == 422){
         this.responseContent = "Contrasena Incorrecta";
-        var clientpwd = document.getElementById('clientpwd');
-        clientpwd.className += "invalid-data"
       }
     })
   }
@@ -327,6 +334,8 @@ methods:{
             this.responseMss = "error";
             this.responseContent = response.data.responseContent;
             this.loading = false;
+            var clientmail = document.getElementById('clientmail');
+            clientmail.className = "invalid-data";
 
           }else if(response.data.response == 'successNoSession'){
             this.formselected = "pwd-form";
@@ -351,7 +360,7 @@ methods:{
           .catch((error) => {
           this.hasError = true;
           var clientmail = document.getElementById('clientmail');
-          clientmail.className += "invalid-data"
+          clientmail.className = "invalid-data";
           if (error.response.data.error == "invalid_credentials"){
             this.responseContent = "Contrasena Incorrecta";
           }

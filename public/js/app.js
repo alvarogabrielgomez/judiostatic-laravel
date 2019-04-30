@@ -2110,15 +2110,23 @@ __webpack_require__.r(__webpack_exports__);
           password: this.password
         }).then(function (response) {
           console.log(response);
+
+          if (response.status == 200) {
+            _this.hasResponse = true;
+            _this.hasError = false;
+            _this.loadingMss = true;
+            _this.responseContent = "Logued";
+            window.location.href = '/home';
+          }
         })["catch"](function (error) {
+          var clientpwd = document.getElementById('clientpwd');
+          clientpwd.className = "invalid-data";
           console.log(error.response);
           _this.hasError = true;
           _this.loadingMss = false;
 
           if (error.response.status == 422) {
             _this.responseContent = "Contrasena Incorrecta";
-            var clientpwd = document.getElementById('clientpwd');
-            clientpwd.className += "invalid-data";
           }
         });
       }
@@ -2150,6 +2158,8 @@ __webpack_require__.r(__webpack_exports__);
             _this2.responseMss = "error";
             _this2.responseContent = response.data.responseContent;
             _this2.loading = false;
+            var clientmail = document.getElementById('clientmail');
+            clientmail.className = "invalid-data";
           } else if (response.data.response == 'successNoSession') {
             //this.passToPWD();
             var selectpwd = function selectpwd() {
@@ -2174,7 +2184,7 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (error) {
           _this2.hasError = true;
           var clientmail = document.getElementById('clientmail');
-          clientmail.className += "invalid-data";
+          clientmail.className = "invalid-data";
 
           if (error.response.data.error == "invalid_credentials") {
             _this2.responseContent = "Contrasena Incorrecta";
