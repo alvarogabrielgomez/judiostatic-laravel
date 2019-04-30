@@ -278,7 +278,7 @@ display: flex;
 input{
   border-radius: 4px;
   font-size:15px;
-  padding: 14px 10px 14px 10px;
+  padding: 14px 10px 14px 14px;
   display:block;
   width:285px;
   border:1px solid #cacaca;
@@ -293,7 +293,7 @@ label{
   font-weight:normal;
   position:absolute;
   pointer-events:none;
-  left:5px;
+  left:10px;
   top:11px;
   transition:0.15s ease all; 
   -moz-transition:0.15s ease all; 
@@ -811,14 +811,26 @@ export default {
   updated(){
 
 
-// Swicher de Boton
+// Swicher de Boton y demas
       this.next = this.stepactual+1 
       this.steps.Next = this.steps.step[this.next];
       if(this.stepactual == 2 || this.stepactual == 4){
         if(this.stepactual == 2){
           this.formselected = "insert-form";
+          function selectname(){
+            var inputfirst = document.getElementById('clientfirst');
+            inputfirst.focus();
+            inputfirst.select();
+          }
+          setTimeout(selectname, 1000);
         }else if (this.stepactual == 4){
           this.formselected = "pwd-form";
+          function selectPwd(){
+            var inputpwd = document.getElementById('clientpwd');
+            inputpwd.focus();
+            inputpwd.select();
+          }
+          setTimeout(selectPwd, 1000);
         }
         this.botoncontinuar = false;
         this.botonsubmit = true;

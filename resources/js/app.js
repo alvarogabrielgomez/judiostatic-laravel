@@ -14,11 +14,7 @@ import {store} from './store/store'
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
-Vue.component('pokemons-component', require('./components/PokemonsComponent.vue').default);
-
-Vue.component('add-pokemon-btn', require('./components/AddPokemonComponent.vue').default);
 Vue.component('dealsubmit-component', require('./components/modalwindow/DealSubmitComponent.vue').default);
 Vue.component('Spinner', require('./components/Spinner.vue').default);
 Vue.component('spinner-small', require('./components/Spinner-small.vue').default);

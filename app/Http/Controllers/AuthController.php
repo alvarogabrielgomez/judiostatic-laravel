@@ -62,4 +62,50 @@ class AuthController extends Controller
         //     'Successfully logged out']);
     }
 
+    public function checkuser(Request $request){
+        $response = "";
+        $responseContent = "";
+        $request->validate([
+            'email' =>  'required|email',
+        ]);
+    //Primero se Revisa si existe el usuario
+        $users = User::where('email', '=', $request->email)
+        ->first();
+        $client_first = "";
+        $client_last = "";
+        // El usuario si existia en la tabla Users
+        if($users != null){
+            
+            if($users->active != 1){
+                // Si el usuario no esta activo
+                $client_first = $users->client_first;
+                $client_last = $users->client_last;
+                $email = $users->email;
+                $response = "error";
+                $responseContent = "Usuário Banido ou desativado";
+            }else if($users->active == 1){
+                // Si el usuario esta activo
+                $client_first = $users->client_first;
+                $client_last = $users->client_last;
+                $email = $users->email;
+
+                //Aca se tiene que revisar si esta en sesion
+                if(Auth::check()){
+                    $response = "success";
+                    $responseContent = "Esta en Session";     
+                }else{
+                    $response = "successNoSession";
+                    $responseContent = "Escriba su contrasena para continuar."; 
+                }
+            }
+        }else{
+          // El usuario no existia en la tabla Users 
+          $email = "";
+          $response = "error";
+          $responseContent = "Usuario No existe";
+    }
+    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
+
+ }
+
 }

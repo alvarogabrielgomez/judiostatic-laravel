@@ -2,13 +2,13 @@
   <div id="login-form">
 
 
-    <div id="pwd-form-container" class="admin-login" style="padding: 20spx;">
-      <div class="nav-login">
-        <div
-          class="light-bar-t"
-          id="nav-bar"
-          style="position: absolute;top: 11px;margin-top:0px!important;"
-        >
+    <div id="pwd-form-container" class="admin-login" style="padding: 20px; position:relative;  transition: 0.7s;">
+        <transition name="fade">
+        <div id="loading-overlay" v-if="loadingMss" >
+        <spinner-small style = "margin-top:30px;" ></spinner-small>
+        </div>
+         </transition>
+        <div class="light-bar-t" id="nav-bar" style="position: absolute;top: 11px;margin-top:0px!important;z-index: 1000;">
           <div id="nav-bar-container">
             <nav>
               <ul class="light-bar-text">
@@ -23,22 +23,20 @@
             </nav>
           </div>
         </div>
+      <transition name="slide-horizontal">
+    <div v-if="stepactual == 1" class="stepslogin" id="step1">
+      <div class="nav-login">
+
         <div id="logo-form">
           <div class="trans-black-logo-form"></div>
       <!-- <h1 class="title-login-center">Inicia sesion</h1> -->
         </div>
-        <form action="#" @submit.prevent="login">
+        <form id="emailform" action="#" @submit.prevent="formSubmit">
           <div class="group" style="margin: auto;">
-            <input id="clientemail" type="email" name="email" required v-model="username">
+            <input id="clientmail" type="email" name="email" required v-model="username">
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Email</label>
-          </div>
-          <div class="group" style="margin: auto;">
-                      <input id="clientpwd" type="password" name="password" required v-model="password">
-                      <span class="highlight"></span>
-                      <span class="bar"></span>
-                      <label>Password</label>
           </div>
           <div class="group" style="margin:13px auto 0px;;width: 81%;">          
             <a class="opcion-alt" href="iforgot/reset-password.php">Crear una nueva cuenta</a>
@@ -46,24 +44,102 @@
           </div>
 
         </form>
-
-        <button type="submit" class="button red login-submit" name="login-submit">Login</button>
       </div>
+
+
+                    
+      </div>
+      </transition>
+
+
+      <transition name="slide-horizontal">
+    <div v-if="stepactual == 2" class="stepslogin" id="step2">
+      <div class="nav-login">
+        <div id="logo-form">
+          <div class="trans-black-logo-form"></div>
+     <h1 class="title-login-center">Bienvenido de nuevo, {{this.$store.state.userdata.client_first}}</h1>
+        </div>
+        <form id="pwdform" action="#" @submit.prevent="login">
+          <div class="group" style="margin: auto;">
+                      <input id="clientpwd" type="password" name="password" required v-model="password">
+                      <span class="highlight"></span>
+                      <span class="bar"></span>
+                      <label>Password</label>
+          </div>
+          <div class="group" style="margin:13px auto 0px;;width: 81%;">          
+            <a class="opcion-alt" href="iforgot/reset-password.php">Olvide el password</a>
+            <a class="opcion-alt" v-on:click="stepactual = 1" >Volver</a>
+      
+          </div>
+
+        </form>
+      </div>
+           
+
+      </div>
+      </transition>
+
+
+
+
+        <button v-if="botoncontinuar" form="emailform" type="submit" class="button red login-submit" name="login-submit">Siguiente</button>
+        <button v-if="botonsubmit" form="pwdform" type="submit" class="button red login-submit" name="login-submit">Login</button>
     </div>
   </div>
 </template>
 
 <style>
-body::after{
-    position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
-    content:url(/images/omeleth_trans_black.png);
+.invalid-data{
+    border: 1px solid var(--red);
+}
+.invalid-data:focus{
+      border: 1px solid var(--red);
+    box-shadow: inset 0px 0 0 1px var(--red);
+}
+
+.invalid-data:focus ~ label {
+    color: var(--red);
+
+}
+.invalid-data ~ label {
+    font-weight: 600;
+    color: var(--red);
+
+}
+
+#loading-overlay{
+      position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding-bottom: 45px;
+    z-index: 10000;
+    background-color: rgba(255, 255, 255, 0.79);
+}
+.stepslogin{
+      position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.slide-horizontal-leave-active,
+.slide-horizontal-enter-active {
+  transition: 0.7s;
+}
+
+.slide-horizontal-enter {
+  transform: translate(100%, 0);
+}
+.slide-horizontal-leave-to {
+  transform: translate(-100%, 0);
 }
 
 .title-login-center {
-  padding: 1px 28px;
-  text-align: center;
-  font-size: 0.8em;
-
+    padding: 1px 27px;
+    text-align: center;
+    font-size: 0.92em;
+    font-weight: 600;
+    color: #464646;
+    margin-top: 30px!important;
 }
 
 #logo-form {
@@ -93,6 +169,7 @@ body::after{
   box-shadow: 0px 0px transparent !important;
   bottom: 0px;
   width: 100%;
+      z-index: 10000;
 }
 .admin-login {
   min-width: 377px !important;
@@ -131,14 +208,168 @@ export default {
 name:'login',
 data(){
     return{
+        stepactual:1,
+        next: 2,
+        loading: false,
+        loadingMss: false,
+        botoncontinuar:true,
+        botonsubmit:false,
+        responseMss: "success",
+        responseContent: "",
         username:'',
-        password:''
+        password:'',
+        steps: { "step":{
+          "1":"Ingrese email", 
+          "2":"Ingrese password", 
+          "3":"Registrar"
+          },
+          "Next":
+          "Next Step"
+        },
+        hasError:false,
+        hasResponse:false,
+        formselected:"emailform"
     }
+},
+mounted(){
+const form = document.getElementById(this.formselected);
+const emailInput  = form.querySelector('input[name=email]');
+const pwdformContainer = document.getElementById('pwd-form-container');
+pwdformContainer.style.height = "420px";
+function selectEmail(){
+  var inputEmail = document.getElementById('clientmail');
+  inputEmail.focus();
+  inputEmail.select();
+}
+setTimeout(selectEmail, 300);
+
+},
+updated(){
+// Swicher de Boton y demas
+
+      this.next = this.stepactual+1 
+      this.steps.Next = this.steps.step[this.next];
+      const pwdformContainer = document.getElementById('pwd-form-container');
+      if(this.stepactual == 1){
+          this.formselected = "emailform";
+          pwdformContainer.style.height = "420px";          
+        this.botoncontinuar = true;
+        this.botonsubmit = false;
+      }else if(this.stepactual == 2){
+        pwdformContainer.style.height = "400px";
+        this.formselected = "pwdform";
+        this.botoncontinuar = false;
+        this.botonsubmit = true;
+      }
+// Switcher de Spinner
+      if(this.responseMss == 'success'){
+        this.showing = true;
+        this.loading = false;
+      }else if(this.responseMss == 'error'){
+        this.showing = false;
+        this.loading = false;
+      }else if(this.responseMss != 'success' || this.responseMss != 'error'){
+        this.loading = true;
+      }
+
 },
 methods:{
   login(){
-
+    this.loadingMss = true;
+    this.hasError = false;
+    this.hasResponse = false;
+    if(this.password == ''){
+          this.hasError = true;
+          this.hasResponse = false;
+          this.responseContent = "Llene todos los campos";
+          this.loadingMss = false;
+    }
+    else{
+    axios.post('/login',{
+      email:this.$store.state.userdata.email,
+      password:this.password,
+    })
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error.response);
+      this.hasError = true;
+      this.loadingMss = false;
+      if(error.response.status == 422){
+        this.responseContent = "Contrasena Incorrecta";
+        var clientpwd = document.getElementById('clientpwd');
+        clientpwd.className += "invalid-data"
+      }
+    })
   }
+  },
+
+  formSubmit: function formSubmit(){
+      this.loadingMss = true;
+      this.hasResponse = false;
+      this.loading = true;
+      if(this.username == ''){
+          this.hasError = true;
+          this.hasResponse = false;
+          this.responseContent = "Llene todos los campos";
+          this.loadingMss = false;
+      }else{
+        this.$store.state.userdata.email = this.username;
+        this.hasError = false;
+        var input = {'email':this.$store.state.userdata.email}
+        axios.post('api/checkuser', input)
+        .then((response) => {
+          this.hasResponse = true;
+          this.loadingMss = false;
+          if(response.data.response == 'error'){
+            this.hasError = true;
+            this.responseMss = "error";
+            this.responseContent = response.data.responseContent;
+            this.loading = false;
+
+          }else if(response.data.response == 'successNoSession'){
+            this.formselected = "pwd-form";
+            this.hasError = false;
+            this.responseMss = "success";
+            this.$store.state.userdata = response.data;
+            this.responseContent = response.data.responseContent;
+            this.resume = true;
+            this.showing = true;
+            this.loading = false;
+            this.passToNext();
+            //this.passToPWD();
+            function selectpwd(){
+            var inputpwd = document.getElementById('clientpwd');
+            inputpwd.focus();
+            inputpwd.select();
+            }
+            setTimeout(selectpwd, 1000);
+
+          }
+        })
+          .catch((error) => {
+          this.hasError = true;
+          var clientmail = document.getElementById('clientmail');
+          clientmail.className += "invalid-data"
+          if (error.response.data.error == "invalid_credentials"){
+            this.responseContent = "Contrasena Incorrecta";
+          }
+          else if(error.response.data.error == "invalid_request"){
+            this.responseContent = "Hubo un problema en la respuesta";
+          }
+          else{
+            this.responseContent = error.response.data.message;
+          }
+          this.loadingMss = false;
+        })
+      }
+
+  },
+
+  passToNext: function(){
+    this.stepactual += 1;
+  },
 }
 };
 </script>
