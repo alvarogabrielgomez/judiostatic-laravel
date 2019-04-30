@@ -237,9 +237,9 @@ const emailInput  = form.querySelector('input[name=email]');
 const pwdformContainer = document.getElementById('pwd-form-container');
 pwdformContainer.style.height = "420px";
 function selectEmail(){
-  var inputEmail = document.getElementById('clientmail');
-  inputEmail.focus();
-  inputEmail.select();
+  var clientmail = document.getElementById('clientmail');
+  clientmail.focus();
+  clientmail.select();
 }
 setTimeout(selectEmail, 300);
 
@@ -302,9 +302,12 @@ methods:{
     .catch((error) => {
       var clientpwd = document.getElementById('clientpwd');
       clientpwd.className = "invalid-data";
+      clientpwd.focus();
+      clientpwd.select();
       console.log(error.response);
       this.hasError = true;
       this.loadingMss = false;
+
       if(error.response.status == 422){
         this.responseContent = "Contrasena Incorrecta";
       }

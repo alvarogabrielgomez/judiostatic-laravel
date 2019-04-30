@@ -2055,9 +2055,9 @@ __webpack_require__.r(__webpack_exports__);
     pwdformContainer.style.height = "420px";
 
     function selectEmail() {
-      var inputEmail = document.getElementById('clientmail');
-      inputEmail.focus();
-      inputEmail.select();
+      var clientmail = document.getElementById('clientmail');
+      clientmail.focus();
+      clientmail.select();
     }
 
     setTimeout(selectEmail, 300);
@@ -2121,6 +2121,8 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (error) {
           var clientpwd = document.getElementById('clientpwd');
           clientpwd.className = "invalid-data";
+          clientpwd.focus();
+          clientpwd.select();
           console.log(error.response);
           _this.hasError = true;
           _this.loadingMss = false;
@@ -2349,6 +2351,8 @@ function cargado() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -3350,7 +3354,11 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
-    storeAccessToken: function storeAccessToken(token) {} // formSubmit: function formSubmit(){
+    oauthClient: function oauthClient() {
+      axios.get('/oauth/scopes').then(function (response) {
+        console.log(response.data);
+      });
+    } // formSubmit: function formSubmit(){
     //   let currentObj = this;
     //   this.axios.get('/dealsubmit', {
     //         first: this.first,
@@ -6205,6 +6213,19 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "deal-info deal-white" }, [
                     _c("p", [
+                      _c(
+                        "a",
+                        {
+                          staticStyle: { cursor: "pointer" },
+                          on: {
+                            click: function($event) {
+                              return _vm.oauthClient()
+                            }
+                          }
+                        },
+                        [_vm._v("OAUTHCLIENTS.")]
+                      ),
+                      _vm._v(" "),
                       _c("strong", [_vm._v("Verifique")]),
                       _vm._v(
                         " se tudo está em ordem e é a oferta que\r\n                        você deseja. Se tudo estiver correto, você pode\r\n                        "

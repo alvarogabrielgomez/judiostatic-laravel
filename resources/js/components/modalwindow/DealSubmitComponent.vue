@@ -31,6 +31,8 @@
 
                 <div class="deal-info deal-white">
                     <p>
+                       <a style="cursor:pointer;" v-on:click="oauthClient()" >OAUTHCLIENTS.</a>
+
                         <strong>Verifique</strong> se tudo está em ordem e é a oferta que
                         você deseja. Se tudo estiver correto, você pode
                         <strong>continuar</strong>*
@@ -1004,9 +1006,13 @@ export default {
 
     
     },
-    storeAccessToken: function storeAccessToken(token){
-      
-    },
+  oauthClient:function(){
+  axios.get('/oauth/scopes')
+    .then(response => {
+        console.log(response.data);
+    });
+  },
+
 
     // formSubmit: function formSubmit(){
       
