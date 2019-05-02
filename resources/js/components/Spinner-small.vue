@@ -35,6 +35,8 @@ export default {
 .loader-small {
   margin: auto;
   font-size: 4px;
+      width: 45px;
+    height: 45px;
   position: relative;
   text-indent: -9999em;
   border-top: 1.1em solid rgba(15,23,43, 0.2);

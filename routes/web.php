@@ -13,9 +13,7 @@ use Laravel\Passport\Passport;
 */
 Auth::routes();
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('/');
+Route::get('/', 'MainController@index')->name('/');
 
 // Route::group(['middleware' => 'cors'], function(){
 //     Passport::routes();
@@ -26,10 +24,6 @@ Route::resource('modalwindow', 'ModalwindowController');
 Route::post('/dealsubmit', 'DealsController@dealsubmit');
 Route::post('/dealsubmituser', 'DealsController@dealsubmituser');
 Route::get('carousel', 'DealsController@carousel');
-
-Route::get('/home', function () {
-    return view('welcome');
-})->name('home');
 
 Route::get('deals', 'DealsController@index');
 Route::get('modalwindow', 'ModalwindowController@index');

@@ -89,23 +89,7 @@
 </template>
 
 <style>
-.invalid-data{
-    border: 1px solid var(--red);
-}
-.invalid-data:focus{
-      border: 1px solid var(--red);
-    box-shadow: inset 0px 0 0 1px var(--red);
-}
 
-.invalid-data:focus ~ label {
-    color: var(--red);
-
-}
-.invalid-data ~ label {
-    font-weight: 600;
-    color: var(--red);
-
-}
 
 #loading-overlay{
       position: absolute;
@@ -350,7 +334,6 @@ methods:{
             this.showing = true;
             this.loading = false;
             this.passToNext();
-            //this.passToPWD();
             function selectpwd(){
             var inputpwd = document.getElementById('clientpwd');
             inputpwd.focus();

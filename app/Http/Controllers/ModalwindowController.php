@@ -4,6 +4,7 @@ namespace judiostatic\Http\Controllers;
 
 use Illuminate\Http\Request;
 use judiostatic\Post;
+use Illuminate\Support\Facades\Auth;
 use judiostatic\Buss;
 
 class ModalwindowController extends Controller
@@ -19,8 +20,13 @@ class ModalwindowController extends Controller
         
         $posts = Post::where('post_id', '=', $id)->join('buss', 'buss.buss_id', '=', 'posts.buss_id')->firstOrFail();
        
+        $userdata = '{"email":"", "client_first":"", "client_last":""}';
 
-        return view('partials.modalwindow.continue', compact('posts'));
+        if(Auth::check()){
+            $userdata = Auth::user();
+        }
+
+        return view('partials.modalwindow.continue', compact('posts', 'userdata'));
     }
 
 }

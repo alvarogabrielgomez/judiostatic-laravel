@@ -59,6 +59,9 @@
     <meta property="og:description"        content="@yield('description')" />
     <meta property="og:image"              content="https://omeleth.com/@yield('heroimage')" />
     <meta property="fb:app_id"             content="238563567095772" /> 
+    {{-- <script>
+        window.auth_user = {!! json_encode($auth_user); !!};
+    </script> --}}
 </head>
 <body>
    

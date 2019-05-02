@@ -31,7 +31,7 @@
 
                 <div class="deal-info deal-white">
                     <p>
-                       <a style="cursor:pointer;" v-on:click="oauthClient()" >OAUTHCLIENTS.</a>
+
 
                         <strong>Verifique</strong> se tudo está em ordem e é a oferta que
                         você deseja. Se tudo estiver correto, você pode
@@ -79,7 +79,9 @@
 
                 <div class="deal-info deal-white" style="padding: 0px; overflow: hidden;">
 
-                  <form id="insert-form">
+                  <form @submit.prevent="formSubmit" id="insert-form">
+                    <!-- FORM MOSTRADO SI NO ESTA INICIADA LA SESION -->
+                    <div id="new-user-form" v-if="this.user.email == '' ">
 
                     <div class="group">
                       <input id="clientfirst" type="text" name="client_first" required>
@@ -99,12 +101,42 @@
                       <span class="bar"></span>
                       <label>Email</label>
                     </div>
+                    </div>
+                    <!-- FORM MOSTRADO SI LA SESION ESTA INICIADA -->
+                    <div id="user-form" v-if="this.user.email != ''">
+
+                  <div id="clientfirst" class="selecting-user" style="width:100%;">
+    
+                    <div id="whoisyou" style="background-color:transparent;">
+                    <div id="whoisyou-img">
+                    <i style="font-size: 1.35em;color: #666;display: block;margin: auto;width: 23px;height: 25px;" class="fas fa-user"></i>
+                    </div>
+                    <div id="whoisyou-name"><span>
+                      {{this.user.client_first + " " + this.user.client_last}}
+                    </span>
+                    <div id="whoisyou-email"><span>
+                      {{this.user.email}}
+                    </span>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    <div id="user-data" style="display:none;">
+                    <input disabled=disabled id="clientfirst" type="text" name="client_first" v-bind:value="this.user.client_first" required>
+                    <input disabled=disabled id="clientlast" type="text" name="client_last" v-bind:value="this.user.client_last" required>
+                    <input disabled=disabled id="clientemail" type="email" name="email" v-bind:value="this.user.email" required>
+                    </div>
+                    </div>
+
+
+
                     <transition name="fade" mode="out-in">
-                    <spinner-small v-if="loadingMss"></spinner-small>
                     <p class="alert alert-danger" v-if = hasError>{{responseContent}}</p>
                     <p class="alert alert-normal" v-if = hasResponse>{{responseContent}}</p>
                     </transition>
                 </form>
+
+
                 </div>
 
                 <div class="next-selection">
@@ -167,17 +199,16 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                     </p>
                 </div>
                 <div id="pwd-form-container">
-                  <form id="pwd-form">
+                  <form @submit.prevent="formSubmit" id="pwd-form">
 
                     <div class="group" style="margin: auto;">
-                      <input id="clientpwd" type="password" name="password" required>
+                      <input id="clientpwd" type="password" name="password" required v-model="password">
                       <span class="highlight"></span>
                       <span class="bar"></span>
                       <label>Password</label>
                     </div>
                   
                     <transition name="fade" mode="out-in">
-                    <spinner-small style = "margin-top:30px;" v-if="loadingMss"></spinner-small>
                     <p style="top:44px;" class="alert alert-danger" v-if = hasError>{{responseContent}}</p>
                     <p style="top:44px;" class="alert alert-normal" v-if = hasResponse>{{responseContent}}</p>
                     </transition>
@@ -201,12 +232,16 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 <div id="creditos"><div><a href="documents/terms.html">Condições de Uso</a> <a href="documents/privacy-policy.html">Privacidade</a><a href="https://ckj.one"> © Alvaro Gabriel Gomez</a>. <span id="rights">TODOS OS DIREITOS RESERVADOS</span></div></div>
       
 </div> -->
-
+<transition name="fade" >
+<div id="loading-overlay" v-if="loadingMss" >
+        <spinner-small ></spinner-small>
+</div>
+</transition>
 
 <div class="modal-footer">
 <transition name="fade" >
- <a v-if="botoncontinuar" id="continue-btn" v-on:click="passToNext"  class="button footer-btn">Continuar</a>
-<button v-if="botonsubmit" id="continue-btn" @click.prevent="formSubmit()" class="button footer-btn">MALDITO MADURO</button>
+ <a v-if="botoncontinuar" id="continue-btn" v-on:click="passToInsert"  class="button footer-btn">Continuar</a>
+<button v-if="botonsubmit" id="continue-btn" v-bind:form="this.formselected" class="button footer-btn">MALDITO MADURO</button>
 <a v-if="botonterminar" id="continue-btn" class="button footer-btn">Terminar</a>
 </transition>
 </div>
@@ -758,9 +793,10 @@ background: #FFF;
 
 export default {
   name:'dealsubmit',
-  props: ["title", "descuento", "bussname", "user"],
+  props: ["title", "descuento", "bussname", "userdata"],
   data(){
         return{
+            user:{'email':'', 'client_first':'', 'client_last':'client_last'},
             spinnersize:48,
             next: 2,
             stepactual:1,
@@ -786,12 +822,17 @@ export default {
             resume:false,
             hasError:false,
             hasResponse:false,
+            password:'',
             newUser:{'client_first':'', 'client_last':'', 'email':''},
             formselected:"insert-form"
                     
         }
   },
   mounted(){
+  this.user = JSON.parse(this.userdata);
+      if(this.user.email != ""){
+        this.steps.step[2] = "Confirme"
+      }
 
   // Get the modal
   var modal = document.getElementById('modalwindow');
@@ -808,10 +849,11 @@ export default {
   var continueBtn = $("#continue-btn")[0];
   
   this.steps.Next = this.steps.step[this.next];
+
+
   },
 
   updated(){
-
 
 // Swicher de Boton y demas
       this.next = this.stepactual+1 
@@ -819,20 +861,8 @@ export default {
       if(this.stepactual == 2 || this.stepactual == 4){
         if(this.stepactual == 2){
           this.formselected = "insert-form";
-          function selectname(){
-            var inputfirst = document.getElementById('clientfirst');
-            inputfirst.focus();
-            inputfirst.select();
-          }
-          setTimeout(selectname, 1000);
         }else if (this.stepactual == 4){
           this.formselected = "pwd-form";
-          function selectPwd(){
-            var inputpwd = document.getElementById('clientpwd');
-            inputpwd.focus();
-            inputpwd.select();
-          }
-          setTimeout(selectPwd, 1000);
         }
         this.botoncontinuar = false;
         this.botonsubmit = true;
@@ -873,9 +903,33 @@ export default {
     passToNext: function(){
       this.stepactual += 1;
     },
+
+    passToInsert: function(){
+      this.stepactual = 2;
+      function selectname(){
+      var inputfirst = document.getElementById('clientfirst');
+      inputfirst.focus();
+      inputfirst.select();
+      }
+      setTimeout(selectname, 1000);
+    },
+
+
     passToPWD: function(){
       this.stepactual = 4;
+      function selectPwd(){
+        var inputpwd = document.getElementById('clientpwd');
+        inputpwd.focus();
+        inputpwd.select();
+      }
+      setTimeout(selectPwd, 1000);
     },
+
+    passToCupon: function(){
+      this.stepactual = 3;
+    },
+
+
 
     formSubmit: function formSubmit(){
       if(this.formselected == "pwd-form"){
@@ -887,7 +941,6 @@ export default {
       const lastInput  = form.querySelector('input[name=client_last]');
       const emailInput  = form.querySelector('input[name=email]');
       this.newUser = {'client_first':firstInput.value, 'client_last':lastInput.value, 'email':emailInput.value};
-      
 
       this.loadingMss = true;
       this.hasResponse = false;
@@ -915,7 +968,7 @@ export default {
             this.responseMss = "success";
             this.$store.state.userdata = response.data;
             this.responseContent = response.data.responseContent;
-            this.passToNext();
+            this.passToCupon();
 
           }else if(response.data.response == 'successNoSession'){
             this.formselected = "pwd-form";
@@ -935,6 +988,11 @@ export default {
           this.hasError = true;
           if(error.response.data.errors.email != ""){
             this.responseContent = "Tiene que introducir un Email válido";
+            var inputemail = document.getElementById('clientemail');
+            inputemail.className = "invalid-data"
+            inputemail.focus();
+            inputemail.select();
+
           }else{
             this.responseContent = error.response.data.message;
           }
@@ -947,12 +1005,10 @@ export default {
     },
 
     formPwdSubmit: function formPwdSubmit(){
-      const form = document.getElementById(this.formselected);
-      var pwdInput  = form.querySelector('input[name=password]');
       //El resto de los datos ya estan en memoria en userdata.
       this.loadingMss = true;
       this.hasResponse = false;
-      var input = {'client_first':this.$store.state.userdata.client_first, 'client_last':this.$store.state.userdata.client_last, 'email':this.$store.state.userdata.email, 'password': pwdInput.value};
+      var input = {'client_first':this.$store.state.userdata.client_first, 'client_last':this.$store.state.userdata.client_last, 'email':this.$store.state.userdata.email, 'password': this.password};
 
       if(input['client_first'] == '' || input['client_last'] == '' || input['email'] == '' || input['password'] == ''){
           this.hasError = true;
@@ -969,29 +1025,34 @@ export default {
         }
       };
 
-        axios.post(process.env.MIX_APP_URL + ':8000' + '/api/login',{
-          username: this.$store.state.userdata.email,
-          password: pwdInput.value,
+        axios.post('/login',{
+          email: this.$store.state.userdata.email,
+          password: this.password,
         }) 
         .then((response) => {
           this.hasResponse = true;
           this.loadingMss = false;
           this.newUser = {};
-          if(response.data.access_token != ''){
+          if(response.status == 200){
             this.hasError = false;
             this.responseMss = "success";
             var response = response.data;
             this.responseContent = "Token Listo";
-            //this.storeAccessToken(response.data.access_token);
-           // this.passToNext();
+            this.passToCupon();
 
 
           }
         })
         .catch((error) => {
           this.hasError = true;
-          if (error.response.data.error == "invalid_credentials"){
+          if (error.response.status == 422){
             this.responseContent = "Contrasena Incorrecta";
+            var inputpwd = document.getElementById('clientpwd');
+            inputpwd.focus();
+            inputpwd.select();
+            inputpwd.className = "invalid-data"
+
+
           }
           else if(error.response.data.error == "invalid_request"){
             this.responseContent = "Hubo un problema en la respuesta";
@@ -1006,12 +1067,6 @@ export default {
 
     
     },
-  oauthClient:function(){
-  axios.get('/oauth/scopes')
-    .then(response => {
-        console.log(response.data);
-    });
-  },
 
 
     // formSubmit: function formSubmit(){

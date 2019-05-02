@@ -2005,22 +2005,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
   data: function data() {
@@ -2163,7 +2147,6 @@ __webpack_require__.r(__webpack_exports__);
             var clientmail = document.getElementById('clientmail');
             clientmail.className = "invalid-data";
           } else if (response.data.response == 'successNoSession') {
-            //this.passToPWD();
             var selectpwd = function selectpwd() {
               var inputpwd = document.getElementById('clientpwd');
               inputpwd.focus();
@@ -3107,11 +3090,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'dealsubmit',
-  props: ["title", "descuento", "bussname", "user"],
+  props: ["title", "descuento", "bussname", "userdata"],
   data: function data() {
     return {
+      user: {
+        'email': '',
+        'client_first': '',
+        'client_last': 'client_last'
+      },
       spinnersize: 48,
       next: 2,
       stepactual: 1,
@@ -3138,6 +3161,7 @@ __webpack_require__.r(__webpack_exports__);
       resume: false,
       hasError: false,
       hasResponse: false,
+      password: '',
       newUser: {
         'client_first': '',
         'client_last': '',
@@ -3147,7 +3171,13 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    // Get the modal
+    this.user = JSON.parse(this.userdata);
+
+    if (this.user.email != "") {
+      this.steps.step[2] = "Confirme";
+    } // Get the modal
+
+
     var modal = document.getElementById('modalwindow'); // Get the <span> element that closes the modal
 
     var span = document.getElementsByClassName("close")[0]; // When the user clicks on <span> (x), close the modal
@@ -3167,23 +3197,9 @@ __webpack_require__.r(__webpack_exports__);
 
     if (this.stepactual == 2 || this.stepactual == 4) {
       if (this.stepactual == 2) {
-        var selectname = function selectname() {
-          var inputfirst = document.getElementById('clientfirst');
-          inputfirst.focus();
-          inputfirst.select();
-        };
-
         this.formselected = "insert-form";
-        setTimeout(selectname, 1000);
       } else if (this.stepactual == 4) {
-        var selectPwd = function selectPwd() {
-          var inputpwd = document.getElementById('clientpwd');
-          inputpwd.focus();
-          inputpwd.select();
-        };
-
         this.formselected = "pwd-form";
-        setTimeout(selectPwd, 1000);
       }
 
       this.botoncontinuar = false;
@@ -3223,8 +3239,30 @@ __webpack_require__.r(__webpack_exports__);
     passToNext: function passToNext() {
       this.stepactual += 1;
     },
+    passToInsert: function passToInsert() {
+      this.stepactual = 2;
+
+      function selectname() {
+        var inputfirst = document.getElementById('clientfirst');
+        inputfirst.focus();
+        inputfirst.select();
+      }
+
+      setTimeout(selectname, 1000);
+    },
     passToPWD: function passToPWD() {
       this.stepactual = 4;
+
+      function selectPwd() {
+        var inputpwd = document.getElementById('clientpwd');
+        inputpwd.focus();
+        inputpwd.select();
+      }
+
+      setTimeout(selectPwd, 1000);
+    },
+    passToCupon: function passToCupon() {
+      this.stepactual = 3;
     },
     formSubmit: function formSubmit() {
       var _this = this;
@@ -3267,7 +3305,7 @@ __webpack_require__.r(__webpack_exports__);
               _this.$store.state.userdata = response.data;
               _this.responseContent = response.data.responseContent;
 
-              _this.passToNext();
+              _this.passToCupon();
             } else if (response.data.response == 'successNoSession') {
               _this.formselected = "pwd-form";
               _this.hasError = false;
@@ -3287,6 +3325,10 @@ __webpack_require__.r(__webpack_exports__);
 
             if (error.response.data.errors.email != "") {
               _this.responseContent = "Tiene que introducir un Email válido";
+              var inputemail = document.getElementById('clientemail');
+              inputemail.className = "invalid-data";
+              inputemail.focus();
+              inputemail.select();
             } else {
               _this.responseContent = error.response.data.message;
             }
@@ -3299,16 +3341,14 @@ __webpack_require__.r(__webpack_exports__);
     formPwdSubmit: function formPwdSubmit() {
       var _this2 = this;
 
-      var form = document.getElementById(this.formselected);
-      var pwdInput = form.querySelector('input[name=password]'); //El resto de los datos ya estan en memoria en userdata.
-
+      //El resto de los datos ya estan en memoria en userdata.
       this.loadingMss = true;
       this.hasResponse = false;
       var input = {
         'client_first': this.$store.state.userdata.client_first,
         'client_last': this.$store.state.userdata.client_last,
         'email': this.$store.state.userdata.email,
-        'password': pwdInput.value
+        'password': this.password
       };
 
       if (input['client_first'] == '' || input['client_last'] == '' || input['email'] == '' || input['password'] == '') {
@@ -3324,26 +3364,31 @@ __webpack_require__.r(__webpack_exports__);
             "X-Requested-With": "XMLHttpRequest"
           }
         };
-        axios.post("http://localhost" + ':8000' + '/api/login', {
-          username: this.$store.state.userdata.email,
-          password: pwdInput.value
+        axios.post('/login', {
+          email: this.$store.state.userdata.email,
+          password: this.password
         }).then(function (response) {
           _this2.hasResponse = true;
           _this2.loadingMss = false;
           _this2.newUser = {};
 
-          if (response.data.access_token != '') {
+          if (response.status == 200) {
             _this2.hasError = false;
             _this2.responseMss = "success";
             var response = response.data;
-            _this2.responseContent = "Token Listo"; //this.storeAccessToken(response.data.access_token);
-            // this.passToNext();
+            _this2.responseContent = "Token Listo";
+
+            _this2.passToCupon();
           }
         })["catch"](function (error) {
           _this2.hasError = true;
 
-          if (error.response.data.error == "invalid_credentials") {
+          if (error.response.status == 422) {
             _this2.responseContent = "Contrasena Incorrecta";
+            var inputpwd = document.getElementById('clientpwd');
+            inputpwd.focus();
+            inputpwd.select();
+            inputpwd.className = "invalid-data";
           } else if (error.response.data.error == "invalid_request") {
             _this2.responseContent = "Hubo un problema en la respuesta";
           } else {
@@ -3353,11 +3398,6 @@ __webpack_require__.r(__webpack_exports__);
           _this2.loadingMss = false;
         });
       }
-    },
-    oauthClient: function oauthClient() {
-      axios.get('/oauth/scopes').then(function (response) {
-        console.log(response.data);
-      });
     } // formSubmit: function formSubmit(){
     //   let currentObj = this;
     //   this.axios.get('/dealsubmit', {
@@ -4166,7 +4206,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.loader-small,\r\n.loader-small:after {\r\n  border-radius: 50%;\r\n  width: 10em;\r\n  height: 10em;\n}\n.loader-small-container{\r\n    display: flex;\r\n    padding-top: 0;\r\n    height: 100%;\n}\n.loader-small {\r\n  margin: auto;\r\n  font-size: 4px;\r\n  position: relative;\r\n  text-indent: -9999em;\r\n  border-top: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-right: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-bottom: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-left: 1.1em solid #0f172b;\r\n  -webkit-transform: translateZ(0);\r\n  transform: translateZ(0);\r\n  -webkit-animation: load8 1.1s infinite linear;\r\n  animation: load8 1.1s infinite linear;\n}\n@-webkit-keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\n@keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\r\n", ""]);
+exports.push([module.i, "\n.loader-small,\r\n.loader-small:after {\r\n  border-radius: 50%;\r\n  width: 10em;\r\n  height: 10em;\n}\n.loader-small-container{\r\n    display: flex;\r\n    padding-top: 0;\r\n    height: 100%;\n}\n.loader-small {\r\n  margin: auto;\r\n  font-size: 4px;\r\n      width: 45px;\r\n    height: 45px;\r\n  position: relative;\r\n  text-indent: -9999em;\r\n  border-top: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-right: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-bottom: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-left: 1.1em solid #0f172b;\r\n  -webkit-transform: translateZ(0);\r\n  transform: translateZ(0);\r\n  -webkit-animation: load8 1.1s infinite linear;\r\n  animation: load8 1.1s infinite linear;\n}\n@-webkit-keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\n@keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\r\n", ""]);
 
 // exports
 
@@ -4204,7 +4244,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.invalid-data{\r\n    border: 1px solid var(--red);\n}\n.invalid-data:focus{\r\n      border: 1px solid var(--red);\r\n    box-shadow: inset 0px 0 0 1px var(--red);\n}\n.invalid-data:focus ~ label {\r\n    color: var(--red);\n}\n.invalid-data ~ label {\r\n    font-weight: 600;\r\n    color: var(--red);\n}\n#loading-overlay{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\r\n    box-sizing: border-box;\r\n    padding-bottom: 45px;\r\n    z-index: 10000;\r\n    background-color: rgba(255, 255, 255, 0.79);\n}\n.stepslogin{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\n}\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n.title-login-center {\r\n    padding: 1px 27px;\r\n    text-align: center;\r\n    font-size: 0.92em;\r\n    font-weight: 600;\r\n    color: #464646;\r\n    margin-top: 30px!important;\n}\n#logo-form {\r\n  width: 100%;\n}\n.trans-black-logo-form {\r\n  width: 91px;\r\n  height: 31px;\r\n  margin: 10px auto 3px;\r\n  background-image: url(/images/omeleth_trans_black.png);\r\n  background-position: center;\r\n  background-size: cover;\r\n  background-repeat: no-repeat;\n}\n.opcion-alt {\r\n  font-size: 12px;\r\n  display: table;\r\n  -webkit-transform: translate(2px);\r\n          transform: translate(2px);\r\n  color: #bc2d19;\r\n  width: auto !important;\n}\n.login-submit {\r\n  position: absolute;\r\n  border-radius: 0px;\r\n  box-shadow: 0px 0px transparent !important;\r\n  bottom: 0px;\r\n  width: 100%;\r\n      z-index: 10000;\n}\n.admin-login {\r\n  min-width: 377px !important;\r\n  max-width: 1000px !important;\r\n  width: -webkit-min-content;\r\n  width: -moz-min-content;\r\n  width: min-content;\r\n  width: moz-min-content;\r\n  padding: 0px !important;\r\n  background-color: #fff;\r\n  margin: 86px auto !important;\r\n  border-radius: 5px !important;\n}\n.nav-login {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
+exports.push([module.i, "\n#loading-overlay{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\r\n    box-sizing: border-box;\r\n    padding-bottom: 45px;\r\n    z-index: 10000;\r\n    background-color: rgba(255, 255, 255, 0.79);\n}\n.stepslogin{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\n}\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n.title-login-center {\r\n    padding: 1px 27px;\r\n    text-align: center;\r\n    font-size: 0.92em;\r\n    font-weight: 600;\r\n    color: #464646;\r\n    margin-top: 30px!important;\n}\n#logo-form {\r\n  width: 100%;\n}\n.trans-black-logo-form {\r\n  width: 91px;\r\n  height: 31px;\r\n  margin: 10px auto 3px;\r\n  background-image: url(/images/omeleth_trans_black.png);\r\n  background-position: center;\r\n  background-size: cover;\r\n  background-repeat: no-repeat;\n}\n.opcion-alt {\r\n  font-size: 12px;\r\n  display: table;\r\n  -webkit-transform: translate(2px);\r\n          transform: translate(2px);\r\n  color: #bc2d19;\r\n  width: auto !important;\n}\n.login-submit {\r\n  position: absolute;\r\n  border-radius: 0px;\r\n  box-shadow: 0px 0px transparent !important;\r\n  bottom: 0px;\r\n  width: 100%;\r\n      z-index: 10000;\n}\n.admin-login {\r\n  min-width: 377px !important;\r\n  max-width: 1000px !important;\r\n  width: -webkit-min-content;\r\n  width: -moz-min-content;\r\n  width: min-content;\r\n  width: moz-min-content;\r\n  padding: 0px !important;\r\n  background-color: #fff;\r\n  margin: 86px auto !important;\r\n  border-radius: 5px !important;\n}\n.nav-login {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
 
 // exports
 
@@ -6213,19 +6253,6 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "deal-info deal-white" }, [
                     _c("p", [
-                      _c(
-                        "a",
-                        {
-                          staticStyle: { cursor: "pointer" },
-                          on: {
-                            click: function($event) {
-                              return _vm.oauthClient()
-                            }
-                          }
-                        },
-                        [_vm._v("OAUTHCLIENTS.")]
-                      ),
-                      _vm._v(" "),
                       _c("strong", [_vm._v("Verifique")]),
                       _vm._v(
                         " se tudo está em ordem e é a oferta que\r\n                        você deseja. Se tudo estiver correto, você pode\r\n                        "
@@ -6312,65 +6339,196 @@ var render = function() {
                     [
                       _c(
                         "form",
-                        { attrs: { id: "insert-form" } },
+                        {
+                          attrs: { id: "insert-form" },
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              return _vm.formSubmit($event)
+                            }
+                          }
+                        },
                         [
-                          _c("div", { staticClass: "group" }, [
-                            _c("input", {
-                              attrs: {
-                                id: "clientfirst",
-                                type: "text",
-                                name: "client_first",
-                                required: ""
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "highlight" }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "bar" }),
-                            _vm._v(" "),
-                            _c("label", [_vm._v("Nombre")])
-                          ]),
+                          this.user.email == ""
+                            ? _c("div", { attrs: { id: "new-user-form" } }, [
+                                _c("div", { staticClass: "group" }, [
+                                  _c("input", {
+                                    attrs: {
+                                      id: "clientfirst",
+                                      type: "text",
+                                      name: "client_first",
+                                      required: ""
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "highlight" }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "bar" }),
+                                  _vm._v(" "),
+                                  _c("label", [_vm._v("Nombre")])
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "group" }, [
+                                  _c("input", {
+                                    attrs: {
+                                      id: "clientlast",
+                                      type: "text",
+                                      name: "client_last",
+                                      required: ""
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "highlight" }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "bar" }),
+                                  _vm._v(" "),
+                                  _c("label", [_vm._v("Apellido")])
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "group" }, [
+                                  _c("input", {
+                                    attrs: {
+                                      id: "clientemail",
+                                      type: "email",
+                                      name: "email",
+                                      required: ""
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "highlight" }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "bar" }),
+                                  _vm._v(" "),
+                                  _c("label", [_vm._v("Email")])
+                                ])
+                              ])
+                            : _vm._e(),
                           _vm._v(" "),
-                          _c("div", { staticClass: "group" }, [
-                            _c("input", {
-                              attrs: {
-                                id: "clientlast",
-                                type: "text",
-                                name: "client_last",
-                                required: ""
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "highlight" }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "bar" }),
-                            _vm._v(" "),
-                            _c("label", [_vm._v("Apellido")])
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "group" }, [
-                            _c("input", {
-                              attrs: {
-                                id: "clientemail",
-                                type: "email",
-                                name: "email",
-                                required: ""
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "highlight" }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "bar" }),
-                            _vm._v(" "),
-                            _c("label", [_vm._v("Email")])
-                          ]),
+                          this.user.email != ""
+                            ? _c("div", { attrs: { id: "user-form" } }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "selecting-user",
+                                    staticStyle: { width: "100%" },
+                                    attrs: { id: "clientfirst" }
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticStyle: {
+                                          "background-color": "transparent"
+                                        },
+                                        attrs: { id: "whoisyou" }
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          { attrs: { id: "whoisyou-img" } },
+                                          [
+                                            _c("i", {
+                                              staticClass: "fas fa-user",
+                                              staticStyle: {
+                                                "font-size": "1.35em",
+                                                color: "#666",
+                                                display: "block",
+                                                margin: "auto",
+                                                width: "23px",
+                                                height: "25px"
+                                              }
+                                            })
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { attrs: { id: "whoisyou-name" } },
+                                          [
+                                            _c("span", [
+                                              _vm._v(
+                                                "\r\n                      " +
+                                                  _vm._s(
+                                                    this.user.client_first +
+                                                      " " +
+                                                      this.user.client_last
+                                                  ) +
+                                                  "\r\n                    "
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              {
+                                                attrs: { id: "whoisyou-email" }
+                                              },
+                                              [
+                                                _c("span", [
+                                                  _vm._v(
+                                                    "\r\n                      " +
+                                                      _vm._s(this.user.email) +
+                                                      "\r\n                    "
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticStyle: { display: "none" },
+                                    attrs: { id: "user-data" }
+                                  },
+                                  [
+                                    _c("input", {
+                                      attrs: {
+                                        disabled: "disabled",
+                                        id: "clientfirst",
+                                        type: "text",
+                                        name: "client_first",
+                                        required: ""
+                                      },
+                                      domProps: {
+                                        value: this.user.client_first
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      attrs: {
+                                        disabled: "disabled",
+                                        id: "clientlast",
+                                        type: "text",
+                                        name: "client_last",
+                                        required: ""
+                                      },
+                                      domProps: { value: this.user.client_last }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      attrs: {
+                                        disabled: "disabled",
+                                        id: "clientemail",
+                                        type: "email",
+                                        name: "email",
+                                        required: ""
+                                      },
+                                      domProps: { value: this.user.email }
+                                    })
+                                  ]
+                                )
+                              ])
+                            : _vm._e(),
                           _vm._v(" "),
                           _c(
                             "transition",
                             { attrs: { name: "fade", mode: "out-in" } },
                             [
-                              _vm.loadingMss ? _c("spinner-small") : _vm._e(),
-                              _vm._v(" "),
                               _vm.hasError
                                 ? _c(
                                     "p",
@@ -6386,8 +6544,7 @@ var render = function() {
                                     [_vm._v(_vm._s(_vm.responseContent))]
                                   )
                                 : _vm._e()
-                            ],
-                            1
+                            ]
                           )
                         ],
                         1
@@ -6505,7 +6662,15 @@ var render = function() {
                       _c("div", { attrs: { id: "pwd-form-container" } }, [
                         _c(
                           "form",
-                          { attrs: { id: "pwd-form" } },
+                          {
+                            attrs: { id: "pwd-form" },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return _vm.formSubmit($event)
+                              }
+                            }
+                          },
                           [
                             _c(
                               "div",
@@ -6515,11 +6680,28 @@ var render = function() {
                               },
                               [
                                 _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.password,
+                                      expression: "password"
+                                    }
+                                  ],
                                   attrs: {
                                     id: "clientpwd",
                                     type: "password",
                                     name: "password",
                                     required: ""
+                                  },
+                                  domProps: { value: _vm.password },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.password = $event.target.value
+                                    }
                                   }
                                 }),
                                 _vm._v(" "),
@@ -6535,12 +6717,6 @@ var render = function() {
                               "transition",
                               { attrs: { name: "fade", mode: "out-in" } },
                               [
-                                _vm.loadingMss
-                                  ? _c("spinner-small", {
-                                      staticStyle: { "margin-top": "30px" }
-                                    })
-                                  : _vm._e(),
-                                _vm._v(" "),
                                 _vm.hasError
                                   ? _c(
                                       "p",
@@ -6562,8 +6738,7 @@ var render = function() {
                                       [_vm._v(_vm._s(_vm.responseContent))]
                                     )
                                   : _vm._e()
-                              ],
-                              1
+                              ]
                             )
                           ],
                           1
@@ -6578,6 +6753,17 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.loadingMss
+          ? _c(
+              "div",
+              { attrs: { id: "loading-overlay" } },
+              [_c("spinner-small")],
+              1
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "modal-footer" },
@@ -6589,7 +6775,7 @@ var render = function() {
                   {
                     staticClass: "button footer-btn",
                     attrs: { id: "continue-btn" },
-                    on: { click: _vm.passToNext }
+                    on: { click: _vm.passToInsert }
                   },
                   [_vm._v("Continuar")]
                 )
@@ -6600,13 +6786,7 @@ var render = function() {
                   "button",
                   {
                     staticClass: "button footer-btn",
-                    attrs: { id: "continue-btn" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.formSubmit()
-                      }
-                    }
+                    attrs: { id: "continue-btn", form: this.formselected }
                   },
                   [_vm._v("MALDITO MADURO")]
                 )
