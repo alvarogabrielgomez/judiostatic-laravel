@@ -1997,14 +1997,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
   data: function data() {
@@ -3111,20 +3103,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'dealsubmit',
   props: ["title", "descuento", "bussname", "userdata"],
@@ -3264,8 +3242,38 @@ __webpack_require__.r(__webpack_exports__);
     passToCupon: function passToCupon() {
       this.stepactual = 3;
     },
-    formSubmit: function formSubmit() {
+    logout: function logout() {
       var _this = this;
+
+      this.loadingMss = true;
+      this.hasResponse = false;
+      axios.post('/logout').then(function (response) {
+        _this.loadingMss = false;
+        _this.hasResponse = true;
+        _this.responseContent = "Sesion cerrada";
+        _this.user = {
+          'email': '',
+          'client_first': '',
+          'client_last': ''
+        };
+        _this.resume = false;
+        _this.steps.step[2] = "Ingrese su nombre";
+
+        function selectname() {
+          var inputfirst = document.getElementById('clientfirst');
+          inputfirst.focus();
+          inputfirst.select();
+        }
+
+        setTimeout(selectname, 700);
+      })["catch"](function (error) {
+        _this.loadingMss = false;
+        _this.hasError = true;
+        _this.responseContent = error;
+      });
+    },
+    formSubmit: function formSubmit() {
+      var _this2 = this;
 
       if (this.formselected == "pwd-form") {
         this.formPwdSubmit();
@@ -3291,55 +3299,55 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           this.hasError = false;
           axios.post('/dealsubmit', input).then(function (response) {
-            _this.hasResponse = true;
-            _this.loadingMss = false;
-            _this.newUser = {};
+            _this2.hasResponse = true;
+            _this2.loadingMss = false;
+            _this2.newUser = {};
 
             if (response.data.response == 'error') {
-              _this.hasError = true;
-              _this.responseMss = "error";
-              _this.responseContent = response.data.responseContent;
+              _this2.hasError = true;
+              _this2.responseMss = "error";
+              _this2.responseContent = response.data.responseContent;
             } else if (response.data.response == 'success') {
-              _this.hasError = false;
-              _this.responseMss = "success";
-              _this.$store.state.userdata = response.data;
-              _this.responseContent = response.data.responseContent;
+              _this2.hasError = false;
+              _this2.responseMss = "success";
+              _this2.$store.state.userdata = response.data;
+              _this2.responseContent = response.data.responseContent;
 
-              _this.passToCupon();
+              _this2.passToCupon();
             } else if (response.data.response == 'successNoSession') {
-              _this.formselected = "pwd-form";
-              _this.hasError = false;
-              _this.responseMss = "success";
-              _this.$store.state.userdata = response.data;
-              _this.responseContent = response.data.responseContent;
-              _this.resume = true;
-              _this.showing = true;
-              _this.loading = false;
+              _this2.formselected = "pwd-form";
+              _this2.hasError = false;
+              _this2.responseMss = "success";
+              _this2.$store.state.userdata = response.data;
+              _this2.responseContent = response.data.responseContent;
+              _this2.resume = true;
+              _this2.showing = true;
+              _this2.loading = false;
 
-              _this.passToPWD();
+              _this2.passToPWD();
 
-              console.log(_this.$store.state.userdata);
+              console.log(_this2.$store.state.userdata);
             }
           })["catch"](function (error) {
-            _this.hasError = true;
+            _this2.hasError = true;
 
             if (error.response.data.errors.email != "") {
-              _this.responseContent = "Tiene que introducir un Email válido";
+              _this2.responseContent = "Tiene que introducir un Email válido";
               var inputemail = document.getElementById('clientemail');
               inputemail.className = "invalid-data";
               inputemail.focus();
               inputemail.select();
             } else {
-              _this.responseContent = error.response.data.message;
+              _this2.responseContent = error.response.data.message;
             }
 
-            _this.loadingMss = false;
+            _this2.loadingMss = false;
           });
         }
       }
     },
     formPwdSubmit: function formPwdSubmit() {
-      var _this2 = this;
+      var _this3 = this;
 
       //El resto de los datos ya estan en memoria en userdata.
       this.loadingMss = true;
@@ -3368,36 +3376,58 @@ __webpack_require__.r(__webpack_exports__);
           email: this.$store.state.userdata.email,
           password: this.password
         }).then(function (response) {
-          _this2.hasResponse = true;
-          _this2.loadingMss = false;
-          _this2.newUser = {};
+          _this3.hasResponse = true;
+          _this3.loadingMss = false;
+          _this3.newUser = {};
 
           if (response.status == 200) {
-            _this2.hasError = false;
-            _this2.responseMss = "success";
+            _this3.hasError = false;
+            _this3.responseMss = "success";
             var response = response.data;
-            _this2.responseContent = "Token Listo";
+            _this3.responseContent = "Token Listo";
+            console.log(response);
+            _this3.user = {
+              'email': _this3.$store.state.userdata.email,
+              'client_first': _this3.$store.state.userdata.client_first,
+              'client_last': _this3.$store.state.userdata.client_last
+            };
 
-            _this2.passToCupon();
+            if (_this3.user.email != "") {
+              _this3.steps.step[2] = "Confirme";
+              _this3.resume = false;
+            }
+
+            _this3.passToCupon();
           }
         })["catch"](function (error) {
-          _this2.hasError = true;
+          _this3.hasError = true;
 
           if (error.response.status == 422) {
-            _this2.responseContent = "Contrasena Incorrecta";
+            _this3.responseContent = "Contrasena Incorrecta";
             var inputpwd = document.getElementById('clientpwd');
             inputpwd.focus();
             inputpwd.select();
             inputpwd.className = "invalid-data";
           } else if (error.response.data.error == "invalid_request") {
-            _this2.responseContent = "Hubo un problema en la respuesta";
+            _this3.responseContent = "Hubo un problema en la respuesta";
           } else {
-            _this2.responseContent = error.response.data.message;
+            _this3.responseContent = error.response.data.message;
           }
 
-          _this2.loadingMss = false;
+          _this3.loadingMss = false;
         });
       }
+    },
+    insertTransaction: function insertTransaction() {
+      axios.post('/inserttrans', {
+        post_id: 12,
+        client_id: 0,
+        buss_id: 8
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
     } // formSubmit: function formSubmit(){
     //   let currentObj = this;
     //   this.axios.get('/dealsubmit', {
@@ -4206,7 +4236,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.loader-small,\r\n.loader-small:after {\r\n  border-radius: 50%;\r\n  width: 10em;\r\n  height: 10em;\n}\n.loader-small-container{\r\n    display: flex;\r\n    padding-top: 0;\r\n    height: 100%;\n}\n.loader-small {\r\n  margin: auto;\r\n  font-size: 4px;\r\n      width: 45px;\r\n    height: 45px;\r\n  position: relative;\r\n  text-indent: -9999em;\r\n  border-top: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-right: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-bottom: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-left: 1.1em solid #0f172b;\r\n  -webkit-transform: translateZ(0);\r\n  transform: translateZ(0);\r\n  -webkit-animation: load8 1.1s infinite linear;\r\n  animation: load8 1.1s infinite linear;\n}\n@-webkit-keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\n@keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\r\n", ""]);
+exports.push([module.i, "\n.loader-small,\r\n.loader-small:after {\r\n  border-radius: 50%;\r\n  width: 10em;\r\n  height: 10em;\r\n  text-rendering: geometricPrecision;\n}\n.loader-small-container{\r\n    display: flex;\r\n    padding-top: 0;\r\n    height: 100%;\r\n    max-width: 50px;\r\n    max-height: 50px;\r\n    margin:auto;\n}\n.loader-small {\r\n  margin: auto;\r\n  font-size: 4px;\r\n  position: relative;\r\n  text-indent: -9999em;\r\n  border-top: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-right: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-bottom: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-left: 1.1em solid #0f172b;\r\n  -webkit-transform: translateZ(0);\r\n  transform: translateZ(0);\r\n  -webkit-animation: load8 1.1s infinite linear;\r\n  animation: load8 1.1s infinite linear;\n}\n@-webkit-keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\n@keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\r\n", ""]);
 
 // exports
 
@@ -4244,7 +4274,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#loading-overlay{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\r\n    box-sizing: border-box;\r\n    padding-bottom: 45px;\r\n    z-index: 10000;\r\n    background-color: rgba(255, 255, 255, 0.79);\n}\n.stepslogin{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\n}\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n.title-login-center {\r\n    padding: 1px 27px;\r\n    text-align: center;\r\n    font-size: 0.92em;\r\n    font-weight: 600;\r\n    color: #464646;\r\n    margin-top: 30px!important;\n}\n#logo-form {\r\n  width: 100%;\n}\n.trans-black-logo-form {\r\n  width: 91px;\r\n  height: 31px;\r\n  margin: 10px auto 3px;\r\n  background-image: url(/images/omeleth_trans_black.png);\r\n  background-position: center;\r\n  background-size: cover;\r\n  background-repeat: no-repeat;\n}\n.opcion-alt {\r\n  font-size: 12px;\r\n  display: table;\r\n  -webkit-transform: translate(2px);\r\n          transform: translate(2px);\r\n  color: #bc2d19;\r\n  width: auto !important;\n}\n.login-submit {\r\n  position: absolute;\r\n  border-radius: 0px;\r\n  box-shadow: 0px 0px transparent !important;\r\n  bottom: 0px;\r\n  width: 100%;\r\n      z-index: 10000;\n}\n.admin-login {\r\n  min-width: 377px !important;\r\n  max-width: 1000px !important;\r\n  width: -webkit-min-content;\r\n  width: -moz-min-content;\r\n  width: min-content;\r\n  width: moz-min-content;\r\n  padding: 0px !important;\r\n  background-color: #fff;\r\n  margin: 86px auto !important;\r\n  border-radius: 5px !important;\n}\n.nav-login {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
+exports.push([module.i, "\n.stepslogin{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\n}\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n.title-login-center {\r\n    padding: 1px 27px;\r\n    text-align: center;\r\n    font-size: 0.92em;\r\n    font-weight: 600;\r\n    color: #464646;\r\n    margin-top: 30px!important;\n}\n#logo-form {\r\n  width: 100%;\n}\n.trans-black-logo-form {\r\n  width: 91px;\r\n  height: 31px;\r\n  margin: 10px auto 3px;\r\n  background-image: url(/images/omeleth_trans_black.png);\r\n  background-position: center;\r\n  background-size: cover;\r\n  background-repeat: no-repeat;\n}\n.opcion-alt {\r\n  font-size: 12px;\r\n  display: table;\r\n  -webkit-transform: translate(2px);\r\n          transform: translate(2px);\r\n  color: #bc2d19;\r\n  width: auto !important;\n}\n.login-submit {\r\n  position: absolute;\r\n  border-radius: 0px;\r\n  box-shadow: 0px 0px transparent !important;\r\n  bottom: 0px;\r\n  width: 100%;\r\n      z-index: 10000;\n}\n.admin-login {\r\n  min-width: 377px !important;\r\n  max-width: 1000px !important;\r\n  width: -webkit-min-content;\r\n  width: -moz-min-content;\r\n  width: min-content;\r\n  width: moz-min-content;\r\n  padding: 0px !important;\r\n  background-color: #fff;\r\n  margin: 86px auto !important;\r\n  border-radius: 5px !important;\n}\n.nav-login {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
 
 // exports
 
@@ -4282,7 +4312,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#pwd-form-container{\r\n    margin: 17px 21px 0;\r\n    padding: 42px 42px 36px;\r\n    border: 1px solid #eaeced;\r\n    max-width: 377px;\r\n    overflow: hidden;\r\n    min-height: 109px;\n}\n#continuar-anterior{\r\n    position: absolute;\r\n    right: 13px;\r\n    bottom: 68px;\r\n    font-size: 12px;\n}\n#continuar-anterior a{\r\n      color: #ba2d2b;\n}\n.fade-enter-active, .fade-leave-active {\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n.alert{\r\n    position: relative;\r\n    top: -5px;\r\n    float: right;\r\n    margin: auto;\r\n    background-color: transparent;\r\n    padding: 5px 17px;\n}\n.alert-normal {\r\nborder-bottom: 2px solid #22ba6a;\r\n   border-bottom: 2px solid #22ba6a;\n}\n.alert-danger{\r\n  color:#ff3d61;\r\n     border-bottom: 2px solid #e61e1e;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\r\n/* form starting stylings ------------------------------- */\n.group { \r\n  position:relative; \r\n  margin-bottom:17px;\n}\n#insert-form, #pwd-form{\r\ndisplay: flex;\r\n    width: 100%;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    flex-direction: column;\r\n    padding: 26px 0px 8px 1px;\n}\ninput{\r\n  border-radius: 4px;\r\n  font-size:15px;\r\n  padding: 14px 10px 14px 14px;\r\n  display:block;\r\n  width:285px;\r\n  border:1px solid #cacaca;\r\n    border-bottom: 1px solid rgb(210, 210, 210);\r\n      transition:0.2s ease all;\n}\r\n/* LABEL ======================================= */\nlabel{\r\n  padding: 0px 5px;\r\n  color:#999; \r\n  font-size:15px;\r\n  font-weight:normal;\r\n  position:absolute;\r\n  pointer-events:none;\r\n  left:10px;\r\n  top:11px;\r\n  transition:0.15s ease all; \r\n  -moz-transition:0.15s ease all; \r\n  -webkit-transition:0.15s ease all;\r\n      background-color:#fff;\n}\r\n/* active state */\ninput:focus{\r\n    border: 1px solid var(--highlight-input);\r\n    transition: 0.2s ease all;\r\n    box-shadow: inset 0px 0 0 1px var(--highlight-input);\r\n  outline:none;\n}\ninput:focus ~ label, input:valid ~ label {\r\n    top: -12px;\r\n    left: 8px;\r\n    font-size: 11.5px;\n}\ninput:focus ~ label{\r\n    color: var(--highlight-input);\n}\r\n\r\n/* BOTTOM BARS ================================= */\r\n/* .bar \t{ position:relative; display:block; width:300px; }\r\n.bar:before, .bar:after \t{\r\n  content:'';\r\n  height:2px; \r\n  width:0;\r\n  bottom:1px; \r\n  position:absolute;\r\n  background:#5264AE; \r\n  transition:0.2s ease all; \r\n  -moz-transition:0.2s ease all; \r\n  -webkit-transition:0.2s ease all;\r\n}\r\n.bar:before {\r\n  left:50%;\r\n}\r\n.bar:after {\r\n  right:50%; \r\n} */\r\n/* active state */\ninput:focus ~ .bar:before, input:focus ~ .bar:after {\r\n  width:50%;\n}\r\n/* HIGHLIGHTER ================================== */\n.highlight {\r\n    position: absolute;\r\n    height: 60%;\r\n    width: 100px;\r\n    border-radius: 2px;\r\n    top: 19%;\r\n    left: 11px;\r\n    pointer-events: none;\r\n    opacity: 0.5;\r\n    z-index: 10;\n}\r\n/* active state */\ninput:focus ~ .highlight {\r\n  -webkit-animation:inputHighlighter 0.3s ease;\r\n  animation:inputHighlighter 0.3s ease;\n}\r\n/* ANIMATIONS ================ */\n@-webkit-keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n@keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content,{\r\ntransition: -webkit-transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out, -webkit-transform .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    margin-top: 71px;\r\n    margin-left: 49px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 85px;\r\n    margin-left: 49px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    flex: 10;\n}\n.row-centered{\r\n    display: flex;\r\n    flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: center;\n}\n.row-linea{\r\n      flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3{\r\n    display: flex;\r\n    flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-body {\r\n  \r\n    overflow: auto;\r\n    max-height: 523px;\r\n    \r\n    min-height: 355px;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  align-items: center;\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n#pwd-form-container{\r\n    margin: 17px 21px 0;\r\n    padding: 42px 42px 36px;\r\n    border: 1px solid #eaeced;\r\n    max-width: 377px;\r\n    overflow: hidden;\r\n    min-height: 109px;\n}\n#continuar-anterior{\r\n    position: absolute;\r\n    right: 13px;\r\n    bottom: 68px;\r\n    font-size: 12px;\n}\n#continuar-anterior a{\r\n      color: #ba2d2b;\n}\n.fade-enter-active, .fade-leave-active {\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\r\n/* form starting stylings ------------------------------- */\n.group { \r\n  position:relative; \r\n  margin-bottom:17px;\n}\n#insert-form, #pwd-form{\r\ndisplay: flex;\r\n    width: 100%;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    flex-direction: column;\r\n    padding: 26px 0px 8px 1px;\n}\ninput{\r\n  border-radius: 4px;\r\n  font-size:15px;\r\n  padding: 14px 10px 14px 14px;\r\n  display:block;\r\n  width:285px;\r\n  border:1px solid #cacaca;\r\n    border-bottom: 1px solid rgb(210, 210, 210);\r\n      transition:0.2s ease all;\n}\r\n/* LABEL ======================================= */\nlabel{\r\n  padding: 0px 5px;\r\n  color:#999; \r\n  font-size:15px;\r\n  font-weight:normal;\r\n  position:absolute;\r\n  pointer-events:none;\r\n  left:10px;\r\n  top:11px;\r\n  transition:0.15s ease all; \r\n  -moz-transition:0.15s ease all; \r\n  -webkit-transition:0.15s ease all;\r\n      background-color:#fff;\n}\r\n/* active state */\ninput:focus{\r\n    border: 1px solid var(--highlight-input);\r\n    transition: 0.2s ease all;\r\n    box-shadow: inset 0px 0 0 1px var(--highlight-input);\r\n  outline:none;\n}\ninput:focus ~ label, input:valid ~ label {\r\n    top: -12px;\r\n    left: 8px;\r\n    font-size: 11.5px;\n}\ninput:focus ~ label{\r\n    color: var(--highlight-input);\n}\r\n\r\n/* BOTTOM BARS ================================= */\r\n/* .bar \t{ position:relative; display:block; width:300px; }\r\n.bar:before, .bar:after \t{\r\n  content:'';\r\n  height:2px; \r\n  width:0;\r\n  bottom:1px; \r\n  position:absolute;\r\n  background:#5264AE; \r\n  transition:0.2s ease all; \r\n  -moz-transition:0.2s ease all; \r\n  -webkit-transition:0.2s ease all;\r\n}\r\n.bar:before {\r\n  left:50%;\r\n}\r\n.bar:after {\r\n  right:50%; \r\n} */\r\n/* active state */\ninput:focus ~ .bar:before, input:focus ~ .bar:after {\r\n  width:50%;\n}\r\n/* HIGHLIGHTER ================================== */\n.highlight {\r\n    position: absolute;\r\n    height: 60%;\r\n    width: 100px;\r\n    border-radius: 2px;\r\n    top: 19%;\r\n    left: 11px;\r\n    pointer-events: none;\r\n    opacity: 0.5;\r\n    z-index: 10;\n}\r\n/* active state */\ninput:focus ~ .highlight {\r\n  -webkit-animation:inputHighlighter 0.3s ease;\r\n  animation:inputHighlighter 0.3s ease;\n}\r\n/* ANIMATIONS ================ */\n@-webkit-keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n@keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content,{\r\ntransition: -webkit-transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out;\r\ntransition: transform .5s ease-in-out, -webkit-transform .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    margin-top: 71px;\r\n    margin-left: 49px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 85px;\r\n    margin-left: 49px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    flex: 10;\n}\n.row-centered{\r\n    display: flex;\r\n    flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: center;\n}\n.row-linea{\r\n      flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3{\r\n    display: flex;\r\n    flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-body {\r\n  \r\n    overflow: auto;\r\n    max-height: 523px;\r\n    \r\n    min-height: 355px;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  align-items: center;\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -5781,9 +5811,7 @@ var render = function() {
             ? _c(
                 "div",
                 { attrs: { id: "loading-overlay" } },
-                [
-                  _c("spinner-small", { staticStyle: { "margin-top": "30px" } })
-                ],
+                [_c("spinner-small")],
                 1
               )
             : _vm._e()
@@ -5973,6 +6001,7 @@ var render = function() {
                             "a",
                             {
                               staticClass: "opcion-alt",
+                              staticStyle: { cursor: "pointer" },
                               on: {
                                 click: function($event) {
                                   _vm.stepactual = 1
@@ -6253,6 +6282,19 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "deal-info deal-white" }, [
                     _c("p", [
+                      _c(
+                        "a",
+                        {
+                          staticStyle: { cursor: "pointer" },
+                          on: {
+                            click: function($event) {
+                              return _vm.insertTransaction()
+                            }
+                          }
+                        },
+                        [_vm._v("Continuar Anterasdasdior Operacion.")]
+                      ),
+                      _vm._v(" "),
                       _c("strong", [_vm._v("Verifique")]),
                       _vm._v(
                         " se tudo está em ordem e é a oferta que\r\n                        você deseja. Se tudo estiver correto, você pode\r\n                        "
@@ -6410,7 +6452,7 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass: "selecting-user",
-                                    staticStyle: { width: "100%" },
+                                    staticStyle: { width: "99%" },
                                     attrs: { id: "clientfirst" }
                                   },
                                   [
@@ -6520,6 +6562,29 @@ var render = function() {
                                       },
                                       domProps: { value: this.user.email }
                                     })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticStyle: { "margin-top": "10px" },
+                                    attrs: { id: "logout" }
+                                  },
+                                  [
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass: "opcion-alt",
+                                        staticStyle: { cursor: "pointer" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.logout()
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("No soy yo.")]
+                                    )
                                   ]
                                 )
                               ])

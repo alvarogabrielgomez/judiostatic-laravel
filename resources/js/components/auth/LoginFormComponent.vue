@@ -5,7 +5,7 @@
     <div id="pwd-form-container" class="admin-login" style="padding: 20px; position:relative;  transition: 0.7s;">
         <transition name="fade">
         <div id="loading-overlay" v-if="loadingMss" >
-        <spinner-small style = "margin-top:30px;" ></spinner-small>
+        <spinner-small ></spinner-small>
         </div>
          </transition>
         <div class="light-bar-t" id="nav-bar" style="position: absolute;top: 11px;margin-top:0px!important;z-index: 1000;">
@@ -68,7 +68,7 @@
           </div>
           <div class="group" style="margin:13px auto 0px;;width: 81%;">          
             <a class="opcion-alt" href="iforgot/reset-password.php">Olvide el password</a>
-            <a class="opcion-alt" v-on:click="stepactual = 1" >Volver</a>
+            <a class="opcion-alt" style="cursor:pointer;" v-on:click="stepactual = 1" >Volver</a>
       
           </div>
 
@@ -91,15 +91,7 @@
 <style>
 
 
-#loading-overlay{
-      position: absolute;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding-bottom: 45px;
-    z-index: 10000;
-    background-color: rgba(255, 255, 255, 0.79);
-}
+
 .stepslogin{
       position: absolute;
     width: 100%;

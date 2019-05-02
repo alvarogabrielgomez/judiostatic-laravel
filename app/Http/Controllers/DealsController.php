@@ -3,11 +3,14 @@
 namespace judiostatic\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
+use Validator;
 use judiostatic\Post;
 use judiostatic\Buss;
 use judiostatic\User;
-use Validator;
-use Auth;
+use judiostatic\Transaction;
+use judiostatic\Buylimit;
+use PHPUnit\Framework\Exception;
 
 class DealsController extends Controller
 {
@@ -124,6 +127,88 @@ class DealsController extends Controller
         }
         return response()->json(array('responseContent' => $responseContent, 'response' => $response));
     }
+
+
+    public function insertTransaction(Request $request){
+        // Se revisan los BuyLimits primero
+        $response = "";
+        $data = "";
+        try{
+            
+            $busslimits = Buss::where('buss_id', '=', $request->buss_id)
+                                ->select('buss_limits')
+                                ->first()
+                                ;
+
+            $buylimits = Buylimit::where('client_id', '=', $request->client_id)
+                                ->where('buss_id', '=', $request->buss_id)
+                                ->whereDay('updated_at', '=', date('d')) // hoy
+                                ->whereMonth('updated_at', '=', date('m'))
+                                ->whereYear('updated_at', '=', date('Y'))
+                                ->first()
+                                ;
+
+            if(!is_null($buylimits)){ // se encontro en la tabla buylimits del dia de hoy
+
+                $day_now = time();
+                $day_updated_at = strtotime($buylimits->updated_at);
+                $limit_count = $buylimits->limit_count;
+
+                if($day_now >= $day_updated_at){
+                    if($limit_count < $busslimits->buss_limits){ // se pueden pedir
+
+                        $buylimits->limit_count = $limit_count+1;
+                        $buylimits->save();
+
+                        $transqr = $request->client_id . $request->post_id . random_int(1, 1000000) . $request->buss_id;
+
+                        $transactions = new Transaction();
+                        $transactions->post_id = $request->post_id;
+                        $transactions->buss_id = $request->buss_id;
+                        $transactions->client_id = $request->client_id;
+                        $transactions->transaction_qr = $transqr;
+                        $transactions->save();
+
+                        $response = "success";
+                        $data = array('transqr' => $transactions->transaction_qr);
+
+                    }else if($limit_count >= $busslimits->buss_limits){ // no se pueden pedir
+                        $response = "error";
+                        $data->message = "Você pediu muitos cupons do mesmo lugar, tente outro dia.";
+                    }
+                }else if($day_now < $day_updated_at){
+                    $response = "error";
+                    $data->message = "Time Unknown Error";
+                }
+            }else if(is_null($buylimits)){ // no se encontro hoy
+
+                $buylimits = new Buylimit();
+                $buylimits->buss_id = $request->buss_id;
+                $buylimits->client_id = $request->client_id;
+                $buylimits->post_id = $request->post_id;
+                $buylimits->save();
+
+                $transqr = $request->client_id . $request->post_id . random_int(1, 1000000) . $request->buss_id;
+
+                $transactions = new Transaction();
+                $transactions->post_id = $request->post_id;
+                $transactions->buss_id = $request->buss_id;
+                $transactions->client_id = $request->client_id;
+                $transactions->transaction_qr = $transqr;
+                $transactions->save();
+
+                $response = "success";
+                $data = array('transqr' => $transactions->transaction_qr);
+            }
+
+            return response()->json(array('data' => $data, 'response' => $response));
+
+        }
+        catch (Exception $e){ 
+            return response()->json(array('data' => $e));
+        }
+    }
+
 
     public function update(Request $request, $slug)
     {

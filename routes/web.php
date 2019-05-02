@@ -23,6 +23,7 @@ Route::resource('deals', 'DealsController');
 Route::resource('modalwindow', 'ModalwindowController');
 Route::post('/dealsubmit', 'DealsController@dealsubmit');
 Route::post('/dealsubmituser', 'DealsController@dealsubmituser');
+Route::post('/inserttrans', 'DealsController@insertTransaction');
 Route::get('carousel', 'DealsController@carousel');
 
 Route::get('deals', 'DealsController@index');

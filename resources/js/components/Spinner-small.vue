@@ -26,17 +26,20 @@ export default {
   border-radius: 50%;
   width: 10em;
   height: 10em;
+  text-rendering: geometricPrecision;
+
 }
 .loader-small-container{
     display: flex;
     padding-top: 0;
     height: 100%;
+    max-width: 50px;
+    max-height: 50px;
+    margin:auto;
 }
 .loader-small {
   margin: auto;
   font-size: 4px;
-      width: 45px;
-    height: 45px;
   position: relative;
   text-indent: -9999em;
   border-top: 1.1em solid rgba(15,23,43, 0.2);

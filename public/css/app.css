@@ -490,6 +490,7 @@ body {
   --red: #BC2D19;
   --light-red: #e36350;
   --red-hover: #cf311c;
+  --red-alert: #ff3d61;
   --button-base-color: #22BA6A;
   --blue: #0f172b;
   --light-blue: #1E4363;
@@ -1026,6 +1027,25 @@ abbr {
   margin-top: 9px;
 }
 
+.alert {
+  position: relative;
+  top: -5px;
+  float: right;
+  margin: auto;
+  background-color: transparent;
+  padding: 5px 17px;
+}
+
+.alert-normal {
+  border-bottom: 2px solid #22ba6a;
+  border-bottom: 2px solid #22ba6a;
+}
+
+.alert-danger {
+  color: var(--red-alert);
+  border-bottom: 2px solid var(--red-alert);
+}
+
 .login-status {
   margin: 0 16px !important;
   display: flex;
@@ -1039,22 +1059,33 @@ abbr {
   vertical-align: center;
 }
 
+#loading-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  box-sizing: border-box;
+  padding-bottom: 45px;
+  z-index: 10000;
+  background-color: rgba(255, 255, 255, 0.81);
+}
+
 .invalid-data {
-  border: 1px solid var(--red);
+  border: 1px solid var(--red-alert);
 }
 
 .invalid-data:focus {
-  border: 1px solid var(--red);
-  box-shadow: inset 0px 0 0 1px var(--red);
+  border: 1px solid var(--red-alert);
+  box-shadow: inset 0px 0 0 1px var(--red-alert);
 }
 
 .invalid-data:focus ~ label {
-  color: var(--red);
+  color: var(--red-alert);
 }
 
 .invalid-data ~ label {
   font-weight: 600;
-  color: var(--red);
+  color: var(--red-alert);
 }
 
 #creditos {
@@ -2116,14 +2147,14 @@ abbr {
 }
 
 .selecting-user {
-  border: none;
+  background-color: #fff;
+  border: 1px solid #eaeced;
   cursor: pointer;
-  background-color: #f3f2ee;
-  border-radius: 4px;
+  border-radius: 5px !important;
 }
 
 .selecting-user:hover {
-  background-color: #eaeaea;
+  background-color: #fdfdfd;
 }
 
 .selecting-user span {

@@ -32,6 +32,7 @@
                 <div class="deal-info deal-white">
                     <p>
 
+                  <a style="cursor:pointer;" v-on:click="insertTransaction()" >Continuar Anterasdasdior Operacion.</a>
 
                         <strong>Verifique</strong> se tudo está em ordem e é a oferta que
                         você deseja. Se tudo estiver correto, você pode
@@ -105,7 +106,7 @@
                     <!-- FORM MOSTRADO SI LA SESION ESTA INICIADA -->
                     <div id="user-form" v-if="this.user.email != ''">
 
-                  <div id="clientfirst" class="selecting-user" style="width:100%;">
+                  <div id="clientfirst" class="selecting-user" style="width:99%;">
     
                     <div id="whoisyou" style="background-color:transparent;">
                     <div id="whoisyou-img">
@@ -126,8 +127,10 @@
                     <input disabled=disabled id="clientlast" type="text" name="client_last" v-bind:value="this.user.client_last" required>
                     <input disabled=disabled id="clientemail" type="email" name="email" v-bind:value="this.user.email" required>
                     </div>
+                    <div id="logout" style="margin-top:10px;">
+                      <a class="opcion-alt" style="cursor:pointer;" v-on:click="logout()" >No soy yo.</a>
                     </div>
-
+                    </div>
 
 
                     <transition name="fade" mode="out-in">
@@ -275,24 +278,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-.alert{
-    position: relative;
-    top: -5px;
-    float: right;
-    margin: auto;
-    background-color: transparent;
-    padding: 5px 17px;
- 
-}
-.alert-normal {
-border-bottom: 2px solid #22ba6a;
-   border-bottom: 2px solid #22ba6a;
-}
 
-.alert-danger{
-  color:#ff3d61;
-     border-bottom: 2px solid #e61e1e;
-}
 #resultados{
     height: 100%;
     max-height: 300px;
@@ -855,6 +841,7 @@ export default {
 
   updated(){
 
+
 // Swicher de Boton y demas
       this.next = this.stepactual+1 
       this.steps.Next = this.steps.step[this.next];
@@ -929,7 +916,30 @@ export default {
       this.stepactual = 3;
     },
 
-
+    logout:function logout(){
+      this.loadingMss = true;
+      this.hasResponse = false;
+      axios.post('/logout')
+        .then((response) => {
+          this.loadingMss = false;
+          this.hasResponse = true;
+          this.responseContent = "Sesion cerrada";
+          this.user = {'email':'', 'client_first':'', 'client_last':''};
+          this.resume = false;
+          this.steps.step[2] = "Ingrese su nombre"
+          function selectname(){
+          var inputfirst = document.getElementById('clientfirst');
+          inputfirst.focus();
+          inputfirst.select();
+          }
+          setTimeout(selectname, 700);
+        })
+        .catch((error) => {
+          this.loadingMss = false;
+          this.hasError = true;
+          this.responseContent = error;
+        })
+    },
 
     formSubmit: function formSubmit(){
       if(this.formselected == "pwd-form"){
@@ -1038,6 +1048,12 @@ export default {
             this.responseMss = "success";
             var response = response.data;
             this.responseContent = "Token Listo";
+            console.log(response);
+            this.user = {'email':this.$store.state.userdata.email, 'client_first':this.$store.state.userdata.client_first, 'client_last':this.$store.state.userdata.client_last}
+            if(this.user.email != ""){
+              this.steps.step[2] = "Confirme"
+              this.resume = false;
+            }
             this.passToCupon();
 
 
@@ -1068,6 +1084,20 @@ export default {
     
     },
 
+    insertTransaction: function insertTransaction(){
+      
+        axios.post('/inserttrans',{
+          post_id: 12,
+          client_id: 0,
+          buss_id: 8,
+        }) 
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) =>{
+          console.log(error);
+        })
+    },
 
     // formSubmit: function formSubmit(){
       
