@@ -10,6 +10,7 @@ use judiostatic\Buss;
 use judiostatic\User;
 use judiostatic\Transaction;
 use judiostatic\Buylimit;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Exception;
 
 class DealsController extends Controller
@@ -63,6 +64,7 @@ class DealsController extends Controller
         ->first();
         $client_first = "";
         $client_last = "";
+        $client_id = "";
         // El usuario si existia en la tabla Users
         if($users != null){
             
@@ -78,6 +80,7 @@ class DealsController extends Controller
                 $client_first = $users->client_first;
                 $client_last = $users->client_last;
                 $email = $users->email;
+                $client_id = $users->id;
 
                 //Aca se tiene que revisar si esta en sesion
                 if(Auth::check()){
@@ -101,7 +104,7 @@ class DealsController extends Controller
     //   $Users->email = $request->email;
 
 
-    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
+    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response,'client_id' => $client_id, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
     
 }
     
@@ -132,7 +135,14 @@ class DealsController extends Controller
     public function insertTransaction(Request $request){
         // Se revisan los BuyLimits primero
         $response = "";
-        $data = "";
+        $data = array('transqr' => '', 'message' => '');
+
+        $request->validate([
+            'post_id' =>  'required|min:1',
+            'client_id' =>  'required|min:1',
+            'buss_id' => 'required|min:1'
+        ]);
+
         try{
             
             $busslimits = Buss::where('buss_id', '=', $request->buss_id)
@@ -170,15 +180,15 @@ class DealsController extends Controller
                         $transactions->save();
 
                         $response = "success";
-                        $data = array('transqr' => $transactions->transaction_qr);
+                        $data = array('transqr' => $transactions->transaction_qr, 'message' => 'success');
 
                     }else if($limit_count >= $busslimits->buss_limits){ // no se pueden pedir
                         $response = "error";
-                        $data->message = "Você pediu muitos cupons do mesmo lugar, tente outro dia.";
+                        $data = array('transqr' => '', 'message' => 'Você pediu muitos cupons do mesmo lugar, tente outro dia.');
                     }
                 }else if($day_now < $day_updated_at){
                     $response = "error";
-                    $data->message = "Time Unknown Error";
+                    $data = array('transqr' => '', 'message' => 'Time Unknown Error.');
                 }
             }else if(is_null($buylimits)){ // no se encontro hoy
 
@@ -198,7 +208,7 @@ class DealsController extends Controller
                 $transactions->save();
 
                 $response = "success";
-                $data = array('transqr' => $transactions->transaction_qr);
+                $data = array('transqr' => $transactions->transaction_qr, 'message' => 'success');
             }
 
             return response()->json(array('data' => $data, 'response' => $response));

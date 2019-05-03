@@ -18,7 +18,10 @@ class ModalwindowController extends Controller
 
     public function show($id){
         
-        $posts = Post::where('post_id', '=', $id)->join('buss', 'buss.buss_id', '=', 'posts.buss_id')->firstOrFail();
+        $posts = Post::where('post_id', '=', $id)
+                        ->join('buss', 'buss.buss_id', '=', 'posts.buss_id')
+                        ->select('buss.buss_id', 'buss.buss_name', 'title', 'description', 'post_hero_img_url', 'price_from', 'price_new', 'offer_end_at', 'posts.created_at', 'post_id')
+                        ->firstOrFail();
        
         $userdata = '{"email":"", "client_first":"", "client_last":""}';
 

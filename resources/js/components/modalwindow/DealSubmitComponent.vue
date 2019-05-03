@@ -32,8 +32,6 @@
                 <div class="deal-info deal-white">
                     <p>
 
-                  <a style="cursor:pointer;" v-on:click="insertTransaction()" >Continuar Anterasdasdior Operacion.</a>
-
                         <strong>Verifique</strong> se tudo está em ordem e é a oferta que
                         você deseja. Se tudo estiver correto, você pode
                         <strong>continuar</strong>*
@@ -68,7 +66,7 @@
             
 
                 <div class="deal-info">
-                    <p style="line-height: 20px;">Su cupon es para <strong>{{this.bussname}}</strong>
+                    <p style="line-height: 20px;">Su cupon es para <strong>{{this.deal.buss_name}}</strong>
                        <span></span>
                        
                     </p>
@@ -82,7 +80,7 @@
 
                   <form @submit.prevent="formSubmit" id="insert-form">
                     <!-- FORM MOSTRADO SI NO ESTA INICIADA LA SESION -->
-                    <div id="new-user-form" v-if="this.user.email == '' ">
+                    <div id="new-user-form" v-if="this.$store.state.userdata.email == '' ">
 
                     <div class="group">
                       <input id="clientfirst" type="text" name="client_first" required>
@@ -104,7 +102,7 @@
                     </div>
                     </div>
                     <!-- FORM MOSTRADO SI LA SESION ESTA INICIADA -->
-                    <div id="user-form" v-if="this.user.email != ''">
+                    <div id="user-form" v-if="this.$store.state.userdata.email != ''">
 
                   <div id="clientfirst" class="selecting-user" style="width:99%;">
     
@@ -113,21 +111,21 @@
                     <i style="font-size: 1.35em;color: #666;display: block;margin: auto;width: 23px;height: 25px;" class="fas fa-user"></i>
                     </div>
                     <div id="whoisyou-name"><span>
-                      {{this.user.client_first + " " + this.user.client_last}}
+                      {{this.$store.state.userdata.client_first + " " + this.$store.state.userdata.client_last}}
                     </span>
                     <div id="whoisyou-email"><span>
-                      {{this.user.email}}
+                      {{this.$store.state.userdata.email}}
                     </span>
                     </div>
                     </div>
                     </div>
                     </div>
                     <div id="user-data" style="display:none;">
-                    <input disabled=disabled id="clientfirst" type="text" name="client_first" v-bind:value="this.user.client_first" required>
-                    <input disabled=disabled id="clientlast" type="text" name="client_last" v-bind:value="this.user.client_last" required>
-                    <input disabled=disabled id="clientemail" type="email" name="email" v-bind:value="this.user.email" required>
+                    <input disabled=disabled id="clientfirst" type="text" name="client_first" v-bind:value="this.$store.state.userdata.client_first" required>
+                    <input disabled=disabled id="clientlast" type="text" name="client_last" v-bind:value="this.$store.state.userdata.client_last" required>
+                    <input disabled=disabled id="clientemail" type="email" name="email" v-bind:value="this.$store.state.userdata.email" required>
                     </div>
-                    <div id="logout" style="margin-top:10px;">
+                    <div id="logout" style="margin-top:10px;margin-bottom: 13px;">
                       <a class="opcion-alt" style="cursor:pointer;" v-on:click="logout()" >No soy yo.</a>
                     </div>
                     </div>
@@ -612,13 +610,7 @@ z-index: 10;
     background: #fff;
     }
   
-  .modal-body {
-  
-    overflow: auto;
-    max-height: 523px;
-    
-    min-height: 355px;
-  }
+ 
   
   .modal-footer {
     margin-top: 5px;
@@ -779,10 +771,10 @@ background: #FFF;
 
 export default {
   name:'dealsubmit',
-  props: ["title", "descuento", "bussname", "userdata"],
+  props: ["descuento", "postdata", "userdata"],
   data(){
         return{
-            user:{'email':'', 'client_first':'', 'client_last':'client_last'},
+            deal:{},
             spinnersize:48,
             next: 2,
             stepactual:1,
@@ -794,7 +786,6 @@ export default {
             botonterminar:false,
             responseMss: "success",
             responseContent: "",
-            deal:{"title":this.title},
             steps: { "step":{
                       "1":"Verifique los datos", 
                       "2":"Ingrese su nombre", 
@@ -815,8 +806,10 @@ export default {
         }
   },
   mounted(){
-  this.user = JSON.parse(this.userdata);
-      if(this.user.email != ""){
+  this.$store.state.userdata = JSON.parse(this.userdata);
+  this.deal = JSON.parse(this.postdata);
+
+      if(this.$store.state.userdata.email != ""){
         this.steps.step[2] = "Confirme"
       }
 
@@ -913,18 +906,19 @@ export default {
     },
 
     passToCupon: function(){
-      this.stepactual = 3;
+      this.insertTransaction();
     },
 
     logout:function logout(){
       this.loadingMss = true;
       this.hasResponse = false;
+      this.hasError = false;
       axios.post('/logout')
         .then((response) => {
           this.loadingMss = false;
           this.hasResponse = true;
           this.responseContent = "Sesion cerrada";
-          this.user = {'email':'', 'client_first':'', 'client_last':''};
+          this.$store.state.userdata = {'client_id':'', 'email':'', 'client_first':'', 'client_last':''};
           this.resume = false;
           this.steps.step[2] = "Ingrese su nombre"
           function selectname(){
@@ -937,6 +931,7 @@ export default {
         .catch((error) => {
           this.loadingMss = false;
           this.hasError = true;
+          this.hasResponse = false;
           this.responseContent = error;
         })
     },
@@ -978,6 +973,7 @@ export default {
             this.responseMss = "success";
             this.$store.state.userdata = response.data;
             this.responseContent = response.data.responseContent;
+            console.log(this.$store.state.userdata);
             this.passToCupon();
 
           }else if(response.data.response == 'successNoSession'){
@@ -1040,6 +1036,7 @@ export default {
           password: this.password,
         }) 
         .then((response) => {
+          this.password = "";
           this.hasResponse = true;
           this.loadingMss = false;
           this.newUser = {};
@@ -1048,9 +1045,7 @@ export default {
             this.responseMss = "success";
             var response = response.data;
             this.responseContent = "Token Listo";
-            console.log(response);
-            this.user = {'email':this.$store.state.userdata.email, 'client_first':this.$store.state.userdata.client_first, 'client_last':this.$store.state.userdata.client_last}
-            if(this.user.email != ""){
+           if(this.$store.state.userdata.email != ""){
               this.steps.step[2] = "Confirme"
               this.resume = false;
             }
@@ -1060,6 +1055,7 @@ export default {
           }
         })
         .catch((error) => {
+          this.password = "";
           this.hasError = true;
           if (error.response.status == 422){
             this.responseContent = "Contrasena Incorrecta";
@@ -1085,16 +1081,38 @@ export default {
     },
 
     insertTransaction: function insertTransaction(){
-      
+        this.loadingMss = true;
+        this.hasResponse = false;
         axios.post('/inserttrans',{
-          post_id: 12,
-          client_id: 0,
-          buss_id: 8,
+          post_id: this.deal.post_id,
+          client_id: this.$store.state.userdata.client_id,
+          buss_id: this.deal.buss_id,
         }) 
         .then((response) => {
-          console.log(response);
+          this.hasResponse = true;
+          this.hasError = false;
+          this.loadingMss = false;
+          
+          if(response.data.response == "success"){
+          this.showing = true;
+          this.stepactual = 3;
+          this.responseMss = "success";
+          this.responseContent = "TransQR returned";
+          }
+          else if(response.data.response == "error"){
+          this.hasResponse = false;
+          this.hasError = true;
+          this.showing = false;
+          this.responseMss = "error";
+          this.responseContent = response.data.data.message;
+          }
+
         })
         .catch((error) =>{
+          this.hasResponse = false;
+          this.hasError = true;
+          this.responseContent = error.response.data.message;
+          this.loadingMss = false;
           console.log(error);
         })
     },

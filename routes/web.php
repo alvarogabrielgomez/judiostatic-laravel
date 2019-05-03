@@ -19,14 +19,14 @@ Route::get('/', 'MainController@index')->name('/');
 //     Passport::routes();
 // });
 
-Route::resource('deals', 'DealsController');
+Route::resource('/deals', 'DealsController');
 Route::resource('modalwindow', 'ModalwindowController');
 Route::post('/dealsubmit', 'DealsController@dealsubmit');
 Route::post('/dealsubmituser', 'DealsController@dealsubmituser');
 Route::post('/inserttrans', 'DealsController@insertTransaction');
 Route::get('carousel', 'DealsController@carousel');
 
-Route::get('deals', 'DealsController@index');
+Route::get('/deals', 'DealsController@index')->name('deals');
 Route::get('modalwindow', 'ModalwindowController@index');
 Route::get('modalwindow/deals/{id}', 'ModalwindowController@show');
 Route::get('/settings', 'SettingsController@index')->name('settings');
