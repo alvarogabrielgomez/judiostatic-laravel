@@ -4,6 +4,10 @@
 @section('description',  $posts->description)
 @section('heroimage',  $posts->post_hero_img_url)
 @section('content')
+
+
+{{-- {{'<img src="'.(new QRcode)->render($posts->post_id).'"/>'}} --}}
+
 <div id="nav-bar">
         <div id="nav-bar-container">
                     <nav>

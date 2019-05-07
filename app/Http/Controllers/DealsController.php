@@ -220,6 +220,8 @@ class DealsController extends Controller
     }
 
 
+
+
     public function update(Request $request, $slug)
     {
 
@@ -228,4 +230,32 @@ class DealsController extends Controller
     public function destroy($slug)
     {
     }
+
+
+
+
+///////////////////////////////////////////
+    public function indexApi()
+    {
+        $posts = Post::all();
+
+
+        return $this->sendResponse($posts->toArray(), 'Deals retrieved successfully.');
+    }
+
+    public function showApi($id)
+    {
+        $posts = Post::where('post_id', '=', $id)->join('buss', 'buss.buss_id', '=', 'posts.buss_id')->firstOrFail();
+
+        if (is_null($posts)) {
+            return $this->sendError('Product not found.');
+        }
+
+
+        return $this->sendResponse($posts->toArray(), 'Product retrieved successfully.');
+    }
+
+
+
+    
 }

@@ -14,21 +14,30 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'client_first' => 'required|string|max:255',
             'client_last' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:3|confirmed',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required',
+            'c_password' => 'required|same:password'
         ]);
 
-        return User::create([
-            'client_first' => $request->client_first,
-            'client_last' => $request->client_last,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
 
+        $input = $request->all();
+        $input['password'] = Hash::make($input['password']);
+
+        $user = User::create($input);
+        $success['token'] = $user->createToken('judiostatic')->accessToken;
+        $success['email'] = $user->email;
+
+
+        return $this->sendResponse($success, 'User register success'); 
     }
+
+    
     public function login(Request $request)
     {
 

@@ -21,6 +21,13 @@ Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
 Route::post('/checkuser', 'AuthController@checkuser');
 
+Route::middleware('auth:api')->group( function () {
+	Route::resource('deals', 'DealsController');
+});
+
+Route::get('/deals', 'DealsController@indexApi');
+Route::get('/deals/{id}', 'DealsController@showApi');
+
 Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
 
 // Route::group(['prefix' => 'auth'], function () {
