@@ -21,12 +21,44 @@ Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
 Route::post('/checkuser', 'AuthController@checkuser');
 
-Route::middleware('auth:api')->group( function () {
-	Route::resource('deals', 'DealsController');
+Route::get('/v1/redirect', function(Request $request){
+    $query = http_build_query(array(
+         'client_id' => $request->client_id,
+         //'client_secret' => 'mmgkKwYfFh1H0d3kOJEfm3cMhluyMz1hMpiUUdwI',
+         'redirect_uri' => 'http://localhost:8000/api/v1/callback',
+         'response_type' => 'code',
+         'scope' => '*',
+     ));
+
+     return redirect('http://localhost:8000/oauth/authorize?'.$query);
 });
 
-Route::get('/deals', 'DealsController@indexApi');
-Route::get('/deals/{id}', 'DealsController@showApi');
+Route::get('/v1/callback', function(Request $request){
+    
+    $request->request->add([
+        'client_id' => 3,
+        'client_secret' => 'mmgkKwYfFh1H0d3kOJEfm3cMhluyMz1hMpiUUdwI',
+        'grant_type' => 'authorization_code',
+        'redirect_uri' => 'http://localhost:8000/api/v1/callback',
+        'code' => $request->code, 
+    ]);
+    $tokenRequest = Request::create(
+        config('services.passport.login_endpoint'), // endpoint/oauth/token
+        'post'
+    );
+    $response = Route::dispatch($tokenRequest);
+
+    
+    return $response;
+
+});
+
+
+Route::middleware('auth:api')->get('/v1/deals', 'DealsController@indexApi');
+Route::middleware('auth:api')->get('/v1/deals/{id}', 'DealsController@showApi');
+
+Route::middleware('auth:api')->post('/v1/inserttrans', 'DealsController@insertTransaction');
+
 
 Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
 

@@ -37,7 +37,7 @@ class AuthController extends Controller
         return $this->sendResponse($success, 'User register success'); 
     }
 
-    
+
     public function login(Request $request)
     {
 
@@ -115,6 +115,10 @@ class AuthController extends Controller
     }
     return response()->json(array( 'responseContent' => $responseContent, 'response' => $response, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
 
- }
+     }
+
+///////////////////////////////////////////////////////////////
+
+
 
 }

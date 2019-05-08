@@ -131,7 +131,7 @@ class DealsController extends Controller
         return response()->json(array('responseContent' => $responseContent, 'response' => $response));
     }
 
-
+// funciona en API tambien 
     public function insertTransaction(Request $request){
         // Se revisan los BuyLimits primero
         $response = "";
@@ -245,15 +245,18 @@ class DealsController extends Controller
 
     public function showApi($id)
     {
-        $posts = Post::where('post_id', '=', $id)->join('buss', 'buss.buss_id', '=', 'posts.buss_id')->firstOrFail();
+        $posts = Post::where('post_id', '=', $id)->join('buss', 'buss.buss_id', '=', 'posts.buss_id')
+        ->select('posts.post_id', 'buss.buss_id', 'posts.active', 'posts.created_at', 'posts.updated_at', 'offer_end_at', 'price_new', 'price_from', 'title', 'description', 'post_hero_img_url', 'buss_name', 'buss_dir', 'buss_phone', 'buss_url', 'cover_url', 'buss_limits')
+        ->firstOrFail();
 
         if (is_null($posts)) {
             return $this->sendError('Product not found.');
         }
 
 
-        return $this->sendResponse($posts->toArray(), 'Product retrieved successfully.');
+        return $this->sendResponse($posts, 'Product retrieved successfully.');
     }
+
 
 
 
