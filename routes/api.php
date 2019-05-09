@@ -13,13 +13,38 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('oauth/token', 'AccessTokenController@issueToken');
+
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::post('/login', 'AuthController@login');
-Route::post('/register', 'AuthController@register');
-Route::post('/checkuser', 'AuthController@checkuser');
+Route::post('/register', 'AuthController@registerApi');
+Route::middleware('auth:api')->get('/checkuser', 'AuthController@checkuser');
+
+Route::post('/v1/getTokenApi', function(Request $request){
+    $request->request->add([
+        'grant_type' => 'password',
+        'client_id' => $request->id,
+        'client_secret' => config('services.passport.client_secret_api'),
+        'password' => $request->password,
+        'name' => $request->name,
+        'username' => config('services.passport.usernameApi'),
+        'scope' => ['user-data', 'manage-coupons']
+    ]);
+
+    $tokenRequest = Request::create(
+        config('services.passport.login_endpoint'), // endpoint/oauth/token
+        'post'
+    );
+    $response = Route::dispatch($tokenRequest);
+
+    return $response;
+});
+
 
 Route::get('/v1/redirect', function(Request $request){
     $query = http_build_query(array(
@@ -27,7 +52,7 @@ Route::get('/v1/redirect', function(Request $request){
          //'client_secret' => 'mmgkKwYfFh1H0d3kOJEfm3cMhluyMz1hMpiUUdwI',
          'redirect_uri' => 'http://localhost:8000/api/v1/callback',
          'response_type' => 'code',
-         'scope' => '*',
+         'scope' => ['user-data', 'manage-coupons'],
      ));
 
      return redirect('http://localhost:8000/oauth/authorize?'.$query);

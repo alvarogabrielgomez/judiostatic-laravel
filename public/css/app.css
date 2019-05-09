@@ -185,12 +185,10 @@
   #modal-content {
     width: 100% !important;
     margin: 0 !important;
-    height: -webkit-fit-content;
-    height: -moz-fit-content;
-    height: fit-content;
     border-radius: 0px !important;
     border: 0 !important;
     max-width: 1000px !important;
+    height: 100%;
   }
 
   .modal-footer div {

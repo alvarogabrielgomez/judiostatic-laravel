@@ -26,9 +26,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         Passport::routes();
         Passport::tokensCan([
-            'manage-devices' => 'Manage devices',
-            'place-orders' => 'Place orders',
-            'check-status' => 'Check order status',
+            'user-data' => 'Datos de basicos de usuario',
+            'manage-coupons' => 'Acceder y pedir nuevos cupones',
         ]);
         $this->registerPolicies();
         //

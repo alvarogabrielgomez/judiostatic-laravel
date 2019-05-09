@@ -17,12 +17,14 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('client_first');
             $table->string('client_last');
-            $table->boolean('active')->default(0);
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('email')->unique();
+            $table->boolean('active')->default(0);
+            $table->timestamp('email_verified_at')->nullable();
+            //$table->string('activation_token');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

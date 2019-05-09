@@ -23,6 +23,7 @@
 
                 <div class="deal-info">
                     <p>
+                      
                        <strong>{{deal.title}}</strong>
                        <span>{{this.descuento}}% de descuento</span>
                        <!-- <span style="display:none;">{{stepactual}}</span> -->
@@ -166,17 +167,24 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
             <div id="resultados">
                 <spinner-small size="48" v-show="loading"></spinner-small>
                 <div v-if="showing" class="deal-info">
-                    <p>
-                       <strong>PromoÃ§Ã£o de 600 gr de Brigadeiros</strong>
-                       <span>50% de descuento</span>
+                    
+<p> <i style="font-size: 1.5em;color: #7fbf4e;margin-right: 10px;" class="fas fa-check-circle"></i> Oi, {{this.$store.state.userdata.client_first + " " + this.$store.state.userdata.client_last}}!.</p>
+
+                      <div id = "qr">
+
+                      </div>
+                      <p>Aqui está o seu código:</p>
                        <!-- <span style="display:none;">{{stepactual}}</span> -->
-                    </p>
+                       <p class="codigo-final" id="transqr">{{this.transqr}}</p>
+                        <p>Pronto, seu código será enviado por <strong>Email</strong> também, mostre este código ao fazer sua compra em <strong>{{this.deal.buss_name}}</strong> </p>
+                   
                 </div>
             </div>
                 </div>
           </div>
   
 </div>
+                      <a href="#" v-on:click="checkuser" >asdasdasda</a>
 </transition>
 
 
@@ -243,7 +251,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 <transition name="fade" >
  <a v-if="botoncontinuar" id="continue-btn" v-on:click="passToInsert"  class="button footer-btn">Continuar</a>
 <button v-if="botonsubmit" id="continue-btn" v-bind:form="this.formselected" class="button footer-btn">MALDITO MADURO</button>
-<a v-if="botonterminar" id="continue-btn" class="button footer-btn">Terminar</a>
+<a v-if="botonterminar" id="terminar-btn" class="button footer-btn" v-on:click="stepactual = 1, hasError = false, hasResponse = false">Terminar</a>
 </transition>
 </div>
 
@@ -252,6 +260,14 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 </template>
 
 <style>
+#qr{
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    top: 14px;
+    background-color: #ababab;
+    right: 23px;
+}
 #pwd-form-container{
     margin: 17px 21px 0;
     padding: 42px 42px 36px;
@@ -729,6 +745,7 @@ z-index: 10;
   .deal-info{
   
     display: block;
+    position: relative;
     max-width: 498px;
     padding: 2px 23px;
     background-color: #fbfbf2;
@@ -801,7 +818,8 @@ export default {
             hasResponse:false,
             password:'',
             newUser:{'client_first':'', 'client_last':'', 'email':''},
-            formselected:"insert-form"
+            formselected:"insert-form",
+            transqr: "0000000"
                     
         }
   },
@@ -818,11 +836,14 @@ export default {
   
   // Get the <span> element that closes the modal
   var span = document.getElementsByClassName("close")[0];
-  
+
   // When the user clicks on <span> (x), close the modal
   span.onclick = function() {
     modal.style.display = "none";
   }
+
+
+
 
   var nextSelection = $(".next-selection")[0];
   var continueBtn = $("#continue-btn")[0];
@@ -851,6 +872,10 @@ export default {
         this.botoncontinuar = false;
         this.botonsubmit = false;
         this.botonterminar = true;
+        var terminar = document.getElementById("terminar-btn");
+        terminar.onclick = function() {
+          modal.style.display = "none";
+        } 
       }
         else{
         this.botoncontinuar = true;
@@ -880,6 +905,20 @@ export default {
     }
   },
   methods:{
+
+    checkuser: function(){
+        axios.get('/api/checkuser', {
+          email: this.$store.state.userdata.email
+        })
+        .then((response) => {
+           console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    },
+
+
     passToNext: function(){
       this.stepactual += 1;
     },
@@ -1098,6 +1137,7 @@ export default {
           this.stepactual = 3;
           this.responseMss = "success";
           this.responseContent = "TransQR returned";
+          this.transqr = response.data.data.transqr;
           }
           else if(response.data.response == "error"){
           this.hasResponse = false;

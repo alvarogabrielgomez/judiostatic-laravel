@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function registerApi(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'client_first' => 'required|string|max:255',
