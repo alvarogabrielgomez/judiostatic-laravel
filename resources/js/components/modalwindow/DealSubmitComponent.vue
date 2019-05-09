@@ -177,6 +177,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                        <!-- <span style="display:none;">{{stepactual}}</span> -->
                        <p class="codigo-final" id="transqr">{{this.transqr}}</p>
                         <p>Pronto, seu código será enviado por <strong>Email</strong> também, mostre este código ao fazer sua compra em <strong>{{this.deal.buss_name}}</strong> </p>
+                      <a href="#" v-on:click="checkuser" >asdasdasda</a>
                    
                 </div>
             </div>
@@ -184,7 +185,6 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
           </div>
   
 </div>
-                      <a href="#" v-on:click="checkuser" >asdasdasda</a>
 </transition>
 
 
@@ -907,6 +907,17 @@ export default {
   methods:{
 
     checkuser: function(){
+
+      // let axiosConfig = {
+      //   headers: {
+      //     'Content-Type': 'application/json;charset=UTF-8',
+      //     "X-Requested-With": "XMLHttpRequest",
+      //   }
+      // };
+
+      //       window.Laravel.csrfToken = csrf_token;
+      //       window.axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf_token;
+
         axios.get('/api/checkuser', {
           email: this.$store.state.userdata.email
         })

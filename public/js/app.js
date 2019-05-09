@@ -3224,6 +3224,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     checkuser: function checkuser() {
+      // let axiosConfig = {
+      //   headers: {
+      //     'Content-Type': 'application/json;charset=UTF-8',
+      //     "X-Requested-With": "XMLHttpRequest",
+      //   }
+      // };
+      //       window.Laravel.csrfToken = csrf_token;
+      //       window.axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf_token;
       axios.get('/api/checkuser', {
         email: this.$store.state.userdata.email
       }).then(function (response) {
@@ -6744,7 +6752,16 @@ var render = function() {
                               _c("strong", [
                                 _vm._v(_vm._s(this.deal.buss_name))
                               ])
-                            ])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: { click: _vm.checkuser }
+                              },
+                              [_vm._v("asdasdasda")]
+                            )
                           ])
                         : _vm._e()
                     ],
@@ -6753,11 +6770,7 @@ var render = function() {
                 ])
               ])
             ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c("a", { attrs: { href: "#" }, on: { click: _vm.checkuser } }, [
-          _vm._v("asdasdasda")
-        ])
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("transition", { attrs: { name: "slide" } }, [
