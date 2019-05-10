@@ -3121,7 +3121,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'dealsubmit',
   props: ["descuento", "postdata", "userdata"],
@@ -3187,6 +3186,12 @@ __webpack_require__.r(__webpack_exports__);
     this.next = this.stepactual + 1;
     this.steps.Next = this.steps.step[this.next];
 
+    if (this.stepactual == 1) {
+      this.botoncontinuar = true;
+      this.botonsubmit = false;
+      this.botonterminar = false;
+    }
+
     if (this.stepactual == 2 || this.stepactual == 4) {
       if (this.stepactual == 2) {
         this.formselected = "insert-form";
@@ -3233,14 +3238,13 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    checkuser: function checkuser() {
-      axios.post('/api/checkuser', {
-        withCredentials: true,
-        email: 'admin@gmail.com'
-      }).then(function (response) {
-        console.log(response);
-      })["catch"](function (error) {
-        console.log(error);
+    refreshCsrfToken: function refreshCsrfToken() {
+      var URL = "/refreshCsrfToken";
+      return axios(URL, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json'
+        }
       });
     },
     passToNext: function passToNext() {
@@ -3330,7 +3334,7 @@ __webpack_require__.r(__webpack_exports__);
           this.loadingMss = false;
         } else {
           this.hasError = false;
-          axios.post('/dealsubmit', input).then(function (response) {
+          axios.post('/checkuser', input).then(function (response) {
             _this2.hasResponse = true;
             _this2.loadingMss = false;
             _this2.newUser = {};
@@ -3399,12 +3403,6 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingMss = false;
       } else {
         this.hasError = false;
-        var axiosConfig = {
-          headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "X-Requested-With": "XMLHttpRequest"
-          }
-        };
         axios.post('/login', {
           email: this.$store.state.userdata.email,
           password: this.password
@@ -3452,33 +3450,40 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loadingMss = true;
       this.hasResponse = false;
-      axios.post('/inserttrans', {
-        post_id: this.deal.post_id,
-        client_id: this.$store.state.userdata.client_id,
-        buss_id: this.deal.buss_id
-      }).then(function (response) {
-        _this4.hasResponse = true;
-        _this4.hasError = false;
-        _this4.loadingMss = false;
+      this.refreshCsrfToken().then(function (response) {
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+        axios.post('/api/v1/inserttrans', {
+          post_id: _this4.deal.post_id,
+          client_id: _this4.$store.state.userdata.client_id,
+          buss_id: _this4.deal.buss_id,
+          app_id: "1"
+        }).then(function (response) {
+          _this4.hasResponse = true;
+          _this4.hasError = false;
+          _this4.loadingMss = false;
 
-        if (response.data.response == "success") {
-          _this4.showing = true;
-          _this4.stepactual = 3;
-          _this4.responseMss = "success";
-          _this4.responseContent = "TransQR returned";
-          _this4.transqr = response.data.data.transqr;
-        } else if (response.data.response == "error") {
+          if (response.data.response == "success") {
+            _this4.showing = true;
+            _this4.stepactual = 3;
+            _this4.responseMss = "success";
+            _this4.responseContent = "TransQR returned";
+            _this4.transqr = response.data.data.transqr;
+          } else if (response.data.response == "error") {
+            _this4.hasResponse = false;
+            _this4.hasError = true;
+            _this4.showing = false;
+            _this4.responseMss = "error";
+            _this4.responseContent = response.data.data.message;
+          }
+        })["catch"](function (error) {
           _this4.hasResponse = false;
           _this4.hasError = true;
-          _this4.showing = false;
-          _this4.responseMss = "error";
-          _this4.responseContent = response.data.data.message;
-        }
+          _this4.responseContent = error.response.data.message;
+          _this4.loadingMss = false;
+          console.log(error);
+        });
       })["catch"](function (error) {
-        _this4.hasResponse = false;
-        _this4.hasError = true;
-        _this4.responseContent = error.response.data.message;
-        _this4.loadingMss = false;
+        /** handle error **/
         console.log(error);
       });
     } // formSubmit: function formSubmit(){
@@ -6755,16 +6760,7 @@ var render = function() {
                               _c("strong", [
                                 _vm._v(_vm._s(this.deal.buss_name))
                               ])
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#" },
-                                on: { click: _vm.checkuser }
-                              },
-                              [_vm._v("asdasdasda")]
-                            )
+                            ])
                           ])
                         : _vm._e()
                     ],
@@ -20136,7 +20132,7 @@ if (false) {} else {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "install", function() { return install; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapState", function() { return mapState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapMutations", function() { return mapMutations; });
@@ -20144,7 +20140,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapActions", function() { return mapActions; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createNamespacedHelpers", function() { return createNamespacedHelpers; });
 /**
- * vuex v3.1.0
+ * vuex v3.1.1
  * (c) 2019 Evan You
  * @license MIT
  */
@@ -20184,9 +20180,12 @@ function applyMixin (Vue) {
   }
 }
 
-var devtoolHook =
-  typeof window !== 'undefined' &&
-  window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+var target = typeof window !== 'undefined'
+  ? window
+  : typeof global !== 'undefined'
+    ? global
+    : {};
+var devtoolHook = target.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 function devtoolPlugin (store) {
   if (!devtoolHook) { return }
@@ -20230,6 +20229,12 @@ function isPromise (val) {
 
 function assert (condition, msg) {
   if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+function partial (fn, arg) {
+  return function () {
+    return fn(arg)
+  }
 }
 
 // Base data struct for store's module, package with some attribute and method
@@ -20693,7 +20698,9 @@ function resetStoreVM (store, state, hot) {
   var computed = {};
   forEachValue(wrappedGetters, function (fn, key) {
     // use computed to leverage its lazy-caching mechanism
-    computed[key] = function () { return fn(store); };
+    // direct inline function use will lead to closure preserving oldVm.
+    // using partial to return function with only arguments preserved in closure enviroment.
+    computed[key] = partial(fn, store);
     Object.defineProperty(store.getters, key, {
       get: function () { return store._vm[key]; },
       enumerable: true // for local getters
@@ -21132,7 +21139,7 @@ function getModuleByNamespace (store, helper, namespace) {
 var index_esm = {
   Store: Store,
   install: install,
-  version: '3.1.0',
+  version: '3.1.1',
   mapState: mapState,
   mapMutations: mapMutations,
   mapGetters: mapGetters,
@@ -21143,6 +21150,7 @@ var index_esm = {
 /* harmony default export */ __webpack_exports__["default"] = (index_esm);
 
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 

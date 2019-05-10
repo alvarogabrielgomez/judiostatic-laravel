@@ -180,7 +180,6 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                        <!-- <span style="display:none;">{{stepactual}}</span> -->
                        <p class="codigo-final" id="transqr">{{this.transqr}}</p>
                         <p>Pronto, seu código será enviado por <strong>Email</strong> também, mostre este código ao fazer sua compra em <strong>{{this.deal.buss_name}}</strong> </p>
-                      <a href="#" v-on:click="checkuser" >asdasdasda</a>
                    
                 </div>
             </div>
@@ -851,10 +850,6 @@ export default {
   span.onclick = function() {
     modal.style.display = "none";
   }
-
-
-
-
   var nextSelection = $(".next-selection")[0];
   var continueBtn = $("#continue-btn")[0];
   
@@ -869,6 +864,11 @@ export default {
 // Swicher de Boton y demas
       this.next = this.stepactual+1 
       this.steps.Next = this.steps.step[this.next];
+      if(this.stepactual == 1){
+        this.botoncontinuar = true;
+        this.botonsubmit = false;
+        this.botonterminar = false;
+      }
       if(this.stepactual == 2 || this.stepactual == 4){
         if(this.stepactual == 2){
           this.formselected = "insert-form";
@@ -917,19 +917,13 @@ export default {
   methods:{
 
 
-    checkuser: function(){
-   
-
-        axios.post('/api/checkuser', {
-          withCredentials: true,
-          email : 'admin@gmail.com',
-        })
-        .then((response) => {
-           console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+    refreshCsrfToken(){
+      const URL = "/refreshCsrfToken";
+      return axios(URL, {
+        method: 'GET',
+        headers: {'content-type': 'application/json'}
+        }
+      )
     },
 
 
@@ -1011,7 +1005,7 @@ export default {
            this.loadingMss = false;
       }else{
         this.hasError = false;
-        axios.post('/dealsubmit', input) 
+        axios.post('/checkuser', input) 
         .then((response) => {
           this.hasResponse = true;
           this.loadingMss = false;
@@ -1058,6 +1052,8 @@ export default {
           this.loadingMss = false;
         })
 
+
+
       }
 
     } 
@@ -1076,14 +1072,6 @@ export default {
            this.loadingMss = false;
       }else{
         this.hasError = false;
-
-      let axiosConfig = {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          "X-Requested-With": "XMLHttpRequest",
-        }
-      };
-
         axios.post('/login',{
           email: this.$store.state.userdata.email,
           password: this.password,
@@ -1103,8 +1091,6 @@ export default {
               this.resume = false;
             }
             this.passToCupon();
-
-
           }
         })
         .catch((error) => {
@@ -1116,8 +1102,6 @@ export default {
             inputpwd.focus();
             inputpwd.select();
             inputpwd.className = "invalid-data"
-
-
           }
           else if(error.response.data.error == "invalid_request"){
             this.responseContent = "Hubo un problema en la respuesta";
@@ -1127,53 +1111,61 @@ export default {
           }
           this.loadingMss = false;
         })
-
       }
-
-    
     },
 
     insertTransaction: function insertTransaction(){
         this.loadingMss = true;
         this.hasResponse = false;
-        axios.post('/inserttrans',{
-          post_id: this.deal.post_id,
-          client_id: this.$store.state.userdata.client_id,
-          buss_id: this.deal.buss_id,
-        }) 
-        .then((response) => {
-          this.hasResponse = true;
-          this.hasError = false;
-          this.loadingMss = false;
-          
-          if(response.data.response == "success"){
-          this.showing = true;
-          this.stepactual = 3;
-          this.responseMss = "success";
-          this.responseContent = "TransQR returned";
-          this.transqr = response.data.data.transqr;
-          }
-          else if(response.data.response == "error"){
-          this.hasResponse = false;
-          this.hasError = true;
-          this.showing = false;
-          this.responseMss = "error";
-          this.responseContent = response.data.data.message;
-          }
 
+        this.refreshCsrfToken().then(response => {
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+
+          axios.post('/api/v1/inserttrans',
+          {
+            post_id: this.deal.post_id,
+            client_id: this.$store.state.userdata.client_id,
+            buss_id: this.deal.buss_id,
+            app_id: process.env.MIX_APP_ID,
+          }) 
+          .then((response) => {
+            this.hasResponse = true;
+            this.hasError = false;
+            this.loadingMss = false;
+          
+            if(response.data.response == "success"){
+              this.showing = true;
+              this.stepactual = 3;
+              this.responseMss = "success";
+              this.responseContent = "TransQR returned";
+              this.transqr = response.data.data.transqr;
+            }
+            else if(response.data.response == "error"){
+              this.hasResponse = false;
+              this.hasError = true;
+              this.showing = false;
+              this.responseMss = "error";
+              this.responseContent = response.data.data.message;
+            }
+          })
+          .catch((error) =>{
+            this.hasResponse = false;
+            this.hasError = true;
+            this.responseContent = error.response.data.message;
+            this.loadingMss = false;
+            console.log(error);
+          })
         })
-        .catch((error) =>{
-          this.hasResponse = false;
-          this.hasError = true;
-          this.responseContent = error.response.data.message;
-          this.loadingMss = false;
+      .catch( error => {
+          /** handle error **/
           console.log(error);
-        })
+      });
+ 
     },
 
     // formSubmit: function formSubmit(){
       
-    //   let currentObj = this;
+      //   let currentObj = this;
     //   this.axios.get('/dealsubmit', {
     //         first: this.first,
     //         last: this.last,

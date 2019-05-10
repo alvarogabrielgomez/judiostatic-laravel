@@ -21,9 +21,9 @@ Route::get('/', 'MainController@index')->name('/');
 
 Route::resource('/deals', 'DealsController');
 Route::resource('modalwindow', 'ModalwindowController');
-Route::post('/dealsubmit', 'DealsController@dealsubmit');
+Route::post('/checkuser', 'DealsController@checkuser');
 Route::post('/dealsubmituser', 'DealsController@dealsubmituser');
-Route::post('/inserttrans', 'DealsController@insertTransaction');
+
 Route::get('carousel', 'DealsController@carousel');
 
 Route::get('/deals', 'DealsController@index')->name('deals');
@@ -32,4 +32,5 @@ Route::get('modalwindow/deals/{id}', 'ModalwindowController@show');
 Route::get('/settings', 'SettingsController@index')->name('settings');
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/refreshCsrfToken', 'AuthController@refreshCsrfToken')->name('refreshCsrfToken');
 

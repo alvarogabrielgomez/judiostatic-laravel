@@ -13,7 +13,7 @@ use judiostatic\Buylimit;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Exception;
 
-class DealsController extends Controller
+class DealsController extends AuthController
 {
 
     public function index(Request $request)
@@ -53,60 +53,60 @@ class DealsController extends Controller
         return response()->json(array('data' => $posts, 'response' => $response));
     }
 
-    public function dealsubmit(Request $request){
-        $response = "";
-        $responseContent = "";
-        $request->validate([
-            'email' =>  'required|email',
-        ]);
-    //Primero se Revisa si existe el usuario
-        $users = User::where('email', '=', $request->email)
-        ->first();
-        $client_first = "";
-        $client_last = "";
-        $client_id = "";
-        // El usuario si existia en la tabla Users
-        if($users != null){
+//     public function dealsubmit(Request $request){ // SE EXTIENDE DESDE AUTHCONTROLLERS
+//         $response = "";
+//         $responseContent = "";
+//         $request->validate([
+//             'email' =>  'required|email',
+//         ]);
+//     //Primero se Revisa si existe el usuario
+//         $users = User::where('email', '=', $request->email)
+//         ->first();
+//         $client_first = "";
+//         $client_last = "";
+//         $client_id = "";
+//         // El usuario si existia en la tabla Users
+//         if($users != null){
             
-            if($users->active != 1){
-                // Si el usuario no esta activo
-                $client_first = $users->client_first;
-                $client_last = $users->client_last;
-                $email = $users->email;
-                $response = "error";
-                $responseContent = "Usuário Banido ou desativado";
-            }else if($users->active == 1){
-                // Si el usuario esta activo
-                $client_first = $users->client_first;
-                $client_last = $users->client_last;
-                $email = $users->email;
-                $client_id = $users->id;
+//             if($users->active != 1){
+//                 // Si el usuario no esta activo
+//                 $client_first = $users->client_first;
+//                 $client_last = $users->client_last;
+//                 $email = $users->email;
+//                 $response = "error";
+//                 $responseContent = "Usuário Banido ou desativado";
+//             }else if($users->active == 1){
+//                 // Si el usuario esta activo
+//                 $client_first = $users->client_first;
+//                 $client_last = $users->client_last;
+//                 $email = $users->email;
+//                 $client_id = $users->id;
 
-                //Aca se tiene que revisar si esta en sesion
-                if(Auth::check()){
-                    $response = "success";
-                    $responseContent = "Esta en Session";     
-                }else{
-                    $response = "successNoSession";
-                    $responseContent = "Escriba su contrasena para continuar."; 
-                }
-            }
-        }else{
-          // El usuario no existia en la tabla Users 
-          $email = "";
-          $response = "error";
-          $responseContent = "Usuario No existe";
-        }
+//                 //Aca se tiene que revisar si esta en sesion
+//                 if(Auth::check()){
+//                     $response = "success";
+//                     $responseContent = "Esta en Session";     
+//                 }else{
+//                     $response = "successNoSession";
+//                     $responseContent = "Escriba su contrasena para continuar."; 
+//                 }
+//             }
+//         }else{
+//           // El usuario no existia en la tabla Users 
+//           $email = "";
+//           $response = "error";
+//           $responseContent = "Usuario No existe";
+//         }
 
-    //   $Users = new Users();
-    //   $Users->User_first = $request->first;
-    //   $Users->User_last = $request->last;
-    //   $Users->email = $request->email;
+//     //   $Users = new Users();
+//     //   $Users->User_first = $request->first;
+//     //   $Users->User_last = $request->last;
+//     //   $Users->email = $request->email;
 
 
-    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response,'client_id' => $client_id, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
+//     return response()->json(array( 'responseContent' => $responseContent, 'response' => $response,'client_id' => $client_id, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
     
-}
+// }
     
 
     function dealsubmituser(Request $request){
@@ -158,7 +158,9 @@ class DealsController extends Controller
                                 ->first()
                                 ;
 
-            if(!is_null($buylimits)){ // se encontro en la tabla buylimits del dia de hoy
+            if(!$busslimits){return response()->json(array('response' => 'Buss not found'));};
+            
+            if($buylimits){ // se encontro en la tabla buylimits del dia de hoy
 
                 $day_now = time();
                 $day_updated_at = strtotime($buylimits->updated_at);
@@ -176,11 +178,12 @@ class DealsController extends Controller
                         $transactions->post_id = $request->post_id;
                         $transactions->buss_id = $request->buss_id;
                         $transactions->client_id = $request->client_id;
-                        $transactions->transaction_qr = $transqr;
+                        $transactions->trans_qr = $transqr;
+                        if($request->app_id){$transactions->app_id = $request->app_id;};
                         $transactions->save();
 
                         $response = "success";
-                        $data = array('transqr' => $transactions->transaction_qr, 'message' => 'success');
+                        $data = array('transqr' => $transactions->trans_qr, 'message' => 'success');
 
                     }else if($limit_count >= $busslimits->buss_limits){ // no se pueden pedir
                         $response = "error";
@@ -190,7 +193,7 @@ class DealsController extends Controller
                     $response = "error";
                     $data = array('transqr' => '', 'message' => 'Time Unknown Error.');
                 }
-            }else if(is_null($buylimits)){ // no se encontro hoy
+            }else if(!$buylimits){ // no se encontro hoy
 
                 $buylimits = new Buylimit();
                 $buylimits->buss_id = $request->buss_id;
@@ -204,11 +207,12 @@ class DealsController extends Controller
                 $transactions->post_id = $request->post_id;
                 $transactions->buss_id = $request->buss_id;
                 $transactions->client_id = $request->client_id;
-                $transactions->transaction_qr = $transqr;
+                $transactions->trans_qr = $transqr;
+                if($request->app_id){$transactions->app_id = $request->app_id;};
                 $transactions->save();
 
                 $response = "success";
-                $data = array('transqr' => $transactions->transaction_qr, 'message' => 'success');
+                $data = array('transqr' => $transactions->trans_qr, 'message' => 'success');
             }
 
             return response()->json(array('data' => $data, 'response' => $response));

@@ -18,9 +18,10 @@ class CreateTransactionsTable extends Migration
             $table->integer('post_id');
             $table->integer('buss_id');
             $table->integer('client_id');
-            $table->integer('trans_qr');
+            $table->bigInteger('trans_qr');
             $table->timestamps();
             $table->boolean('finished')->default(0);
+            $table->integer('app_id')->default(99);
 
         });
     }

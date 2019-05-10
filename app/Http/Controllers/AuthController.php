@@ -13,10 +13,7 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+
 
     public function registerApi(Request $request)
     {
@@ -88,6 +85,7 @@ class AuthController extends Controller
         ->first();
         $client_first = "";
         $client_last = "";
+        $client_id = "";
         // El usuario si existia en la tabla Users
         if($users != null){
             
@@ -103,6 +101,7 @@ class AuthController extends Controller
                 $client_first = $users->client_first;
                 $client_last = $users->client_last;
                 $email = $users->email;
+                $client_id = $users->id;
 
                 //Aca se tiene que revisar si esta en sesion
                 if(Auth::check()){
@@ -119,12 +118,15 @@ class AuthController extends Controller
           $response = "error";
           $responseContent = "Usuario No existe";
     }
-    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
+    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response,'client_id' => $client_id, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
 
      }
 
 ///////////////////////////////////////////////////////////////
 
 
+    public function refreshCsrfToken(){
+        return ['csrfToken' => csrf_token()];
+    }
 
 }
