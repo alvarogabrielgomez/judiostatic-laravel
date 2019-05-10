@@ -11,9 +11,10 @@
 <div v-if="stepactual == 1" class="steps" id="step1">
         <div class="content-step">
           <div class="content-row row-linea">
-            <div class="linea"></div>
+            <div class="linea">
             <div class="seleccion">1</div>
             <div class="opciones">2</div>
+            </div>
           </div>
                     <div class="content-row row-centered">
                 <div class="title-step">
@@ -56,9 +57,10 @@
 
         <div class="content-step">
           <div class="content-row row-linea">
-            <div class="linea lineacont"></div>
+            <div class="linea lineacont">
             <div class="seleccion">2</div>
             <div class="opciones">3</div>
+            </div>
           </div>
                     <div class="content-row row-centered">
                 <div class="title-step">
@@ -157,8 +159,9 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 
         <div class="content-step">
           <div class="content-row row-linea">
-            <div class="linea lineacont"></div>
+            <div class="linea lineacont">
             <div class="seleccion">3</div>
+            </div>
           </div>
                     <div class="content-row row-centered">
                 <div class="title-step">
@@ -193,8 +196,9 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 
         <div class="content-step">
           <div class="content-row row-linea">
-            <div class="linea lineacont"></div>
+            <div class="linea lineacont">
             <div class="seleccion">!</div>
+            </div>
           </div>
                     <div class="content-row row-centered">
                 <div class="title-step">
@@ -486,13 +490,19 @@ transition: transform .5s ease-in-out;
   height: 120%;
   top: 0px;
 }
+.lineacont > .seleccion{
+ top: 70px;
+}
+.lineacont > .opciones{
+ bottom: 186px;
+}
 
 .seleccion{
     position: absolute;
     width: 30px;
     height: 30px;
-    margin-top: 71px;
-    margin-left: 49px;
+    right: -17px;
+    top: -9px;
     background-color: #d6d6d6;
     display: block;
     border-radius: 50%;
@@ -508,8 +518,8 @@ transition: transform .5s ease-in-out;
     position: absolute;
     width: 30px;
     height: 30px;
-    bottom: 85px;
-    margin-left: 49px;
+    bottom: 165px;
+    right: -17px;
     background-color: #ffffff;
     display: block;
     border-radius: 50%;
@@ -906,20 +916,13 @@ export default {
   },
   methods:{
 
+
     checkuser: function(){
+   
 
-      // let axiosConfig = {
-      //   headers: {
-      //     'Content-Type': 'application/json;charset=UTF-8',
-      //     "X-Requested-With": "XMLHttpRequest",
-      //   }
-      // };
-
-      //       window.Laravel.csrfToken = csrf_token;
-      //       window.axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf_token;
-
-        axios.get('/api/checkuser', {
-          email: this.$store.state.userdata.email
+        axios.post('/api/checkuser', {
+          withCredentials: true,
+          email : 'admin@gmail.com',
         })
         .then((response) => {
            console.log(response);

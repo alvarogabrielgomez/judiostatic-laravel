@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function registerApi(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -4,7 +4,13 @@ window.Vue = require('vue');
 window.axios = require('axios');
 import {store} from './store/store'
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.Laravel = {
+    csrfToken: document.head.querySelector("meta[name='csrf-token']").getAttribute('content')
+}
+window.axios.defaults.headers.common = {
+    'X-CSRF-TOKEN': window.Laravel.csrfToken,
+    'X-Requested-With' : 'XMLHttpRequest'
+}
 
 
 /**

@@ -23,7 +23,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@registerApi');
-Route::middleware('auth:api')->get('/checkuser', 'AuthController@checkuser');
+Route::middleware('auth:api')->post('/checkuser', 'AuthController@checkuser');
+
+
+
 
 Route::post('/v1/getTokenApi', function(Request $request){
     $request->request->add([
