@@ -962,18 +962,24 @@ export default {
       this.hasError = false;
       axios.post('/logout')
         .then((response) => {
-          this.loadingMss = false;
-          this.hasResponse = true;
-          this.responseContent = "Sesion cerrada";
-          this.$store.state.userdata = {'client_id':'', 'email':'', 'client_first':'', 'client_last':''};
-          this.resume = false;
-          this.steps.step[2] = "Ingrese su nombre"
-          function selectname(){
-          var inputfirst = document.getElementById('clientfirst');
-          inputfirst.focus();
-          inputfirst.select();
-          }
-          setTimeout(selectname, 700);
+          this.refreshCsrfToken().then(response => {
+            window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+            this.loadingMss = false;
+            this.hasResponse = true;
+            this.responseContent = "Sesion cerrada";
+            this.$store.state.userdata = {'client_id':'', 'email':'', 'client_first':'', 'client_last':''};
+            this.resume = false;
+            this.steps.step[2] = "Ingrese su nombre"
+            function selectname(){
+              var inputfirst = document.getElementById('clientfirst');
+              inputfirst.focus();
+              inputfirst.select();
+            }
+            setTimeout(selectname, 700);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
         })
         .catch((error) => {
           this.loadingMss = false;

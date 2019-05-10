@@ -3282,25 +3282,30 @@ __webpack_require__.r(__webpack_exports__);
       this.hasResponse = false;
       this.hasError = false;
       axios.post('/logout').then(function (response) {
-        _this.loadingMss = false;
-        _this.hasResponse = true;
-        _this.responseContent = "Sesion cerrada";
-        _this.$store.state.userdata = {
-          'client_id': '',
-          'email': '',
-          'client_first': '',
-          'client_last': ''
-        };
-        _this.resume = false;
-        _this.steps.step[2] = "Ingrese su nombre";
+        _this.refreshCsrfToken().then(function (response) {
+          window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+          _this.loadingMss = false;
+          _this.hasResponse = true;
+          _this.responseContent = "Sesion cerrada";
+          _this.$store.state.userdata = {
+            'client_id': '',
+            'email': '',
+            'client_first': '',
+            'client_last': ''
+          };
+          _this.resume = false;
+          _this.steps.step[2] = "Ingrese su nombre";
 
-        function selectname() {
-          var inputfirst = document.getElementById('clientfirst');
-          inputfirst.focus();
-          inputfirst.select();
-        }
+          function selectname() {
+            var inputfirst = document.getElementById('clientfirst');
+            inputfirst.focus();
+            inputfirst.select();
+          }
 
-        setTimeout(selectname, 700);
+          setTimeout(selectname, 700);
+        })["catch"](function (error) {
+          console.log(error);
+        });
       })["catch"](function (error) {
         _this.loadingMss = false;
         _this.hasError = true;
@@ -21204,7 +21209,9 @@ window.Laravel = {
 };
 window.axios.defaults.headers.common = {
   'X-CSRF-TOKEN': window.Laravel.csrfToken,
-  'X-Requested-With': 'XMLHttpRequest'
+  'X-Requested-With': 'XMLHttpRequest',
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
   /**
    * The following block of code may be used to automatically register your
    * Vue components. It will recursively scan this directory for the Vue
