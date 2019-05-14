@@ -839,13 +839,16 @@ export default {
       if(this.$store.state.userdata.email != ""){
         this.steps.step[2] = "Confirme"
       }
+      if(this.$store.state.userdata.client_last == null){
+        this.$store.state.userdata.client_last = " ";
+      }
+
 
   // Get the modal
   var modal = document.getElementById('modalwindow');
   
   // Get the <span> element that closes the modal
   var span = document.getElementsByClassName("close")[0];
-
   // When the user clicks on <span> (x), close the modal
   span.onclick = function() {
     modal.style.display = "none";
@@ -892,6 +895,11 @@ export default {
         this.botonsubmit = false;
         this.botonterminar = false;
       }
+
+      if(this.$store.state.userdata.client_last == null){
+        this.$store.state.userdata.client_last = " ";
+      }
+
 // Switcher de Spinner
       if(this.responseMss == 'success'){
         this.showing = true;
@@ -1004,7 +1012,7 @@ export default {
       this.hasResponse = false;
       var input = this.newUser;
 
-      if(input['client_first'] == '' || input['client_last'] == '' || input['email'] == ''){
+      if(input['client_first'] == '' || input['email'] == ''){
           this.hasError = true;
           this.hasResponse = false;
           this.responseContent = "Llene todos los campos";
@@ -1051,8 +1059,19 @@ export default {
             inputemail.className = "invalid-data"
             inputemail.focus();
             inputemail.select();
+            console.log(error);
 
-          }else{
+          }
+          else if (error.response.state == 419){
+            this.responseContent = "Reload Page";
+            var inputemail = document.getElementById('clientemail');
+            inputemail.className = "invalid-data"
+            inputemail.focus();
+            inputemail.select();
+            console.log(error);
+
+           }
+          else{
             this.responseContent = error.response.data.message;
           }
           this.loadingMss = false;

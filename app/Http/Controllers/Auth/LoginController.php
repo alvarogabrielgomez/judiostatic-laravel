@@ -4,6 +4,10 @@ namespace judiostatic\Http\Controllers\Auth;
 
 use judiostatic\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Laravel\Socialite\Facades\Socialite;
+use judiostatic\User;
+use Illuminate\Support\Facades\Auth;
+
 
 class LoginController extends Controller
 {
@@ -25,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    // protected $redirectTo = '/home';
+     protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -36,4 +40,48 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+
+      
+    /**
+     * Redirect the user to the GitHub authentication page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function redirectToProvider()
+    {
+        return Socialite::driver('github')->redirect();
+    }
+
+    /**
+     * Obtain the user information from GitHub.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function handleProviderCallback()
+    {
+        $githubUser = Socialite::driver('github')->user();
+
+    
+         //dd($githubUser);
+        // $user->token;
+        // Add to database
+        $user = User::create([
+            'email' => $githubUser->getEmail(),
+            'client_first' => $githubUser->getName(),
+            'username' => $githubUser->nickname,
+            'provider_id' => $githubUser->getId(),
+            'provider_name' => 'Github',
+            'active' => '1',
+            // CREEAR USERNAME NULLABLE
+            // TIENES QUE CREAR EL ESPACIO PARA PROVIDER ID EN EL MIGRATION Y HACER EL PASSWORD NULLABLE Y CLIENT_LAST
+            // No olvides hacerlos de escritura tambien
+            ]);
+
+        // LOGIN
+        Auth::login($user, true);
+        return redirect($this->redirectTo);
+    }
+    
 }

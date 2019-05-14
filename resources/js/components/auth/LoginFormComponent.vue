@@ -41,6 +41,7 @@
           <div class="group" style="margin:13px auto 0px;;width: 81%;">          
             <a class="opcion-alt" href="iforgot/reset-password.php">Crear una nueva cuenta</a>
             <a class="opcion-alt" href="iforgot/reset-password.php">Olvide el password</a>
+            <a class="opcion-alt" v-on:click="stepactual = 3" href="#"><i class="fab fa-google"></i>&nbsp;&nbsp;Login with Google</a>
           </div>
 
         </form>
@@ -79,6 +80,36 @@
       </div>
       </transition>
 
+
+
+
+      <transition name="slide-horizontal">
+    <div v-if="stepactual == 3" class="stepslogin" id="step3">
+      <div class="nav-login">
+        <div id="logo-form">
+          <div class="trans-black-logo-form"></div>
+     <h1 class="title-login-center"><i class="fab fa-google"></i>&nbsp;&nbsp;Login with Google.</h1>
+        </div>
+        <form id="oauthform" action="#" @submit.prevent="login">
+          <div class="group" style="margin: auto;">
+
+            
+          <!-- AJA -->
+          <a href="login/github">LOGIN</a>
+
+
+          </div>
+          <div class="group" style="margin:13px auto 0px;;width: 81%;">          
+            <a class="opcion-alt" style="cursor:pointer;" v-on:click="stepactual = 1" >Volver</a>
+      
+          </div>
+
+        </form>
+      </div>
+           
+
+      </div>
+      </transition>
 
 
 

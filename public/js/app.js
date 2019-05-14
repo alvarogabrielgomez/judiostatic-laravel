@@ -1997,6 +1997,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
   data: function data() {
@@ -3166,6 +3197,10 @@ __webpack_require__.r(__webpack_exports__);
 
     if (this.$store.state.userdata.email != "") {
       this.steps.step[2] = "Confirme";
+    }
+
+    if (this.$store.state.userdata.client_last == null) {
+      this.$store.state.userdata.client_last = " ";
     } // Get the modal
 
 
@@ -3215,6 +3250,10 @@ __webpack_require__.r(__webpack_exports__);
       this.botoncontinuar = true;
       this.botonsubmit = false;
       this.botonterminar = false;
+    }
+
+    if (this.$store.state.userdata.client_last == null) {
+      this.$store.state.userdata.client_last = " ";
     } // Switcher de Spinner
 
 
@@ -3332,7 +3371,7 @@ __webpack_require__.r(__webpack_exports__);
         this.hasResponse = false;
         var input = this.newUser;
 
-        if (input['client_first'] == '' || input['client_last'] == '' || input['email'] == '') {
+        if (input['client_first'] == '' || input['email'] == '') {
           this.hasError = true;
           this.hasResponse = false;
           this.responseContent = "Llene todos los campos";
@@ -3379,6 +3418,14 @@ __webpack_require__.r(__webpack_exports__);
               inputemail.className = "invalid-data";
               inputemail.focus();
               inputemail.select();
+              console.log(error);
+            } else if (error.response.state == 419) {
+              _this2.responseContent = "Reload Page";
+              var inputemail = document.getElementById('clientemail');
+              inputemail.className = "invalid-data";
+              inputemail.focus();
+              inputemail.select();
+              console.log(error);
             } else {
               _this2.responseContent = error.response.data.message;
             }
@@ -5966,6 +6013,23 @@ var render = function() {
                               attrs: { href: "iforgot/reset-password.php" }
                             },
                             [_vm._v("Olvide el password")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "opcion-alt",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  _vm.stepactual = 3
+                                }
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "fab fa-google" }),
+                              _vm._v("  Login with Google")
+                            ]
                           )
                         ]
                       )
@@ -6060,6 +6124,73 @@ var render = function() {
                             [_vm._v("Olvide el password")]
                           ),
                           _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "opcion-alt",
+                              staticStyle: { cursor: "pointer" },
+                              on: {
+                                click: function($event) {
+                                  _vm.stepactual = 1
+                                }
+                              }
+                            },
+                            [_vm._v("Volver")]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("transition", { attrs: { name: "slide-horizontal" } }, [
+          _vm.stepactual == 3
+            ? _c("div", { staticClass: "stepslogin", attrs: { id: "step3" } }, [
+                _c("div", { staticClass: "nav-login" }, [
+                  _c("div", { attrs: { id: "logo-form" } }, [
+                    _c("div", { staticClass: "trans-black-logo-form" }),
+                    _vm._v(" "),
+                    _c("h1", { staticClass: "title-login-center" }, [
+                      _c("i", { staticClass: "fab fa-google" }),
+                      _vm._v("  Login with Google.")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      attrs: { id: "oauthform", action: "#" },
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.login($event)
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "group",
+                          staticStyle: { margin: "auto" }
+                        },
+                        [
+                          _c("a", { attrs: { href: "login/github" } }, [
+                            _vm._v("LOGIN")
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "group",
+                          staticStyle: { margin: "13px auto 0px", width: "81%" }
+                        },
+                        [
                           _c(
                             "a",
                             {
