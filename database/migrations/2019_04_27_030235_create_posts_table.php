@@ -18,12 +18,12 @@ class CreatePostsTable extends Migration
             $table->integer('buss_id');
             $table->boolean('active')->default(1);
             $table->timestamps();
-            $table->timestamp('offer_end_at');
+            $table->timestamp('offer_end_at')->nullable();
             $table->decimal('price_new', 6,2);
             $table->decimal('price_from', 6,2);
             $table->string('title');
             $table->string('description');
-            $table->string('post_hero_img_url')->nullable();
+            $table->string('post_hero_img_url');
         });
     }
 
