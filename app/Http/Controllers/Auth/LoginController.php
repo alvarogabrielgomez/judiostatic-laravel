@@ -51,7 +51,7 @@ class LoginController extends Controller
 
     public function redirectToProvider()
     {
-        return Socialite::driver('github')->redirect();
+        return Socialite::driver('google')->redirect();
     }
 
     /**
@@ -61,22 +61,25 @@ class LoginController extends Controller
      */
     public function handleProviderCallback()
     {
-        $githubUser = Socialite::driver('github')->user();
+        $googleUser = Socialite::driver('google')->user();
 
-    
-         //dd($githubUser);
+        $user = User::where('email', '=', $googleUser->getEmail())->first();
+
+        if($user){
+            Auth::login($user, true);
+            return redirect($this->redirectTo);
+        }
+
+        //dd($googleUser);
         // $user->token;
         // Add to database
         $user = User::create([
-            'email' => $githubUser->getEmail(),
-            'client_first' => $githubUser->getName(),
-            'username' => $githubUser->nickname,
-            'provider_id' => $githubUser->getId(),
-            'provider_name' => 'Github',
+            'email' => $googleUser->getEmail(),
+            'client_first' => $googleUser->getName(),
+            'username' => $googleUser->nickname,
+            'provider_id' => $googleUser->getId(),
+            'provider_name' => 'Google',
             'active' => '1',
-            // CREEAR USERNAME NULLABLE
-            // TIENES QUE CREAR EL ESPACIO PARA PROVIDER ID EN EL MIGRATION Y HACER EL PASSWORD NULLABLE Y CLIENT_LAST
-            // No olvides hacerlos de escritura tambien
             ]);
 
         // LOGIN

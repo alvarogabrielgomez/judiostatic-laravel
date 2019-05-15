@@ -2028,6 +2028,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
   data: function data() {
@@ -2085,6 +2090,9 @@ __webpack_require__.r(__webpack_exports__);
       this.formselected = "pwdform";
       this.botoncontinuar = false;
       this.botonsubmit = true;
+    } else if (this.stepactual == 3) {
+      this.botoncontinuar = false;
+      this.botonsubmit = false;
     } // Switcher de Spinner
 
 
@@ -4384,7 +4392,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.stepslogin{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\n}\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n.title-login-center {\r\n    padding: 1px 27px;\r\n    text-align: center;\r\n    font-size: 0.92em;\r\n    font-weight: 600;\r\n    color: #464646;\r\n    margin-top: 30px!important;\n}\n#logo-form {\r\n  width: 100%;\n}\n.trans-black-logo-form {\r\n  width: 91px;\r\n  height: 31px;\r\n  margin: 10px auto 3px;\r\n  background-image: url(/images/omeleth_trans_black.png);\r\n  background-position: center;\r\n  background-size: cover;\r\n  background-repeat: no-repeat;\n}\n.opcion-alt {\r\n  font-size: 12px;\r\n  display: table;\r\n  -webkit-transform: translate(2px);\r\n          transform: translate(2px);\r\n  color: #bc2d19;\r\n  width: auto !important;\n}\n.login-submit {\r\n  position: absolute;\r\n  border-radius: 0px;\r\n  box-shadow: 0px 0px transparent !important;\r\n  bottom: 0px;\r\n  width: 100%;\r\n      z-index: 10000;\n}\n.admin-login {\r\n  min-width: 377px !important;\r\n  max-width: 1000px !important;\r\n  width: -webkit-min-content;\r\n  width: -moz-min-content;\r\n  width: min-content;\r\n  width: moz-min-content;\r\n  padding: 0px !important;\r\n  background-color: #fff;\r\n  margin: 86px auto !important;\r\n  border-radius: 5px !important;\n}\n.nav-login {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
+exports.push([module.i, "\n.google-icon{\r\n  font-size: 14px;\r\n  color: var(--red);\r\n  margin-right:4px;\n}\n.stepslogin{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\n}\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n.title-login-center {\r\n    padding: 1px 27px;\r\n    text-align: center;\r\n    font-size: 0.92em;\r\n    font-weight: 600;\r\n    color: #464646;\r\n    margin-top: 30px!important;\n}\n#logo-form {\r\n  width: 100%;\n}\n.trans-black-logo-form {\r\n  width: 91px;\r\n  height: 31px;\r\n  margin: 10px auto 3px;\r\n  background-image: url(/images/omeleth_trans_black.png);\r\n  background-position: center;\r\n  background-size: cover;\r\n  background-repeat: no-repeat;\n}\n.opcion-alt {\r\n  font-size: 12px;\r\n  display: table;\r\n  -webkit-transform: translate(2px);\r\n          transform: translate(2px);\r\n  color: #bc2d19;\r\n  width: auto !important;\n}\n.login-submit {\r\n  position: absolute;\r\n  border-radius: 0px;\r\n  box-shadow: 0px 0px transparent !important;\r\n  bottom: 0px;\r\n  width: 100%;\r\n      z-index: 10000;\n}\n.admin-login {\r\n  min-width: 377px !important;\r\n  max-width: 1000px !important;\r\n  width: -webkit-min-content;\r\n  width: -moz-min-content;\r\n  width: min-content;\r\n  width: moz-min-content;\r\n  padding: 0px !important;\r\n  background-color: #fff;\r\n  margin: 86px auto !important;\r\n  border-radius: 5px !important;\n}\n.nav-login {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
 
 // exports
 
@@ -6015,22 +6023,20 @@ var render = function() {
                             [_vm._v("Olvide el password")]
                           ),
                           _vm._v(" "),
-                          _c(
-                            "a",
-                            {
-                              staticClass: "opcion-alt",
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  _vm.stepactual = 3
-                                }
-                              }
-                            },
-                            [
-                              _c("i", { staticClass: "fab fa-google" }),
-                              _vm._v("  Login with Google")
-                            ]
-                          )
+                          _c("span", [
+                            _c("i", {
+                              staticClass: "fab fa-google google-icon"
+                            }),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "opcion-alt",
+                                staticStyle: { display: "inline-block" },
+                                attrs: { href: "/login/google" }
+                              },
+                              [_vm._v("Login with Google")]
+                            )
+                          ])
                         ]
                       )
                     ]
@@ -6213,31 +6219,37 @@ var render = function() {
             : _vm._e()
         ]),
         _vm._v(" "),
-        _vm.botoncontinuar
-          ? _c(
-              "button",
-              {
-                staticClass: "button red login-submit",
-                attrs: {
-                  form: "emailform",
-                  type: "submit",
-                  name: "login-submit"
-                }
-              },
-              [_vm._v("Siguiente")]
-            )
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.botonsubmit
-          ? _c(
-              "button",
-              {
-                staticClass: "button red login-submit",
-                attrs: { form: "pwdform", type: "submit", name: "login-submit" }
-              },
-              [_vm._v("Login")]
-            )
-          : _vm._e()
+        _c("transition", { attrs: { name: "slide-horizontal" } }, [
+          _vm.botoncontinuar
+            ? _c(
+                "button",
+                {
+                  staticClass: "button red login-submit",
+                  attrs: {
+                    form: "emailform",
+                    type: "submit",
+                    name: "login-submit"
+                  }
+                },
+                [_vm._v("Siguiente")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.botonsubmit
+            ? _c(
+                "button",
+                {
+                  staticClass: "button red login-submit",
+                  attrs: {
+                    form: "pwdform",
+                    type: "submit",
+                    name: "login-submit"
+                  }
+                },
+                [_vm._v("Login")]
+              )
+            : _vm._e()
+        ])
       ],
       1
     )

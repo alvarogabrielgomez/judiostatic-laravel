@@ -48,8 +48,7 @@ Route::middleware('auth:api')->post('/v1/getTokenApi', function(Request $request
 
 Route::get('/v1/redirect', function(Request $request){
     $query = http_build_query(array(
-         'client_id' => $request->client_id,
-         //'client_secret' => 'mmgkKwYfFh1H0d3kOJEfm3cMhluyMz1hMpiUUdwI',
+         'client_id' => 3,
          'redirect_uri' => 'http://localhost:8000/api/v1/callback',
          'response_type' => 'code',
          'scope' => ['user-data', 'manage-coupons'],
@@ -62,7 +61,7 @@ Route::get('/v1/callback', function(Request $request){
     
     $request->request->add([
         'client_id' => 3,
-        'client_secret' => 'mmgkKwYfFh1H0d3kOJEfm3cMhluyMz1hMpiUUdwI',
+        'client_secret' => 'hRPc3SijxUDtN53wuwMNdQyEk6V3QIo8Oc9xTsqo',
         'grant_type' => 'authorization_code',
         'redirect_uri' => 'http://localhost:8000/api/v1/callback',
         'code' => $request->code, 
@@ -71,10 +70,10 @@ Route::get('/v1/callback', function(Request $request){
         config('services.passport.login_endpoint'), // endpoint/oauth/token
         'post'
     );
-    $response = Route::dispatch($tokenRequest);
-
+    $token = Route::dispatch($tokenRequest);
     
-    return $response;
+    
+    return $token;
 
 });
 

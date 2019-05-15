@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             //$table->string('activation_token');
             $table->rememberToken();
-            $table->bigInteger('provider_id')->nullable();
+            $table->string('provider_id')->nullable();
             $table->string('provider_name')->default('Omeleth');
             $table->timestamps();
             $table->softDeletes();

@@ -41,7 +41,7 @@
           <div class="group" style="margin:13px auto 0px;;width: 81%;">          
             <a class="opcion-alt" href="iforgot/reset-password.php">Crear una nueva cuenta</a>
             <a class="opcion-alt" href="iforgot/reset-password.php">Olvide el password</a>
-            <a class="opcion-alt" v-on:click="stepactual = 3" href="#"><i class="fab fa-google"></i>&nbsp;&nbsp;Login with Google</a>
+            <span><i class="fab fa-google google-icon"></i><a class="opcion-alt" href="/login/google" style="display:inline-block;">Login with Google</a></span>
           </div>
 
         </form>
@@ -112,9 +112,10 @@
       </transition>
 
 
-
+    <transition name="slide-horizontal">
         <button v-if="botoncontinuar" form="emailform" type="submit" class="button red login-submit" name="login-submit">Siguiente</button>
         <button v-if="botonsubmit" form="pwdform" type="submit" class="button red login-submit" name="login-submit">Login</button>
+    </transition>
     </div>
   </div>
 </template>
@@ -122,7 +123,11 @@
 <style>
 
 
-
+.google-icon{
+  font-size: 14px;
+  color: var(--red);
+  margin-right:4px;
+}
 .stepslogin{
       position: absolute;
     width: 100%;
@@ -267,6 +272,9 @@ updated(){
         this.formselected = "pwdform";
         this.botoncontinuar = false;
         this.botonsubmit = true;
+      }else if(this.stepactual == 3){
+        this.botoncontinuar = false;
+        this.botonsubmit = false;
       }
 // Switcher de Spinner
       if(this.responseMss == 'success'){
