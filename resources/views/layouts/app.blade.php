@@ -80,11 +80,15 @@
                     <div id="header-container-menu" class="normal-opacity-menu">
                         <nav id="header-menu">
                             <ul id="header-menu-buttoms">
-                                <li><a href="index.php">Home</a></li>
-                                    <li><a href="new-post.php">New Post</a></li>
-                                    <li><a href="#main">About</a></li>
+                                <li><a href="/">Home</a></li>
+                                    <li><a href="/create">New Post</a></li>
                                     <li><a href="scan-code.php">Scan QR</a></li>
                                     <li><a href="#main">Contacto</a></li>
+                                    <li class="login-status">
+               
+                                            @include('partials.loginstatus')
+                                           
+                                        </li>
                             </ul>
                 
                         </nav>

@@ -83,6 +83,13 @@
                 <nav id="header-menu">
                   <ul id="header-menu-buttoms">
                     <li><a href="index.php">Home</a></li>
+
+                  
+                    <li class="login-status">
+               
+                      @include('partials.loginstatus')
+                     
+                  </li> 
                   </ul>
                 </nav>
               </div>
