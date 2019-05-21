@@ -1,6 +1,8 @@
 <?php
 
 use Laravel\Passport\Passport;
+use Illuminate\Http\Request;
+use GrahamCampbell\Markdown\Facades\Markdown;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,16 +21,29 @@ Route::get('/', 'MainController@index')->name('/');
 //     Passport::routes();
 // });
 
-Route::resource('/deals', 'DealsController');
+Route::resource('deals', 'DealsController');
 Route::resource('modalwindow', 'ModalwindowController');
-Route::post('/checkuser', 'DealsController@checkuser');
-Route::post('/dealsubmituser', 'DealsController@dealsubmituser');
+Route::resource('documents', 'DocumentsController');
 
-Route::get('carousel', 'DealsController@carousel');
+Route::post('/checkuser', 'DealsController@checkuser')->name('checkuser');
+Route::post('/dealsubmituser', 'DealsController@dealsubmituser')->name('dealsubmituser');
+
+Route::get('/carousel', 'DealsController@carousel')->name('carousel');
+
+Route::get('/documents/{document}', function(Request $request){
+    $document = $request->document;
+    $path = public_path()."\documents\\".$document.".txt";
+    $documentOpenin = fopen($path, "r") or die("404");
+    $documentRead = fread($documentOpenin, filesize($path));
+    fclose($documentOpenin);  
+    
+    $documentRead = Markdown::convertToHtml($documentRead);
+    return view('documents.doc', compact('documentRead'));
+});
 
 Route::get('/deals', 'DealsController@index')->name('deals');
-Route::get('modalwindow', 'ModalwindowController@index');
-Route::get('modalwindow/deals/{id}', 'ModalwindowController@show');
+Route::get('/modalwindow', 'ModalwindowController@index')->name('modalwindow');
+Route::get('/modalwindow/deals/{id}', 'ModalwindowController@show');
 Route::get('/settings', 'SettingsController@index')->name('settings');
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -36,8 +51,8 @@ Route::get('/refreshCsrfToken', 'AuthController@refreshCsrfToken')->name('refres
 
 /////
 
-Route::get('login/github', 'Auth\LoginController@redirectToProvider');
-Route::get('login/github/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('/login/github', 'Auth\LoginController@redirectToProvider');
+Route::get('/login/github/callback', 'Auth\LoginController@handleProviderCallback');
 
-Route::get('login/google', 'Auth\LoginController@redirectToProvider');
-Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('/login/google', 'Auth\LoginController@redirectToProvider');
+Route::get('/login/google/callback', 'Auth\LoginController@handleProviderCallback');

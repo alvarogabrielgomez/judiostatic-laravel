@@ -166,6 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
+        GrahamCampbell\Markdown\MarkdownServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -227,6 +228,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'cors' => \judiostatic\Http\Middleware\Cors::class, 
+        
+        'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
     ],
 
 ];
