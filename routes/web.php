@@ -3,6 +3,8 @@
 use Laravel\Passport\Passport;
 use Illuminate\Http\Request;
 use GrahamCampbell\Markdown\Facades\Markdown;
+use function GuzzleHttp\json_decode;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +15,8 @@ use GrahamCampbell\Markdown\Facades\Markdown;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
 Auth::routes();
 
 Route::get('/', 'MainController@index')->name('/');
@@ -30,15 +34,29 @@ Route::post('/dealsubmituser', 'DealsController@dealsubmituser')->name('dealsubm
 
 Route::get('/carousel', 'DealsController@carousel')->name('carousel');
 
-Route::get('/documents/{document}', function(Request $request){
+Route::get('/documents/{lang}/{document}', function(Request $request){
     $document = $request->document;
-    $path = public_path()."\documents\\".$document.".txt";
+    $lenguaje = $request->lang;
+    $path = public_path("\documents\\".$lenguaje."\\".$document.".txt");
+
+    if(!file_exists ($path)){
+        abort(404);
+    }
+    else if(file_exists ($path)){
+        
     $documentOpenin = fopen($path, "r") or die("404");
     $documentRead = fread($documentOpenin, filesize($path));
     fclose($documentOpenin);  
-    
-    $documentRead = Markdown::convertToHtml($documentRead);
-    return view('documents.doc', compact('documentRead'));
+            
+            $documentRead = [
+                'document' => Markdown::convertToHtml($documentRead),
+                'lenguaje' => strtoupper($lenguaje)
+            ];
+            return view('documents.doc', compact('documentRead'));
+   }
+
+
+
 });
 
 Route::get('/deals', 'DealsController@index')->name('deals');

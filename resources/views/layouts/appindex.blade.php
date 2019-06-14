@@ -169,8 +169,8 @@
           
             <div id="creditos">
               <div>
-                <a href="documents/terms.html">Condições de uso</a>
-                <a href="documents/privacy-policy.html">Privacidade</a
+                <a href="documents/es/terms">Condições de uso</a>
+                <a href="documents/es/privacy-policy">Privacidade</a
                 ><a href="https://ckj.one" rel="external"> © Alvaro Gabriel Gomez</a>.
                 TODOS OS DIREITOS RESERVADOS
               </div>

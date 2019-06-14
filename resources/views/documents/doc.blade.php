@@ -15,6 +15,32 @@
 
 </head>
 <body>
+
+<style>
+code{
+    background: #e8eeee;
+    border-radius: 4px;
+    color: rgba(0,0,0,.87);
+    display: block;
+    font-size: 14px;
+    margin: 20px 0 34px;
+    max-width: -webkit-max-content;
+    max-width: -moz-max-content;
+    max-width: max-content;
+    padding: 20px;
+    font-family: Oxygen,sans-serif;
+}
+img{
+    margin: 10px auto;
+    position: relative;
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+</style>
+
 <header id="header-d">
     <div id="logo-d"></div>
 </header>
@@ -29,6 +55,8 @@
                                             <li><a href="/index.php"><div id="home-icon"></div></a></li>
                                             <li class="navbar-divisor">></li>
                                             <li>Documents</li>
+                                            <li class="navbar-divisor">></li>
+                                            <li>{{$documentRead['lenguaje']}}</li>
                                             <li class="navbar-divisor">></li>
                                             <li>Terms</li>
                                         </ul>
@@ -63,14 +91,14 @@
         </aside>
         
         <div id="main-d-content">
-                  <img class="img-privacy" src="{{ asset('images/privacy-img.png') }}">
+                  {{-- <img class="img-privacy" src="{{ asset('images/privacy-img.png') }}"> --}}
         <div id="main-d-content-text">
-                <div class="date-nota-d">
+                {{-- <div class="date-nota-d">
                     <span>Estos terminos y condiciones es de la fecha 14 de Enero del 2019</span>
-                </div>
+                </div> --}}
 
 @php
-echo $documentRead;
+echo $documentRead['document'];
 @endphp
 
         </div>              
