@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Condiciones de Uso Omeleth Cupon</title>
+    <title>{{$documentRead['titulo']}}</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
 
     <meta property="og:url"                content="https://omeleth.com/documents/terms" />
@@ -58,7 +58,7 @@ img{
                                             <li class="navbar-divisor">></li>
                                             <li>{{$documentRead['lenguaje']}}</li>
                                             <li class="navbar-divisor">></li>
-                                            <li>Terms</li>
+                                            <li>{{$documentRead['titulo']}}</li>
                                         </ul>
                                     </nav>
                         </div>
@@ -69,22 +69,26 @@ img{
                 <div class="">
                         <div class="d-header-list">Documentos</div>
                         <ul class="d-list">
-                            <li class="">
+                            <li class="@if ($documentRead['titulo'] == 'Privacy') 
+                            selected-d-list
+                            @endif">
                                 <div class="doc-icon"></div>
                                 <a href="privacy-policy#main-d-content-text" class="">Politica de privacidad</a>
                             </li>
-                            <li class="selected-d-list">
+                            <li class="@if ($documentRead['titulo'] == 'Terms') 
+                            selected-d-list
+                            @endif">
                                 <div class="doc-icon"></div>
-                                <a href="" class="">Condiciones de uso</a>
+                                <a href="terms#main-d-content-text" class="">Condiciones de uso</a>
                             </li>
                             <li>
-                                <div class="doc-icon"></div>
+                                {{-- <div class="doc-icon"></div>
                                 <a href="with-us.html#main-d-content-text" class="">Venda con nosotros</a>
                             </li>
                             <li>
                                     <div class="doc-icon"></div>
                                     <a href="lets-start.html#main-d-content-text" class="">Comenzar con nosotros</a>
-                                </li>
+                                </li> --}}
                     
                         </ul>
                         </div>

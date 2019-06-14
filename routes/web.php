@@ -37,6 +37,15 @@ Route::get('/carousel', 'DealsController@carousel')->name('carousel');
 Route::get('/documents/{lang}/{document}', function(Request $request){
     $document = $request->document;
     $lenguaje = $request->lang;
+    $titulodocumento ='';
+    
+    if($document == 'privacy-policy'){
+        $titulodocumento = 'Privacy';
+    }
+    else if($document == 'terms'){
+        $titulodocumento = 'Terms';
+    }
+
     $path = public_path("\documents\\".$lenguaje."\\".$document.".txt");
 
     if(!file_exists ($path)){
@@ -50,7 +59,8 @@ Route::get('/documents/{lang}/{document}', function(Request $request){
             
             $documentRead = [
                 'document' => Markdown::convertToHtml($documentRead),
-                'lenguaje' => strtoupper($lenguaje)
+                'lenguaje' => strtoupper($lenguaje),
+                'titulo' => $titulodocumento
             ];
             return view('documents.doc', compact('documentRead'));
    }
