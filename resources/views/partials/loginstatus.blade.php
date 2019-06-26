@@ -6,11 +6,7 @@ $icon = "fas fa-user-ninja";
 }
 ?>
 
-<script>
-function dropdownShow() {
-    document.getElementById("dropdown-menu").classList.toggle("show");
-}
-</script>
+
         {{-- DropdownButton --}}
         <div class="dropdown">
                 <button onclick="dropdownShow()" class="dropbtn">

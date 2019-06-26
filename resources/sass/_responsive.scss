@@ -54,6 +54,9 @@
     #main-d-sidebar {
       flex: 15%;
     }
+
+
+
     #main-d-content {
       flex: 50%;
     }
@@ -63,6 +66,13 @@
     #main-login {
       margin: auto;
     }
+
+    #header-menu-buttoms {
+      li{
+        margin: 0;
+      }
+    }
+
     .dropdown-content {
       margin-top: 1px;
     }
@@ -162,12 +172,17 @@
       max-width: 1000px !important;
       height: 100%;
     }
+    .modal-footer {
+      position: fixed !important;
+    }
+
     .modal-footer div {
       position: fixed !important;
       bottom: 0px !important;
       left: 0;
       line-height: 44px !important;
     }
+
     #creditos {
       height: 72px;
     }

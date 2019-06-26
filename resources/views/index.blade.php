@@ -11,7 +11,7 @@
                     <p id="textbloq2">
                     Conte conosco para resolver o seu dia, e você pode dar o seu prazer quando quiser.<br><br> Cupons online baratos e rápidos.
                     </p>
-                    <a href="deals.php" class="herob button blue">Dê uma olhada</a>
+                    <a href="/deals" class="herob button blue">Dê uma olhada</a>
                     <a href="#main"><div id="main-hero-arrow"></div></a>
                 </div>
             

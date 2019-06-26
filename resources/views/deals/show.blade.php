@@ -12,9 +12,9 @@
         <div id="nav-bar-container">
                     <nav>
                         <ul>
-                            <li><a href="index.php"><div id="home-icon"></div></a></li>
+                            <li><a href="/"><div id="home-icon"></div></a></li>
                             <li class="navbar-divisor">&gt;</li>
-                            <li><a href="deals.php" style="margin:0;padding:0;">Deals</a></li>
+                            <li><a href="/deals" style="margin:0;padding:0;">Deals</a></li>
                             <li class="navbar-divisor">&gt;</li>
                             <li><span>Códigos Promocionais<span></span></span></li>
                         </ul>

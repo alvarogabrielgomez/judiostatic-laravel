@@ -59,9 +59,11 @@
     <meta property="og:description"        content="@yield('description')" />
     <meta property="og:image"              content="https://omeleth.com/@yield('heroimage')" />
     <meta property="fb:app_id"             content="238563567095772" /> 
-    {{-- <script>
-        window.auth_user = {!! json_encode($auth_user); !!};
-    </script> --}}
+    <script>
+       function dropdownShow() {
+            document.getElementById("dropdown-menu").classList.toggle("show");
+        }
+    </script> 
 </head>
 <body>
    
@@ -80,15 +82,16 @@
                     <div id="header-container-menu" class="normal-opacity-menu">
                         <nav id="header-menu">
                             <ul id="header-menu-buttoms">
-                                <li><a href="/">Home</a></li>
+                                <div id="wrapper-btn">
+                                    <li><a href="/">Home</a></li>
                                     <li><a href="/create">New Post</a></li>
                                     <li><a href="scan-code.php">Scan QR</a></li>
-                                    <li><a href="#main">Contacto</a></li>
-                                    <li class="login-status">
-               
-                                            @include('partials.loginstatus')
-                                           
-                                        </li>
+                                    
+                                </div>
+
+                                <li class="login-status">
+                                    @include('partials.loginstatus')                                       
+                                </li>
                             </ul>
                 
                         </nav>
@@ -150,9 +153,10 @@
     </div>
 
     <div id="creditos">
-        <div><a href="documents/terms.html">Condições de uso</a> <a
-                href="documents/privacy-policy.html">Privacidade</a><a href="https://ckj.one" rel="external"> © Alvaro
-                Gabriel Gomez</a>. TODOS OS DIREITOS RESERVADOS</div>
+        <div><a href="/documents/es/terms">Condições de uso</a> <a
+                href="/documents/es/privacy-policy">Privacidade</a>
+                <a href="https://ckj.one" rel="external"> © Alvaro Gabriel Gomez</a>.
+                 TODOS OS DIREITOS RESERVADOS</div>
     </div>
 
 </footer>

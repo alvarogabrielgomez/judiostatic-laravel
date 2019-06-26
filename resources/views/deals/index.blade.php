@@ -5,9 +5,9 @@
         <div id="nav-bar-container">
                     <nav>
                         <ul>
-                            <li><a href="index.php"><div id="home-icon"></div></a></li>
+                            <li><a href="/"><div id="home-icon"></div></a></li>
                             <li class="navbar-divisor">&gt;</li>
-                            <li><a href="deals.php" style="margin:0;padding:0;">Deals</a></li>
+                            <li><a href="/deals" style="margin:0;padding:0;">Deals</a></li>
                             <li class="navbar-divisor">&gt;</li>
                             <li><span>Códigos Promocionais<span></span></span></li>
                         </ul>
@@ -24,13 +24,13 @@
                 
                 @foreach($posts as $post)
 
-            <a href="{{$post->post_id}}" class="main-box">
+            <a href="/deals/{{$post->post_id}}" class="main-box">
 
                         <div class="main-img">
                             <img src="{{ asset($post->post_hero_img_url) }}" alt="">
                         </div>
                     
-                        <div class="buss-name"><span>Pizza Hot</span></div><div class="clock-time clock-7"></div>
+                        <div class="buss-name"><span>{{$post->buss_name}}</span></div><div class="clock-time clock-7"></div>
                     
                         
                         <div class="box-title"><span>{{$post ->title}}</span></div>

@@ -101,6 +101,11 @@
   </div>
 
   <script>
+      
+       function dropdownShow() {
+            document.getElementById("dropdown-menu").classList.toggle("show");
+        }
+    
       var isMobile;
       function widthpx() {
         if ($(document).width() <= 800) {
@@ -169,8 +174,8 @@
           
             <div id="creditos">
               <div>
-                <a href="documents/es/terms">Condições de uso</a>
-                <a href="documents/es/privacy-policy">Privacidade</a
+                <a href="/documents/es/terms">Condições de uso</a>
+                <a href="/documents/es/privacy-policy">Privacidade</a
                 ><a href="https://ckj.one" rel="external"> © Alvaro Gabriel Gomez</a>.
                 TODOS OS DIREITOS RESERVADOS
               </div>

@@ -4,6 +4,7 @@ namespace judiostatic\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Mail;
 use Validator;
 use judiostatic\Post;
 use judiostatic\Buss;
@@ -53,60 +54,18 @@ class DealsController extends AuthController
         return response()->json(array('data' => $posts, 'response' => $response));
     }
 
-//     public function dealsubmit(Request $request){ // SE EXTIENDE DESDE AUTHCONTROLLERS
-//         $response = "";
-//         $responseContent = "";
-//         $request->validate([
-//             'email' =>  'required|email',
-//         ]);
-//     //Primero se Revisa si existe el usuario
-//         $users = User::where('email', '=', $request->email)
-//         ->first();
-//         $client_first = "";
-//         $client_last = "";
-//         $client_id = "";
-//         // El usuario si existia en la tabla Users
-//         if($users != null){
-            
-//             if($users->active != 1){
-//                 // Si el usuario no esta activo
-//                 $client_first = $users->client_first;
-//                 $client_last = $users->client_last;
-//                 $email = $users->email;
-//                 $response = "error";
-//                 $responseContent = "Usuário Banido ou desativado";
-//             }else if($users->active == 1){
-//                 // Si el usuario esta activo
-//                 $client_first = $users->client_first;
-//                 $client_last = $users->client_last;
-//                 $email = $users->email;
-//                 $client_id = $users->id;
+   public function enviaremail(Request $request){
+    $to_name = $request->name;
+    $to_email = $request->email;
+    $data = array('name'=>"Sam Jose", "body" => "Test mail");
+        
+    Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
+        $message->to($to_email, $to_name)
+                ->subject('Seu cupom de desconto');
+        $message->from('noreply.ckj.cupon@gmail.com','Omeleth Cupon');
+    });
 
-//                 //Aca se tiene que revisar si esta en sesion
-//                 if(Auth::check()){
-//                     $response = "success";
-//                     $responseContent = "Esta en Session";     
-//                 }else{
-//                     $response = "successNoSession";
-//                     $responseContent = "Escriba su contrasena para continuar."; 
-//                 }
-//             }
-//         }else{
-//           // El usuario no existia en la tabla Users 
-//           $email = "";
-//           $response = "error";
-//           $responseContent = "Usuario No existe";
-//         }
-
-//     //   $Users = new Users();
-//     //   $Users->User_first = $request->first;
-//     //   $Users->User_last = $request->last;
-//     //   $Users->email = $request->email;
-
-
-//     return response()->json(array( 'responseContent' => $responseContent, 'response' => $response,'client_id' => $client_id, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
-    
-// }
+    }
     
 
     function dealsubmituser(Request $request){

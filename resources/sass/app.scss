@@ -8,9 +8,7 @@
 // Bootstrap
 //@import '~bootstrap/scss/bootstrap';
 
-//Others
-@import 'responsive';
-@import 'modalwindow';
+
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -154,19 +152,28 @@ header {
   }
 }
 
+#wrapper-btn{
+  display: flex;
+  flex: 100;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0px 7px;
+}
+
 #header-menu-buttoms {
   list-style: none;
   display: flex;
   line-height: 100px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: space-between;
   padding: 0px 10px;
   box-sizing: border-box;
   margin: 0px;
   li {
-    margin-left: 10px;
+    margin: 0px 14px;
     a {
-      margin-left: 10px;
+      
       color: #FFF;
       font-size: 17px;
       vertical-align: middle;
@@ -266,6 +273,7 @@ nav ul li a {
   padding-top: 30px;
 }
 
+
 #main-container {
   margin-top: 54px;
   padding-bottom: 63px;
@@ -354,6 +362,9 @@ nav ul li a {
   float: left;
   margin: 7px 10px;
 }
+
+
+
 
 .main-img {
   overflow: hidden;
@@ -2058,3 +2069,13 @@ background-color: rgba(255, 255, 255, 0.81);
   font-weight: 600;
   font-size: 28px;
 }
+
+
+
+
+
+
+
+//Others
+@import 'responsive';
+@import 'modalwindow';

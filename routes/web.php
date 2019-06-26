@@ -29,7 +29,8 @@ Route::resource('deals', 'DealsController');
 Route::resource('modalwindow', 'ModalwindowController');
 Route::resource('documents', 'DocumentsController');
 
-Route::post('/checkuser', 'DealsController@checkuser')->name('checkuser');
+Route::post('/enviaremail', 'DealsController@enviaremail')->name('enviaremail');
+
 Route::post('/dealsubmituser', 'DealsController@dealsubmituser')->name('dealsubmituser');
 
 Route::get('/carousel', 'DealsController@carousel')->name('carousel');

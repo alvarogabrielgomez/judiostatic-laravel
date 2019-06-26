@@ -191,7 +191,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 
 
 <transition name="slide">
-<div v-if="stepactual == 4" class="steps" id="step3">
+<div v-if="stepactual == 4" class="steps" id="steplogin">
 
         <div class="content-step">
           <div class="content-row row-linea">
@@ -471,8 +471,8 @@ background: #21a961;
 }
 
 
-.modal, #modalwindow, #modal-content,{
-	-webkit-transition: all .5s ease-in-out;
+.modal, #modalwindow, #modal-content{
+
 transition: transform .5s ease-in-out;
 
 }
@@ -563,7 +563,7 @@ transition: transform .5s ease-in-out;
 }
 
 
-#step1, #step2, #step3{
+#step1, #step2, #step3, #steplogin{
     display: flex;
     flex-direction: column;
 }
@@ -885,8 +885,7 @@ export default {
         this.botoncontinuar = false;
         this.botonsubmit = false;
         this.botonterminar = true;
-        var terminar = document.getElementById("terminar-btn");
-        terminar.onclick = function() {
+        document.getElementById("terminar-btn").onclick = function() {
           modal.style.display = "none";
         } 
       }
@@ -909,6 +908,9 @@ export default {
         this.loading = false;
       }else if(this.responseMss != 'success' || this.responseMss != 'error' || this.responseMss != 'successNoSession'){
         this.loading = true;
+      }else if(this.hasError == true){
+        this.showing = false;
+        this.loading = false;
       }
 
   },
@@ -923,7 +925,6 @@ export default {
     }
   },
   methods:{
-
 
     refreshCsrfToken(){
       const URL = "/refreshCsrfToken";
@@ -941,23 +942,23 @@ export default {
 
     passToInsert: function(){
       this.stepactual = 2;
-      function selectname(){
-      var inputfirst = document.getElementById('clientfirst');
-      inputfirst.focus();
-      inputfirst.select();
-      }
-      setTimeout(selectname, 1000);
+      //function selectname(){
+      // var inputfirst = document.getElementById('clientfirst');
+      // inputfirst.focus();
+      // inputfirst.select();
+      // }
+      // setTimeout(selectname, 1000);
     },
 
 
     passToPWD: function(){
       this.stepactual = 4;
-      function selectPwd(){
-        var inputpwd = document.getElementById('clientpwd');
-        inputpwd.focus();
-        inputpwd.select();
-      }
-      setTimeout(selectPwd, 1000);
+      // function selectPwd(){
+      //   var inputpwd = document.getElementById('clientpwd');
+      //   inputpwd.focus();
+      //   inputpwd.select();
+      // }
+      // setTimeout(selectPwd, 1000);
     },
 
     passToCupon: function(){
@@ -978,12 +979,12 @@ export default {
             this.$store.state.userdata = {'client_id':'', 'email':'', 'client_first':'', 'client_last':''};
             this.resume = false;
             this.steps.step[2] = "Ingrese su nombre"
-            function selectname(){
-              var inputfirst = document.getElementById('clientfirst');
-              inputfirst.focus();
-              inputfirst.select();
-            }
-            setTimeout(selectname, 700);
+            // function selectname(){
+            //   var inputfirst = document.getElementById('clientfirst');
+            //   inputfirst.focus();
+            //   inputfirst.select();
+            // }
+            // setTimeout(selectname, 700);
           })
           .catch((error) => {
             console.log(error);
@@ -1019,7 +1020,7 @@ export default {
            this.loadingMss = false;
       }else{
         this.hasError = false;
-        axios.post('/checkuser', input) 
+        axios.post('/api/checkuser', input) 
         .then((response) => {
           this.hasResponse = true;
           this.loadingMss = false;
@@ -1034,7 +1035,7 @@ export default {
             this.responseMss = "success";
             this.$store.state.userdata = response.data;
             this.responseContent = response.data.responseContent;
-            console.log(this.$store.state.userdata);
+            //console.log(this.$store.state.userdata);
             this.passToCupon();
 
           }else if(response.data.response == 'successNoSession'){
@@ -1048,7 +1049,7 @@ export default {
             this.loading = false;
             this.passToPWD();
 
-            console.log(this.$store.state.userdata);
+            //console.log(this.$store.state.userdata);
           }
         })
         .catch((error) => {
@@ -1068,9 +1069,11 @@ export default {
             inputemail.className = "invalid-data"
             inputemail.focus();
             inputemail.select();
-            console.log(error);
+            //console.log(error);
 
            }
+  
+
           else{
             this.responseContent = error.response.data.message;
           }
@@ -1088,11 +1091,13 @@ export default {
       //El resto de los datos ya estan en memoria en userdata.
       this.loadingMss = true;
       this.hasResponse = false;
+      this.responseMss = "";
       var input = {'client_first':this.$store.state.userdata.client_first, 'client_last':this.$store.state.userdata.client_last, 'email':this.$store.state.userdata.email, 'password': this.password};
 
       if(input['client_first'] == '' || input['client_last'] == '' || input['email'] == '' || input['password'] == ''){
           this.hasError = true;
           this.hasResponse = false;
+          this.responseMss = "error";
           this.responseContent = "Llene todos los campos";
            this.loadingMss = false;
       }else{
@@ -1120,6 +1125,7 @@ export default {
         })
         .catch((error) => {
           this.password = "";
+          this.responseMss = "error";
           this.hasError = true;
           if (error.response.status == 422){
             this.responseContent = "Contrasena Incorrecta";
@@ -1131,7 +1137,19 @@ export default {
           else if(error.response.data.error == "invalid_request"){
             this.responseContent = "Hubo un problema en la respuesta";
           }
+
+          else if (error.response.state == 419){
+            this.responseContent = "Reload Page";
+            var inputemail = document.getElementById('clientemail');
+            inputemail.className = "invalid-data"
+            inputemail.focus();
+            inputemail.select();
+            //console.log(error);
+
+           }
+
           else{
+            this.responseMss = "error";
             this.responseContent = error.response.data.message;
           }
           this.loadingMss = false;
@@ -1164,6 +1182,7 @@ export default {
               this.responseMss = "success";
               this.responseContent = "TransQR returned";
               this.transqr = response.data.data.transqr;
+              this.enviaremail();
             }
             else if(response.data.response == "error"){
               this.hasResponse = false;
@@ -1187,6 +1206,25 @@ export default {
       });
  
     },
+
+     enviaremail: function enviaremail(){
+      
+       
+       this.axios.post('/enviaremail', {
+             name: this.$store.state.userdata.client_first,
+             email: this.$store.state.userdata.email
+       })
+       .then(function (response) {
+             //currentObj.output = response.data;
+             this.responseMss = "success";
+             this.responseContent = "Email Enviado";
+       })
+       .catch(function (error) {
+             //currentObj.output = error;
+             this.responseMss = "error";
+             this.responseContent = "Error al enviar Email";
+       });
+     },
 
     // formSubmit: function formSubmit(){
       
