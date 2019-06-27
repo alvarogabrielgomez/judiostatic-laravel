@@ -76,6 +76,9 @@ Route::get('/modalwindow/deals/{id}', 'ModalwindowController@show');
 Route::get('/settings', 'SettingsController@index')->name('settings');
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::post('/checkuser', 'DealsController@checkuser')->name('checkuser');
+
+
 Route::get('/refreshCsrfToken', 'AuthController@refreshCsrfToken')->name('refreshCsrfToken');
 
 /////

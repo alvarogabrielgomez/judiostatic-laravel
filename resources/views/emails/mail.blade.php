@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />";
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
 <style>
 #qr-canvas{
     width:150px;
@@ -73,24 +73,24 @@
 
 <body>
 <div id='email-container'>
-<p>Oi, {{$to_name}} $last,</p>
+<p>Oi, {{$name}} {{$last}},</p>
 <p>Seu código promocional é:</p>
-<p id='code'>$transqr</p>
+<p id='code'>{{$transqr}}</p>
 <div id='qr-canvas'>
 <img id='imagecode' src=\"cid:qrcode\" />
 </div>
 
 <div class = 'buss-info-container'>
         <div class='deal-info-metadata'>
-        <div class='deal-info-name'>$post_title</div>
-        <div class='deal-info-box'>$post_desc</div>
+        <div class='deal-info-name'>{{$post_title}}</div>
+        <div class='deal-info-box'>{{$post_desc}}</div>
         </div>
 </div>
 
 <p><br>Você pode mostrar este código quando chegar a $post_buss_name e seu desconto será feito imediatamente</p>
 <p>Você pode conferir outros cupons em nosso site</p>
 <div class='deal-map-box'>O endereço do lugar é
- <a href='https://www.google.com.br/maps/search/$post_buss_dir'>$post_buss_dir</a></div>
+ <a href='https://www.google.com.br/maps/search/{{$post_buss_dir}}'>{{$post_buss_dir}}</a></div>
 <p>Muito obrigado</p>
 <p>Omeleth Cupon.</p>
 <br>

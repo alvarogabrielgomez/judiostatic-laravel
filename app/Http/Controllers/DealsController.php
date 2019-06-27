@@ -80,7 +80,7 @@ class DealsController extends AuthController
     $post_desc = $request->post_desc;
     $post_buss_dir = $request->post_buss_dir;
 
-    $data = array('transqr'=>$transqr, "post_buss_name" => $post_buss_name, 'post_title' => $post_title, 'post_desc' => $post_desc, 'post_buss_dir' => $post_buss_dir);
+    $data = array('name' => $to_name, 'last' => $last ,'transqr'=>$transqr, "post_buss_name" => $post_buss_name, 'post_title' => $post_title, 'post_desc' => $post_desc, 'post_buss_dir' => $post_buss_dir);
        try{
            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
                $message->to($to_email, $to_name)

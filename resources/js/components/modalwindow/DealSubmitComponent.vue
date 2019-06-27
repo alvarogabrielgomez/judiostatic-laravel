@@ -838,10 +838,8 @@ export default {
   this.$store.state.userdata = JSON.parse(this.userdata);
   this.deal = JSON.parse(this.postdata);
   const buylimit = JSON.parse(this.buylimits);
-  if(buylimit != [] || buylimit != "" || buylimit != null){
-
     this.activelimits = parseInt(buylimit[0].limit_count);
-  }
+  
 
       if(this.$store.state.userdata.email != ""){
         this.steps.step[2] = "Confirme";
@@ -1044,11 +1042,11 @@ export default {
       }
       
       else{
-      this.refreshCsrfToken().then(response => {
-        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+      // this.refreshCsrfToken().then(response => {
+      //   window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
         
         this.hasError = false;
-        axios.post('/api/checkuser', input) 
+        axios.post('/checkuser', input) 
         .then((response) => {
           this.hasResponse = true;
           this.loadingMss = false;
@@ -1080,7 +1078,7 @@ export default {
             //console.log(this.$store.state.userdata);
           }
 
-        })
+       // })
         
         })
         .catch((error) => {

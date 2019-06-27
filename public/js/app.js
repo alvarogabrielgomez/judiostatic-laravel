@@ -3279,10 +3279,7 @@ __webpack_require__.r(__webpack_exports__);
     this.$store.state.userdata = JSON.parse(this.userdata);
     this.deal = JSON.parse(this.postdata);
     var buylimit = JSON.parse(this.buylimits);
-
-    if (buylimit != [] || buylimit != "" || buylimit != null) {
-      this.activelimits = parseInt(buylimit[0].limit_count);
-    }
+    this.activelimits = parseInt(buylimit[0].limit_count);
 
     if (this.$store.state.userdata.email != "") {
       this.steps.step[2] = "Confirme";
@@ -3469,39 +3466,39 @@ __webpack_require__.r(__webpack_exports__);
           this.loadingMss = false;
           this.resume = false;
         } else {
-          this.refreshCsrfToken().then(function (response) {
-            window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
-            _this2.hasError = false;
-            axios.post('/api/checkuser', input).then(function (response) {
-              _this2.hasResponse = true;
-              _this2.loadingMss = false;
-              _this2.newUser = {};
+          // this.refreshCsrfToken().then(response => {
+          //   window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+          this.hasError = false;
+          axios.post('/checkuser', input).then(function (response) {
+            _this2.hasResponse = true;
+            _this2.loadingMss = false;
+            _this2.newUser = {};
 
-              if (response.data.response == 'error') {
-                _this2.hasError = true;
-                _this2.responseMss = "error";
-                _this2.responseContent = response.data.responseContent;
-              } else if (response.data.response == 'success') {
-                _this2.hasError = false;
-                _this2.responseMss = "success";
-                _this2.$store.state.userdata = response.data;
-                _this2.responseContent = response.data.responseContent; //console.log(this.$store.state.userdata);
+            if (response.data.response == 'error') {
+              _this2.hasError = true;
+              _this2.responseMss = "error";
+              _this2.responseContent = response.data.responseContent;
+            } else if (response.data.response == 'success') {
+              _this2.hasError = false;
+              _this2.responseMss = "success";
+              _this2.$store.state.userdata = response.data;
+              _this2.responseContent = response.data.responseContent; //console.log(this.$store.state.userdata);
 
-                _this2.passToCupon();
-              } else if (response.data.response == 'successNoSession') {
-                _this2.formselected = "pwd-form";
-                _this2.hasError = false;
-                _this2.responseMss = "successNoSession";
-                _this2.$store.state.userdata = response.data;
-                _this2.responseContent = response.data.responseContent;
-                _this2.resume = true;
-                _this2.showing = true;
-                _this2.loading = false;
+              _this2.passToCupon();
+            } else if (response.data.response == 'successNoSession') {
+              _this2.formselected = "pwd-form";
+              _this2.hasError = false;
+              _this2.responseMss = "successNoSession";
+              _this2.$store.state.userdata = response.data;
+              _this2.responseContent = response.data.responseContent;
+              _this2.resume = true;
+              _this2.showing = true;
+              _this2.loading = false;
 
-                _this2.passToPWD(); //console.log(this.$store.state.userdata);
+              _this2.passToPWD(); //console.log(this.$store.state.userdata);
 
-              }
-            });
+            } // })
+
           })["catch"](function (error) {
             _this2.hasError = true;
 
