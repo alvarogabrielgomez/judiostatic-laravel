@@ -73,7 +73,7 @@
 
 <body>
 <div id='email-container'>
-<p>Oi, $first $last,</p>
+<p>Oi, {{$to_name}} $last,</p>
 <p>Seu código promocional é:</p>
 <p id='code'>$transqr</p>
 <div id='qr-canvas'>

@@ -5,9 +5,9 @@
 @section('heroimage',  $posts->post_hero_img_url)
 @section('content')
 
-
+<script src="{{ asset('js/app.js') }}" defer></script>
 {{-- {{'<img src="'.(new QRcode)->render($posts->post_id).'"/>'}} --}}
-
+<div id="app">
 <div id="nav-bar">
         <div id="nav-bar-container">
                     <nav>
@@ -25,7 +25,7 @@
         <div id="time-bar-container">
                 <nav>
                     <ul>
-                        <li><div class="clock-time-deals clock-15"></div></li> <li style="">A oferta termina no dia '.$post_offer_formated.'</li>
+                    <li><clock-sm post_offer_end_at="{{$posts->offer_end_at}}"></clock-sm></li>
                         
                     </ul>
                 </nav>
@@ -85,7 +85,8 @@
         <!-- Modal content -->
         <div id="modal-content">
           <div class="modal-body">
-
+          <dealsubmit-component buylimits ="{{$buylimits}}" postdata="{{$posts}}" descuento="{{abs(round((($posts->price_new/$posts->price_from)*100)-100))}}" userdata="{{$userdata}}">
+            </dealsubmit-component>
         </div>
       </div>
       </div>
@@ -201,6 +202,7 @@
     </div>
 </section>
 </div>
+</div>
 <script>
 var isMobile;
         function widthpx(){
@@ -235,9 +237,9 @@ var isMobile;
             
             window.addEventListener('resize', widthpx);
                 // cargamos el icono en el div donde ira el contenido
-                $(".modal-body").html("<img src='{{ asset('images/icons/loading.svg') }}' class='loadermodal' border='0' />");
-                // cargamos la pagina en el div capa
-                $(".modal-body").load('{{ asset('modalwindow/deals/'.$posts->post_id) }}');
+                // $(".modal-body").html("<img src='{{ asset('images/icons/loading.svg') }}' class='loadermodal' border='0' />");
+                // // cargamos la pagina en el div capa
+                // $(".modal-body").load('{{ asset('modalwindow/deals/'.$posts->post_id) }}');
                 
         };
           function cargarContenido(pagina)

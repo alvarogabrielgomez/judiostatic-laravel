@@ -168,7 +168,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                   <h1>{{ steps.step[3] }}</h1>
                 </div>
             <div id="resultados">
-                <spinner-small size="48" v-show="loading"></spinner-small>
+               
                 <div v-if="showing" class="deal-info">
                     
 <p> <i style="font-size: 1.5em;color: #7fbf4e;margin-right: 10px;" class="fas fa-check-circle"></i> Oi, {{this.$store.state.userdata.client_first + " " + this.$store.state.userdata.client_last}}!.</p>
@@ -204,7 +204,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                   <h1>{{ steps.step[4] }}</h1>
                 </div>
             <div id="resultados">
-                <spinner-small size="48" v-show="loading"></spinner-small>
+
                 <div v-if="showing" class="deal-info">
                     <p>
                        <strong>Bienvenido de nuevo, {{$store.state.userdata.client_first}}!</strong>
@@ -797,12 +797,14 @@ background: #FFF;
 
 export default {
   name:'dealsubmit',
-  props: ["descuento", "postdata", "userdata"],
+  props: ["descuento", "postdata", "userdata", "buylimits"],
   data(){
         return{
             deal:{},
+            activelimits:0,
             spinnersize:48,
             next: 2,
+            loged:false,
             stepactual:1,
             loading: false,
             loadingMss: false,
@@ -835,9 +837,15 @@ export default {
   mounted(){
   this.$store.state.userdata = JSON.parse(this.userdata);
   this.deal = JSON.parse(this.postdata);
+  const buylimit = JSON.parse(this.buylimits);
+  if(buylimit != [] || buylimit != "" || buylimit != null){
+
+    this.activelimits = parseInt(buylimit[0].limit_count);
+  }
 
       if(this.$store.state.userdata.email != ""){
-        this.steps.step[2] = "Confirme"
+        this.steps.step[2] = "Confirme";
+        this.loged = true;
       }
       if(this.$store.state.userdata.client_last == null){
         this.$store.state.userdata.client_last = " ";
@@ -885,9 +893,10 @@ export default {
         this.botoncontinuar = false;
         this.botonsubmit = false;
         this.botonterminar = true;
-        document.getElementById("terminar-btn").onclick = function() {
-          modal.style.display = "none";
-        } 
+        // var modal = document.getElementById('modalwindow');
+        // document.getElementById("terminar-btn").onclick = function() {
+        //   modal.style.display = "none";
+        // } 
       }
         else{
         this.botoncontinuar = true;
@@ -918,11 +927,16 @@ export default {
   computed:{
 
     stepactuallimit : function (){
-      if(this.stepactual > 3){
-        return false;
+      return this.stepactual;
+    },
+
+    activelimitsbool: function(){
+      if (this.activelimits >= this.deal.buss_limits){
+          return false;
       }
       return true;
     }
+
   },
   methods:{
 
@@ -976,9 +990,11 @@ export default {
             this.loadingMss = false;
             this.hasResponse = true;
             this.responseContent = "Sesion cerrada";
+            this.loged = false;
             this.$store.state.userdata = {'client_id':'', 'email':'', 'client_first':'', 'client_last':''};
             this.resume = false;
             this.steps.step[2] = "Ingrese su nombre"
+
             // function selectname(){
             //   var inputfirst = document.getElementById('clientfirst');
             //   inputfirst.focus();
@@ -1018,7 +1034,19 @@ export default {
           this.hasResponse = false;
           this.responseContent = "Llene todos los campos";
            this.loadingMss = false;
-      }else{
+      }
+      else if(!this.activelimitsbool){
+          this.hasError = true;
+          this.hasResponse = false;
+          this.responseContent = "Você pediu muitos cupons do mesmo lugar, tente outro dia.";
+          this.loadingMss = false;
+          this.resume = false;
+      }
+      
+      else{
+      this.refreshCsrfToken().then(response => {
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+        
         this.hasError = false;
         axios.post('/api/checkuser', input) 
         .then((response) => {
@@ -1035,22 +1063,25 @@ export default {
             this.responseMss = "success";
             this.$store.state.userdata = response.data;
             this.responseContent = response.data.responseContent;
+            
             //console.log(this.$store.state.userdata);
             this.passToCupon();
 
           }else if(response.data.response == 'successNoSession'){
             this.formselected = "pwd-form";
             this.hasError = false;
-            this.responseMss = "success";
+            this.responseMss = "successNoSession";
             this.$store.state.userdata = response.data;
             this.responseContent = response.data.responseContent;
             this.resume = true;
             this.showing = true;
             this.loading = false;
             this.passToPWD();
-
             //console.log(this.$store.state.userdata);
           }
+
+        })
+        
         })
         .catch((error) => {
           this.hasError = true;
@@ -1119,6 +1150,7 @@ export default {
            if(this.$store.state.userdata.email != ""){
               this.steps.step[2] = "Confirme"
               this.resume = false;
+              this.loged = true;
             }
             this.passToCupon();
           }
@@ -1181,6 +1213,7 @@ export default {
               this.stepactual = 3;
               this.responseMss = "success";
               this.responseContent = "TransQR returned";
+              this.activelimits++;
               this.transqr = response.data.data.transqr;
               this.enviaremail();
             }
@@ -1195,7 +1228,7 @@ export default {
           .catch((error) =>{
             this.hasResponse = false;
             this.hasError = true;
-            this.responseContent = error.response.data.message;
+            this.responseContent = error;
             this.loadingMss = false;
             console.log(error);
           })
@@ -1210,19 +1243,31 @@ export default {
      enviaremail: function enviaremail(){
       
        
-       this.axios.post('/enviaremail', {
+       axios.post('/enviaremail', {
              name: this.$store.state.userdata.client_first,
+             last: this.$store.state.userdata.client_last,
+             transqr: this.transqr,
+             post_buss_name : this.deal.buss_name,
+             post_title: this.deal.title,
+             post_desc: this.deal.description,
+             post_buss_dir: this.deal.buss_dir,
              email: this.$store.state.userdata.email
        })
-       .then(function (response) {
+        .then((response) => {
              //currentObj.output = response.data;
-             this.responseMss = "success";
-             this.responseContent = "Email Enviado";
+             if(response.data.response == "success"){
+               this.responseMss = "success";
+               this.responseContent = "Email Enviado";
+             }
+             else if(response.data.response == "error"){
+                this.responseMss = "error";
+                this.responseContent = "Error al enviar Email";
+             }
        })
-       .catch(function (error) {
+        .catch((error) =>{
              //currentObj.output = error;
              this.responseMss = "error";
-             this.responseContent = "Error al enviar Email";
+             this.responseContent = error;
        });
      },
 

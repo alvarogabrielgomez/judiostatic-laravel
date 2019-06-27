@@ -1,9 +1,6 @@
-<script src="{{ asset('js/app.js') }}" defer></script>
-
-<div id="app"> 
 <dealsubmit-component postdata="{{$posts}}" descuento="{{abs(round((($posts->price_new/$posts->price_from)*100)-100))}}" userdata="{{$userdata}}">
     </dealsubmit-component>
-</div>
+
 
 
 {{-- <template>

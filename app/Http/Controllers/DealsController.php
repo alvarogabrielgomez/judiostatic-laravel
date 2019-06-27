@@ -32,8 +32,23 @@ class DealsController extends AuthController
 
     public function show($id)
     {
-        $posts = Post::where('post_id', '=', $id)->join('buss', 'buss.buss_id', '=', 'posts.buss_id')->firstOrFail();
-        return view('deals.show', compact('posts'));
+        $posts = Post::where('post_id', '=', $id)
+                    ->join('buss', 'buss.buss_id', '=', 'posts.buss_id')
+                    ->firstOrFail();
+        $userdata = '{"email":"", "client_first":"", "client_last":""}';
+        if(Auth::check()){
+            $userdata = Auth::user();
+        }
+        $buylimits = Buylimit::where('post_id', '=', $id)
+                            ->where('client_id', '=', $userdata->id)
+                            ->orderBy('limits_id', 'desc')
+                            ->limit(1)
+                            ->get();
+        //dd($buylimits);
+
+        return view('deals.show', compact('posts', 'userdata', 'buylimits'));
+
+
     }
 
 
@@ -56,14 +71,28 @@ class DealsController extends AuthController
 
    public function enviaremail(Request $request){
     $to_name = $request->name;
+    $last = $request->last;
     $to_email = $request->email;
-    $data = array('name'=>"Sam Jose", "body" => "Test mail");
-        
-    Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
-        $message->to($to_email, $to_name)
-                ->subject('Seu cupom de desconto');
-        $message->from('noreply.ckj.cupon@gmail.com','Omeleth Cupon');
-    });
+    $response = "success";
+    $transqr = $request->transqr;
+    $post_buss_name = $request->post_buss_name;
+    $post_title = $request->post_title;
+    $post_desc = $request->post_desc;
+    $post_buss_dir = $request->post_buss_dir;
+
+    $data = array('transqr'=>$transqr, "post_buss_name" => $post_buss_name, 'post_title' => $post_title, 'post_desc' => $post_desc, 'post_buss_dir' => $post_buss_dir);
+       try{
+           Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
+               $message->to($to_email, $to_name)
+                       ->subject('Seu cupom de desconto');
+               $message->from('noreply.ckj.cupon@gmail.com','Omeleth Cupon');
+           });
+       } 
+       catch(Exception $e){
+        $response = "error";
+       }
+
+    return response()->json(array('data' => $data, 'response' => $response));
 
     }
     

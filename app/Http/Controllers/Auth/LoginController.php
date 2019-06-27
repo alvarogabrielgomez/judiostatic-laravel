@@ -75,8 +75,10 @@ class LoginController extends Controller
         // Add to database
         $user = User::create([
             'email' => $googleUser->getEmail(),
-            'client_first' => $googleUser->getName(),
-            'username' => $googleUser->nickname,
+            'client_first' => $googleUser->user["given_name"],
+            'client_last' => $googleUser->user["family_name"],
+            //'username' => $googleUser->nickname,
+            'avatar' => $googleUser->avatar,
             'provider_id' => $googleUser->getId(),
             'provider_name' => 'Google',
             'active' => '1',

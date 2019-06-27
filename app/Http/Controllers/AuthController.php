@@ -105,11 +105,13 @@ class AuthController extends Controller
 
                 //Aca se tiene que revisar si esta en sesion
                 if(Auth::check()){
+                    $userdata = Auth::user();
+                    
                     $response = "success";
-                    $responseContent = "Esta en Session";     
+                    $responseContent = "Esta en Session ".$userdata->id;     
                 }else{
                     $response = "successNoSession";
-                    $responseContent = "Escriba su contrasena para continuar."; 
+                    $responseContent = "Escriba su contrasena para continuar. ".$userdata->id; 
                 }
             }
         }else{
