@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title', 'TODOS')
 @section('content')
+
+
 <div id="nav-bar">
         <div id="nav-bar-container">
                     <nav>
@@ -17,7 +19,8 @@
 
 <section>
 
-        
+     <div id="app">
+     
     <div id="main-container"style = "margin-top:0px;">
         <div id="main">
             <div id="main-items">
@@ -30,7 +33,12 @@
                             <img src="{{ asset($post->post_hero_img_url) }}" alt="">
                         </div>
                     
-                        <div class="buss-name"><span>{{$post->buss_name}}</span></div><div class="clock-time clock-7"></div>
+                        <div class="buss-name"><span>{{$post->buss_name}}</span></div>
+                        <clock-sm style="
+                        float: right;
+                        margin-top: -30px;
+                        margin-bottom: -8px;" 
+                        post_created_at="{{$post->created_at}}" post_offer_end_at="{{$post->offer_end_at}}" realtime = "false"></clock-sm>
                     
                         
                         <div class="box-title"><span>{{$post ->title}}</span></div>
@@ -55,7 +63,8 @@
         </div>
 
         </div>
-
+ </div> 
+ <script src="{{ asset('js/app.js') }}" ></script>
 </section>
 
 @endsection

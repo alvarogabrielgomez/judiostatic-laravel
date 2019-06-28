@@ -12,6 +12,7 @@ export const store =  new Vuex.Store({
     },
     state:{
         userdata:{},
+        clock:0,
        // token:null
     },
     actions:{

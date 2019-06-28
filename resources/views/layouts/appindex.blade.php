@@ -183,7 +183,7 @@
           </footer>
 
           
-
+          <script src="{{ asset('js/custom.js') }}" defer></script>
 </body>
 </html>
 

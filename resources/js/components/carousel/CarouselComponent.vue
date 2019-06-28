@@ -17,13 +17,16 @@ Aparentemente não há nada para mostrar aqui, e se você tentar depois? ;)
 </transition>
 <transition name="fade" mode="out-in">
     <div class="carousel" v-if="showing" >
-      <a v-bind:href="'deals/'+post.post_id" class="main-box" v-for="post in posts" v-bind:key="post.post_id">
+      <a v-bind:href="'deals/'+post.post_id" class="main-box" v-for="post in posts" ref="card" v-bind:key="post.post_id">
         <div class="main-img">
           <img v-bind:src="post.post_hero_img_url" alt>
         </div>
         <div class="buss-name">
           <span>{{post.buss_name}}</span>
         </div>
+
+         <clock-sm ref="badge" style="float: right;margin-top: -30px;margin-bottom: -8px;" v-bind:post_created_at = post.created_at v-bind:post_offer_end_at = post.offer_end_at realtime = "false"></clock-sm>
+        
         <div class="badge">
           <span>OFERTA DESTA SEMANA</span>
         </div>
@@ -98,7 +101,9 @@ export default {
       loading: true,
       showing:false,
       empty:false,
-      response: ""
+      response: "",
+      clock:0,
+      badge:true,
     };
   },
 
@@ -116,6 +121,9 @@ export default {
           console.log(err);
         });
       return this.posts;
+
+
+
   },
   updated(){
     if(this.response == 'success'){

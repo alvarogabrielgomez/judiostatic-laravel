@@ -108,7 +108,7 @@
                 href="documents/privacy-policy.html">Privacidade</a><a href="https://ckj.one" rel="external"> © Alvaro
                 Gabriel Gomez</a>. TODOS OS DIREITOS RESERVADOS</div>
     </div>
-
+    <script src="{{ asset('js/custom.js') }}" defer></script>
 </footer>
 </body>
 </html>

@@ -830,16 +830,21 @@ export default {
             password:'',
             newUser:{'client_first':'', 'client_last':'', 'email':''},
             formselected:"insert-form",
-            transqr: "0000000"
+            transqr: "0000000",
+            
                     
         }
   },
   mounted(){
   this.$store.state.userdata = JSON.parse(this.userdata);
+
   this.deal = JSON.parse(this.postdata);
   const buylimit = JSON.parse(this.buylimits);
+  if(buylimit.length >= 1){
     this.activelimits = parseInt(buylimit[0].limit_count);
-  
+  }else{
+    this.activelimits = 0;
+  }
 
       if(this.$store.state.userdata.email != ""){
         this.steps.step[2] = "Confirme";

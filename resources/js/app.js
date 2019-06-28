@@ -4,6 +4,8 @@ window.Vue = require('vue');
 window.axios = require('axios');
 import {store} from './store/store'
 
+
+
 window.Laravel = {
     csrfToken: document.head.querySelector("meta[name='csrf-token']").getAttribute('content')
 }
@@ -35,6 +37,8 @@ Vue.component('spinner-small', require('./components/Spinner-small.vue').default
 Vue.component('carousel-component', require('./components/carousel/CarouselComponent.vue').default);
 Vue.component('login-form-component', require('./components/auth/LoginFormComponent.vue').default);
 Vue.component('clock-sm', require('./components/commons/Clock-sm.vue').default);
+
+
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);
 Vue.component('passport-clients', require('./components/passport/Clients.vue').default);
 Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue').default);

@@ -19,7 +19,9 @@ class DealsController extends AuthController
 
     public function index(Request $request)
     {
-        $posts = Post::all();
+        $posts = Post::join('buss', 'buss.buss_id', '=', 'posts.buss_id')->get();
+        //dd($posts);
+
         return view('deals.index')->with('posts', $posts);
     }
 
@@ -36,14 +38,15 @@ class DealsController extends AuthController
                     ->join('buss', 'buss.buss_id', '=', 'posts.buss_id')
                     ->firstOrFail();
         $userdata = '{"email":"", "client_first":"", "client_last":""}';
+        $buylimits= '{}';
         if(Auth::check()){
             $userdata = Auth::user();
+            $buylimits = Buylimit::where('post_id', '=', $id)
+            ->where('client_id', '=', $userdata->id)
+            ->orderBy('limits_id', 'desc')
+            ->limit(1)
+            ->get();
         }
-        $buylimits = Buylimit::where('post_id', '=', $id)
-                            ->where('client_id', '=', $userdata->id)
-                            ->orderBy('limits_id', 'desc')
-                            ->limit(1)
-                            ->get();
         //dd($buylimits);
 
         return view('deals.show', compact('posts', 'userdata', 'buylimits'));

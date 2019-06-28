@@ -22,10 +22,11 @@
     {{-- <link rel="preload" href="{{ asset('css/style.css') }}" as= "style">
     <link rel="preload" href="{{ asset('css/responsive.css') }}" as= "style">
     <link rel="preload" href="{{ asset('css/modalwindow.css') }}" as= "style"> --}}
-    <link rel="preload" href="{{ asset('css/app.css') }}" as= "style">
-
+    <link rel="preload" href="{{ asset('images/omeleth_red.png') }}" as="image">
+    <link rel="preload" href="{{ asset('images/icons/home-icon.svg') }}" as="image">    
+    <link rel="preload" href="{{ asset('images/icons/cupon-std-small-vertical.svg') }}" as="image">
     <link rel="preload" href="{{ asset('images/icons/cupon-std.svg') }}" as="image">
-    <link rel="preload" href="{{ asset('images/icons/loading.svg') }}" as="image">
+    <link rel="preload" href="{{ asset('css/app.css') }}" as= "style">
 
     <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('images/favicon/apple-touch-icon-60x60.png') }}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/favicon/apple-touch-icon-76x76.png') }}">
@@ -160,7 +161,8 @@
     </div>
 
 </footer>
-<script src="{{ asset('js/modalwindow.js') }}" defer></script>
+
+<script src="{{ asset('js/custom.js') }}" defer></script>
 
 </body>
 </html>

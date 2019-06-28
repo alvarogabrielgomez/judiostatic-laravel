@@ -5,7 +5,9 @@
 @section('heroimage',  $posts->post_hero_img_url)
 @section('content')
 
+
 <script src="{{ asset('js/app.js') }}" defer></script>
+
 {{-- {{'<img src="'.(new QRcode)->render($posts->post_id).'"/>'}} --}}
 <div id="app">
 <div id="nav-bar">
@@ -25,7 +27,7 @@
         <div id="time-bar-container">
                 <nav>
                     <ul>
-                    <li><clock-sm post_offer_end_at="{{$posts->offer_end_at}}"></clock-sm></li>
+                    <li><clock-sm post_created_at="{{$posts->created_at}}" post_offer_end_at="{{$posts->offer_end_at}}" realtime = "false"></clock-sm></li>
                         
                     </ul>
                 </nav>
@@ -104,11 +106,19 @@
                         </div>
                         <div class="cupon-col3-small-vertical">
                 
-                            <button class="cupon-boton-small-vertical button red modaltrigger"><span>TOMAR OFERTA</span></button>
+                            <button class="cupon-boton-small-vertical button red modaltrigger">
+
+                                    <div class="loader-small-container">
+                                            <div class="loader-small loaderwhite" style="font-size: 2px;">Loading...</div>
+                                    </div>
+    
+                                    <span class="span-load" style="display:none;">TOMAR OFERTA</span>
+
+                            </button>
                 
                             <div class="cupon-descuento-small-vertical">
                                 <span class="s-porcentaje-small-vertical">SALVE!</span>
-                                <div class="porcentaje-small-vertical"><span>8%</span></div>
+                                <div class="porcentaje-small-vertical"><span>{{abs(round((($posts->price_new/$posts->price_from)*100)-100))}}%</span></div>
                 
                             </div>
                         </div>
@@ -123,7 +133,17 @@
                             <div class="cupon-titulo"><span>{{$posts->title}}</span></div>
                             <div class="cupon-desc"><span>{{$posts->description}}</span>
                             </div>
-                            <button class="cupon-boton button red modaltrigger"><span>TOMAR OFERTA</span></button>
+                            <button class="cupon-boton button red modaltrigger"> 
+
+
+                                <div class="loader-small-container">
+                                        <div class="loader-small loaderwhite" style="font-size: 2px;">Loading...</div>
+                                </div>
+
+                                <span class="span-load" style="display:none;">TOMAR OFERTA</span>
+
+
+                            </button>
                         </div>
                         <div class="cupon-col3">
                             <div class="cupon-descuento">
@@ -154,7 +174,11 @@
                 
                     <div id="principal-small" style="display: none;" class="cupon-std-small-vertical">
                         <div class="cupon-col1-small-vertical">
-                            <div>VÁLIDO PARA UMA VEZ</div>
+                            <div>
+                                
+                                VÁLIDO PARA UMA VEZ
+                            
+                            </div>
                         </div>
                         <div class="cupon-col2-small-vertical">
                             <div class="cupon-titulo-small-vertical"><span>ghfhfgh</span></div>
@@ -204,8 +228,12 @@
 </div>
 </div>
 <script>
+
+
+
 var isMobile;
         function widthpx(){
+            
             if($(document).width() <= 600){
               isMobile = true;
               $(".cupon-std-small-vertical").css("display", "flex");
@@ -230,25 +258,36 @@ var isMobile;
             }
         
           }
+          function loadingicons() {
+          const loaderSmall = document.getElementsByClassName("loader-small");
+          const spanLoad = document.getElementsByClassName("span-load");
+              for(var i = 0; i < loaderSmall.length; i++){
+                loaderSmall[i].style.display = "none";
+              }
+              for(var i = 0; i < spanLoad.length; i++){
+                spanLoad[i].style.display = "block";
+              }
+          }
+
         widthpx();
 
         window.onload = function() {
-            //funciones a ejecutar
+            loadingicons();
+            window.addEventListener('resize', widthpx); 
             
-            window.addEventListener('resize', widthpx);
-                // cargamos el icono en el div donde ira el contenido
-                // $(".modal-body").html("<img src='{{ asset('images/icons/loading.svg') }}' class='loadermodal' border='0' />");
-                // // cargamos la pagina en el div capa
-                // $(".modal-body").load('{{ asset('modalwindow/deals/'.$posts->post_id) }}');
-                
-        };
-          function cargarContenido(pagina)
-            {
-                // cargamos el icono en el div donde ira el contenido
-                $(".modal-body").html("<img style='float:none!important; display:block;margin:auto;' src='{{ asset('images/icons/loading.svg') }}' class='loadermodal' border='0' />");
-                // cargamos la pagina en el div capa
-                $(".modal-body").load(pagina);
+            // Get the modal
+            var modal = document.getElementById('modalwindow');
+
+            // Get the button that opens the modal
+            btn = document.getElementsByClassName("modaltrigger");
+            // When the user clicks the button, open the modal 
+            for (var i=0; i < btn.length; i++) {
+                btn[i].onclick = function(){
+                modal.style.display = "block";
             }
+            }
+
+        };
 </script>
 
 @endsection
