@@ -996,6 +996,7 @@ export default {
             this.loged = false;
             this.$store.state.userdata = {'client_id':'', 'email':'', 'client_first':'', 'client_last':''};
             this.resume = false;
+            this.activelimits = 0;
             this.steps.step[2] = "Ingrese su nombre"
 
             // function selectname(){

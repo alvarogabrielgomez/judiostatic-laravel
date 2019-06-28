@@ -3454,6 +3454,7 @@ __webpack_require__.r(__webpack_exports__);
             'client_last': ''
           };
           _this.resume = false;
+          _this.activelimits = 0;
           _this.steps.step[2] = "Ingrese su nombre"; // function selectname(){
           //   var inputfirst = document.getElementById('clientfirst');
           //   inputfirst.focus();
