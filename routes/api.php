@@ -13,14 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('oauth/token', 'AccessTokenController@issueToken');
+//Route::post('oauth/token', 'AccessTokenController@issueToken');
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login', 'AuthController@login');
+//Route::post('/login', 'AuthController@login');
+
 Route::post('/register', 'AuthController@registerApi');
 Route::post('/checkuser', 'AuthController@checkuser');
 

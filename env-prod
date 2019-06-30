@@ -1,20 +1,20 @@
 APP_NAME=Omeleth
 APP_ID=1
 APP_ENV=local
-APP_KEY=base64:x/XkkfiGBWYveOAxMM0KrAZx3HwXzCcB08r2eeb5itA=
+APP_KEY=base64:p3+kQ0c2Jx/oSFIVV+jbhAb1RKtOnXexRaz0cHCcT1o=
 APP_DEBUG=true
-APP_URL=http://localhost
+APP_URL=https://omeleth.com
 
-SESSION_DOMAIN = localhost
+SESSION_DOMAIN = omeleth.com
 
 LOG_CHANNEL=stack
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=login_system
-DB_USERNAME=admin
-DB_PASSWORD=A8qFQIz8haQlWQpx
+DB_DATABASE=omeljwzp_login_system
+DB_USERNAME=omeljwzp_admin
+DB_PASSWORD=A5ow&}-b[m.&
 
 
 BROADCAST_DRIVER=log
@@ -54,14 +54,14 @@ MIX_CLIENT_ID="${PASSPORT_CLIENT_ID}"
 MIX_GRANT_TYPE="${PASSPORT_GRANT_TYPE}"
 
 PASSPORT_GRANT_TYPE=password
-PASSPORT_LOGIN_ENDPOINT=http://localhost:8000/oauth/token
+PASSPORT_LOGIN_ENDPOINT=https://omeleth.com/oauth/token
 PASSPORT_CLIENT_ID=2
-PASSPORT_CLIENT_SECRET=jxQ1hLzIJ5Xvks3M4E58PFnCznSa7f87iW6hvY9U
+PASSPORT_CLIENT_SECRET=OpJOAJcAGoqVJCTMWK0Ztl2lWrbsiVNPWNTOcDNh
 
 GITHUB_CLIENT_ID = 6e50193df3a7f50c3393
 GITHUB_CLIENT_SECRET = 6fd505207172155c5bfd07ee99d7d26e68649d22
-GITHUB_CALLBACK = http://localhost:8000/login/github/callback
+GITHUB_CALLBACK = https://omeleth.com/login/github/callback
 
 GOOGLE_CLIENT_ID = 495243581907-527vq1sbh1l146nd48qovb05inlqt85n.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET = KQiNt_KYw1fufzzWPLfESrX2
-GOOGLE_CALLBACK = http://localhost:8000/login/google/callback
+GOOGLE_CALLBACK = https://omeleth.com/login/google/callback
