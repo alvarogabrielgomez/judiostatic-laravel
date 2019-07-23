@@ -24,14 +24,10 @@
         </div>
         </div>
 <div id="time-bar">
-        <div id="time-bar-container">
-                <nav>
-                    <ul>
-                    <li><clock-sm post_created_at="{{$posts->created_at}}" post_offer_end_at="{{$posts->offer_end_at}}" realtime = "false"></clock-sm></li>
-                        
-                    </ul>
-                </nav>
-        </div>
+
+<clock-sm post_created_at="{{$posts->created_at}}" post_offer_end_at="{{$posts->offer_end_at}}" realtime = "false" small="false"></clock-sm>
+
+
 </div>
 
 <section>

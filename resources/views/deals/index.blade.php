@@ -38,7 +38,7 @@
                         float: right;
                         margin-top: -30px;
                         margin-bottom: -8px;" 
-                        post_created_at="{{$post->created_at}}" post_offer_end_at="{{$post->offer_end_at}}" realtime = "false"></clock-sm>
+                        post_created_at="{{$post->created_at}}" post_offer_end_at="{{$post->offer_end_at}}" realtime = "false" small="true"></clock-sm>
                     
                         
                         <div class="box-title"><span>{{$post ->title}}</span></div>

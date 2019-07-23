@@ -1,0 +1,49 @@
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100000; /* Sit on top */
+    padding-top: 28px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.18);  
+    transition: all .2s ease-in-out;
+  }
+  #modalwindow{
+    transition: all .2s ease-in-out;
+  }
+  /* Modal Content */
+  #modal-content {
+    transition: all .2s ease-in-out;
+    position: relative;
+    background-color: #fffefe;
+    margin: auto;
+    margin-bottom: 59px;
+    padding: 0;
+    border: 1px solid rgba(151, 37, 21, 0.45);
+    border-top: 0px;
+    width: 80%;
+    max-width: 677px;
+    min-height: 527px;
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: 3px 3px 8px 1px rgba(0, 0, 0, 0.16), 1px 10px 20px 0px rgba(0, 0, 0, 0.1), 0px -3px 0px 0px #BC2D19;    animation-name: animatetop;
+    animation-duration: 0.4s;
+    overflow:hidden;
+  }
+  
+  /* Add Animation */
+  @-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+  }
+  
+  @keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+  }
+  

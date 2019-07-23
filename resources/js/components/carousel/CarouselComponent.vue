@@ -25,7 +25,7 @@ Aparentemente não há nada para mostrar aqui, e se você tentar depois? ;)
           <span>{{post.buss_name}}</span>
         </div>
 
-         <clock-sm ref="badge" style="float: right;margin-top: -30px;margin-bottom: -8px;" v-bind:post_created_at = post.created_at v-bind:post_offer_end_at = post.offer_end_at realtime = "false"></clock-sm>
+         <clock-sm ref="badge" style="float: right;margin-top: -30px;margin-bottom: -8px;" v-bind:post_created_at = post.created_at v-bind:post_offer_end_at = post.offer_end_at realtime = "false" small="true"></clock-sm>
         
         <div class="badge">
           <span>OFERTA DESTA SEMANA</span>

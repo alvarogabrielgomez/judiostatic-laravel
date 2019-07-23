@@ -765,8 +765,12 @@ background-color: rgba(255, 255, 255, 0.81);
   }
 }
 
+#time-bar{
+  height:45px;
+}
+
 #time-bar-container {
-  width: 100%;
+  //width: 100%;
   max-width: 1000px;
   margin: auto;
 }
@@ -861,7 +865,7 @@ background-color: rgba(255, 255, 255, 0.81);
 }
 
 .desc-art {
-  padding: 8px 16px 2px 17px;
+  padding: 1px 16px 2px 17px;
 }
 
 .col2 img:hover {
@@ -1302,6 +1306,7 @@ background-color: rgba(255, 255, 255, 0.81);
 
 .buss-title-hero-deals {
   padding-left: 19px;
+  margin-top: 4px;
   font-size: 15px;
   line-height: 20px;
   color: #a2a2a2;
