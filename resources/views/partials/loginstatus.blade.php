@@ -2,7 +2,8 @@
 if(Auth::check()){
 $icon = "fas fa-user";
 }else{
-$icon = "fas fa-user-ninja";
+        $icon = "fas fa-user-ninja";
+        $avatar = "";
 }
 ?>
 

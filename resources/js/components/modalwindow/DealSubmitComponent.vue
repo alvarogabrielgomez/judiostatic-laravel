@@ -841,9 +841,17 @@ export default {
   this.deal = JSON.parse(this.postdata);
   const buylimit = JSON.parse(this.buylimits);
   if(buylimit.length >= 1){
-    this.activelimits = parseInt(buylimit[0].limit_count);
+    var limit_count = parseInt(buylimit[0].limit_count);
+    var date_limit = parseInt((new Date(buylimit[0].created_at).getTime() / 1000).toFixed(0));
+    var now = Math.round(Date.now() / 1000)
+    if((date_limit + 86400) > now){
+      this.activelimits = limit_count;
+    }else{
+       this.activelimits = 0;
+    }
   }else{
     this.activelimits = 0;
+
   }
 
       if(this.$store.state.userdata.email != ""){

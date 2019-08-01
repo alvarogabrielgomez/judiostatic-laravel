@@ -48,7 +48,7 @@ class DealsController extends AuthController
             ->get();
         }
         //dd($buylimits);
-
+        dd($userdata->avatar);
         return view('deals.show', compact('posts', 'userdata', 'buylimits'));
 
 

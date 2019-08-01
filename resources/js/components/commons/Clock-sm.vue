@@ -25,9 +25,9 @@ export default {
       clock: 7,
       sm: this.small.toLowerCase() == "true" ? true : false, // convierte en booleano
       classClock: "clock-7",
-      endAt: Date.parse(this.post_offer_end_at) / 1000, //esto transforma en srtDate
+      endAt: parseInt((new Date(this.post_offer_end_at).getTime() / 1000).toFixed(0)), //esto transforma en srtDate
       endAtFormatted: "",
-      createdAt: Date.parse(this.post_created_at) / 1000,
+      createdAt: parseInt((new Date(this.post_created_at).getTime() / 1000).toFixed(0)),
       now: Math.round(Date.now() / 1000),
       countdown: true,
       live: this.realtime.toLowerCase() == "true" ? true : false, // convierte en booleano
