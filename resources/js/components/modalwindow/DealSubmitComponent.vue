@@ -253,7 +253,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 <div class="modal-footer">
 <transition name="fade" >
  <a v-if="botoncontinuar" id="continue-btn" v-on:click="passToInsert"  class="button footer-btn">Continuar</a>
-<button v-if="botonsubmit" id="continue-btn" v-bind:form="this.formselected" class="button footer-btn">MALDITO MADURO</button>
+<button v-if="botonsubmit" id="continue-btn" v-bind:form="this.formselected" class="button footer-btn">Pedir</button>
 <a v-if="botonterminar" id="terminar-btn" class="button footer-btn" v-on:click="stepactual = 1, hasError = false, hasResponse = false">Terminar</a>
 </transition>
 </div>

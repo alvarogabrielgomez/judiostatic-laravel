@@ -1,31 +1,61 @@
 <?php 
-if(Auth::check()){
-$icon = "fas fa-user";
-}else{
-        $icon = "fas fa-user-ninja";
-        $avatar = "";
+$hasAvatar = false;
+if(Auth::check()){ //Logueado
+$avatar = Auth::user()->avatar;
+$hasAvatar = false;
+if(strlen($avatar) > 5) { // Has Avatar
+$hasAvatar = true;
 }
+}
+
+//dd($hasAvatar);
 ?>
 
 
         {{-- DropdownButton --}}
         <div class="dropdown">
                 <button onclick="dropdownShow()" class="dropbtn">
-                        <i style="font-size: 1.35em;color: #FFF;margin: 14px 0px;letter-spacing: 1px;" 
-                        class="dropbtn-i {{$icon}} "></i>
+                
+
+
+
                         @if (Auth::check())
+                        
+                        @if($hasAvatar == false)
+                        
+                        <i class="dropbtn-i fas fa-user"></i>
+                        @else
+                        <div class="dropbtn-avatar">
+                        <img src="{{Auth::user()->avatar}}" alt="avatar">
+                        </div>
+                        @endif
+                        
                         <span>{{Auth::user()->client_first}}</span>
                         @else
+                        <i class="dropbtn-i fas fa-user-ninja"></i>
                         <span>Ninjaman</span>
+                        
                         @endif
+                        
+                        
                 </button>
 
                 {{-- DropdownMenu --}}
                 <div id="dropdown-menu" class="dropdown-content">
                         <div id="whoisyou">
                                 <div id="whoisyou-img"> 
-                                <i style="font-size: 1.35em;color: #666;display: block;margin: auto;width: 23px;height: 25px;" class="{{$icon}}"></i>    
-                                </div> 
+                                        @if(Auth::check())
+                                        @if($hasAvatar == false)
+                                        <i style="font-size: 1.35em;color: #666;display: block;margin: auto;width: 23px;height: 25px;" class="fas fa-user"></i>    
+                                        @else
+                                        <div class="dropbtn-avatar-drop">
+                                        <img src="{{Auth::user()->avatar}}" alt="avatar">
+                                        </div>
+                                        @endif
+                                        @else
+                                        <i style="font-size: 1.35em;color: #666;display: block;margin: auto;width: 23px;height: 25px;" class="fas fa-user-ninja"></i>
+                                        @endif
+                        </div> 
                                 <div id="whoisyou-name">
                                         @if (Auth::check())
                                         <span>{{Auth::user()->client_first}}</span>

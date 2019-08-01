@@ -7396,7 +7396,7 @@ var render = function() {
                     staticClass: "button footer-btn",
                     attrs: { id: "continue-btn", form: this.formselected }
                   },
-                  [_vm._v("MALDITO MADURO")]
+                  [_vm._v("Pedir")]
                 )
               : _vm._e(),
             _vm._v(" "),

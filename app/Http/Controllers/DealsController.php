@@ -37,7 +37,7 @@ class DealsController extends AuthController
         $posts = Post::where('post_id', '=', $id)
                     ->join('buss', 'buss.buss_id', '=', 'posts.buss_id')
                     ->firstOrFail();
-        $userdata = '{"email":"", "client_first":"", "client_last":""}';
+        $userdata = '{"email":"", "client_first":"", "client_last":"", "avatar":""}';
         $buylimits= '{}';
         if(Auth::check()){
             $userdata = Auth::user();
@@ -48,7 +48,7 @@ class DealsController extends AuthController
             ->get();
         }
         //dd($buylimits);
-        dd($userdata->avatar);
+        //dd($userdata->avatar);
         return view('deals.show', compact('posts', 'userdata', 'buylimits'));
 
 
