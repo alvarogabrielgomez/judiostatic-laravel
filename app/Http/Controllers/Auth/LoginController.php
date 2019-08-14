@@ -7,7 +7,9 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Laravel\Socialite\Facades\Socialite;
 use judiostatic\User;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Http\Request;
+use Laravel\Passport\Passport;
+use Illuminate\Support\Carbon;
 
 class LoginController extends Controller
 {
@@ -67,6 +69,7 @@ class LoginController extends Controller
 
         if($user){
             Auth::login($user, true);
+            dd(Auth::user());
             return redirect($this->redirectTo);
         }
 
@@ -88,5 +91,28 @@ class LoginController extends Controller
         Auth::login($user, true);
         return redirect($this->redirectTo);
     }
+
+
+    public function apiLogin(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
     
+        if (Auth::attempt($credentials)) {
+            // Authentication passed...
+    
+            Passport::tokensExpireIn(Carbon::now()->addDays(1));
+            Passport::refreshTokensExpireIn(Carbon::now()->addDays(2));
+    
+            $user = Auth::user();
+            $objToken = $user->createToken('API Access', $request->scope);
+            $strToken = $objToken->accessToken;
+    
+            $expiration = $objToken->token->expires_at->diffInSeconds(Carbon::now());
+    
+            return response()->json(["token_type" => "Bearer", "expires_in" => $expiration, "access_token" => $strToken]);
+        }
+    
+        return response()->json(["error" => "invalid_credentials", "message" => "The user credentials were incorrect."], 401);
+    }
+
 }

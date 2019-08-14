@@ -88,3 +88,25 @@ Route::get('/login/github/callback', 'Auth\LoginController@handleProviderCallbac
 
 Route::get('/login/google', 'Auth\LoginController@redirectToProvider');
 Route::get('/login/google/callback', 'Auth\LoginController@handleProviderCallback');
+
+
+
+Route::get('/v1/getTokenApi', function(Request $request){
+    $request->request->add([
+        'grant_type' => 'password',
+        'client_id' => config('services.passportApi.client_id'),
+        'client_secret' => config('services.passportApi.client_secret'),
+        'password' => $request->password,
+        //'name' => 'api',
+        'email' => $request->email,
+        'scope' => ['user-data', 'manage-coupons']
+    ]);
+
+    $tokenRequest = Request::create(
+        config('services.passportApi.login_endpoint'), // endpoint/oauth/token
+        'post'
+    );
+    $response = Route::dispatch($tokenRequest);
+
+    return $response;
+});

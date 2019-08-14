@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 //Route::post('oauth/token', 'AccessTokenController@issueToken');
 
+Route::post('/oauth/tokenapi', 'Auth\LoginController@apiLogin');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -25,25 +26,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/register', 'AuthController@registerApi');
 Route::post('/checkuser', 'AuthController@checkuser');
 
-Route::middleware('auth:api')->post('/v1/getTokenApi', function(Request $request){
-    $request->request->add([
-        'grant_type' => 'password',
-        'client_id' => $request->id,
-        'client_secret' => config('services.passport.client_secret_api'),
-        'password' => $request->password,
-        'name' => $request->name,
-        'username' => config('services.passport.usernameApi'),
-        'scope' => ['user-data', 'manage-coupons']
-    ]);
-
-    $tokenRequest = Request::create(
-        config('services.passport.login_endpoint'), // endpoint/oauth/token
-        'post'
-    );
-    $response = Route::dispatch($tokenRequest);
-
-    return $response;
-});
 
 
 Route::get('/v1/redirect', function(Request $request){

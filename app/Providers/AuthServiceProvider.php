@@ -25,10 +25,12 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         Passport::routes();
+
         Passport::tokensCan([
             'user-data' => 'Datos de basicos de usuario',
             'manage-coupons' => 'Acceder y pedir nuevos cupones',
         ]);
+        
         $this->registerPolicies();
         //
     }
