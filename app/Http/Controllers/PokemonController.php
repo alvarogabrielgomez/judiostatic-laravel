@@ -32,4 +32,19 @@ class PokemonController extends Controller
             ], 200);
         }
     }
+
+    public function qrcode(Request $request){
+        $data = $request->data;
+        $size = $request->size;
+        $format = 'png';
+        if(Request::has('format')){
+            $format = $request->format;
+        }
+        $color = $request->color;
+        $backgroundColor = $request->backgroundColor;
+        $margin =  $request->margin;
+        $errorCorrection =  $request->errorCorrection;
+
+    }
+
 }

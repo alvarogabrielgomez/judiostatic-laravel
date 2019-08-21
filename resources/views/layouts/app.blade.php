@@ -11,6 +11,7 @@
     <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"type="text/javascript" charset="utf-8"></script>
     <script src="{{ asset('js/qrious.min.js') }}" async="async"></script>
+
     {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 
 
@@ -64,11 +65,16 @@
        function dropdownShow() {
             document.getElementById("dropdown-menu").classList.toggle("show");
         }
+        
     </script> 
+    
+
 </head>
 <body>
    
         <div id="themoderfoquer">
+
+            <div class="shadow"  id="toastdiv"><label class="title" for="title">Title</label><label class="content" for="Content">Lorem ipsum dolor sit amet</label></div>
 
             <header id="header">
                 <div id="header-container">
@@ -162,7 +168,7 @@
 
 </footer>
 
-<script src="{{ asset('js/custom.js') }}" defer></script>
+{{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
 
 </body>
 </html>

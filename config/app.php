@@ -161,7 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -228,7 +228,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'cors' => \judiostatic\Http\Middleware\Cors::class, 
-        
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
     ],
 

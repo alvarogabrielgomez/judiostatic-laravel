@@ -70,6 +70,8 @@ Route::get('/documents/{lang}/{document}', function(Request $request){
 
 });
 
+Route::get('/qrcode', 'Pokemoncontroller@qrcode')->name('qrcode');
+
 Route::get('/deals', 'DealsController@index')->name('deals');
 Route::get('/modalwindow', 'ModalwindowController@index')->name('modalwindow');
 Route::get('/modalwindow/deals/{id}', 'ModalwindowController@show');

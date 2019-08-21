@@ -3889,9 +3889,11 @@ __webpack_require__.r(__webpack_exports__);
         if (response.data.response == "success") {
           _this5.responseMss = "success";
           _this5.responseContent = "Email Enviado";
+          custom.toast('Listo!', 'Email Enviado', 4000);
         } else if (response.data.response == "error") {
           _this5.responseMss = "error";
           _this5.responseContent = "Error al enviar Email";
+          custom.toast('Error', 'Error al enviar Email', 4000);
         }
       })["catch"](function (error) {
         //currentObj.output = error;
@@ -21646,7 +21648,10 @@ __webpack_require__.r(__webpack_exports__);
 window.Vuex = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+ //require('./custom');
 
+window.custom = __webpack_require__(/*! ./custom */ "./resources/js/custom.js");
+custom.toast('Test', 'Lorem Ipsum Dolor Sit Amet', 4000);
 window.Laravel = {
   csrfToken: document.head.querySelector("meta[name='csrf-token']").getAttribute('content')
 };
@@ -22432,6 +22437,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalAccessTokens_vue_vue_type_template_id_49962cc0_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/custom.js":
+/*!********************************!*\
+  !*** ./resources/js/custom.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var custom = {
+  toast: function toast(title, msg, time) {
+    var msgwindow = document.getElementById('toastdiv');
+    msgwindow.style.transform = 'translateY(0px)';
+    msgwindow.style.opacity = "100";
+    msgwindow.querySelector('.title').innerText = title;
+    msgwindow.querySelector('.content').innerText = msg;
+    setTimeout(function () {
+      msgwindow.style.transform = 'translateY(100px)';
+      msgwindow.style.opacity = "0";
+    }, time);
+    return msg;
+  },
+  msg: function msg(_msg, time) {
+    var msgwindow = document.getElementById('toastdiv');
+    msgwindow.style.transform = 'translateY(0px)';
+    msgwindow.style.opacity = "100";
+    msgwindow.querySelector('.title').style.display = 'none';
+    msgwindow.querySelector('.content').innerText = _msg;
+    setTimeout(function () {
+      msgwindow.style.transform = 'translateY(100px)';
+      msgwindow.style.opacity = "0";
+    }, time);
+    return _msg;
+  }
+};
+module.exports = custom;
 
 /***/ }),
 

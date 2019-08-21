@@ -69,7 +69,7 @@ class LoginController extends Controller
 
         if($user){
             Auth::login($user, true);
-            dd(Auth::user());
+            //dd(Auth::user());
             return redirect($this->redirectTo);
         }
 

@@ -93,7 +93,33 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-
+var custom = {
+  toast: function toast(title, msg, time) {
+    var msgwindow = document.getElementById('toastdiv');
+    msgwindow.style.transform = 'translateY(0px)';
+    msgwindow.style.opacity = "100";
+    msgwindow.querySelector('.title').innerText = title;
+    msgwindow.querySelector('.content').innerText = msg;
+    setTimeout(function () {
+      msgwindow.style.transform = 'translateY(100px)';
+      msgwindow.style.opacity = "0";
+    }, time);
+    return msg;
+  },
+  msg: function msg(_msg, time) {
+    var msgwindow = document.getElementById('toastdiv');
+    msgwindow.style.transform = 'translateY(0px)';
+    msgwindow.style.opacity = "100";
+    msgwindow.querySelector('.title').style.display = 'none';
+    msgwindow.querySelector('.content').innerText = _msg;
+    setTimeout(function () {
+      msgwindow.style.transform = 'translateY(100px)';
+      msgwindow.style.opacity = "0";
+    }, time);
+    return _msg;
+  }
+};
+module.exports = custom;
 
 /***/ }),
 

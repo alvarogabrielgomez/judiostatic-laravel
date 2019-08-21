@@ -837,7 +837,7 @@ export default {
   },
   mounted(){
   this.$store.state.userdata = JSON.parse(this.userdata);
-
+  
   this.deal = JSON.parse(this.postdata);
   const buylimit = JSON.parse(this.buylimits);
   if(buylimit.length >= 1){
@@ -1270,10 +1270,14 @@ export default {
              if(response.data.response == "success"){
                this.responseMss = "success";
                this.responseContent = "Email Enviado";
+               custom.toast('Listo!', 'Email Enviado', 4000);
+
              }
              else if(response.data.response == "error"){
                 this.responseMss = "error";
                 this.responseContent = "Error al enviar Email";
+                custom.toast('Error', 'Error al enviar Email', 4000);
+                
              }
        })
         .catch((error) =>{

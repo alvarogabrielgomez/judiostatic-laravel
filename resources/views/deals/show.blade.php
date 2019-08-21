@@ -129,7 +129,7 @@
                             <div class="cupon-titulo"><span>{{$posts->title}}</span></div>
                             <div class="cupon-desc"><span>{{$posts->description}}</span>
                             </div>
-                            <button class="cupon-boton button red modaltrigger"> 
+                            <button class="cupon-boton button red modaltrigger" onclick="toast('1','2','2')"> 
 
 
                                 <div class="loader-small-container">

@@ -2,8 +2,10 @@
 window.Vuex = require('vuex');
 window.Vue = require('vue');
 window.axios = require('axios');
-import {store} from './store/store'
-
+import {store} from './store/store';
+//require('./custom');
+window.custom = require('./custom');
+custom.toast('Test','Lorem Ipsum Dolor Sit Amet',4000);
 
 
 window.Laravel = {
@@ -55,6 +57,7 @@ Vue.component('passport-personal-access-tokens', require('./components/passport/
 const app = new Vue({
     el: '#app',
     store: store,
+
 });
 
 

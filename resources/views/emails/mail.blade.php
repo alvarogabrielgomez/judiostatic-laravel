@@ -1,6 +1,7 @@
 <html>
 <head>
-<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+<meta http-equiv='Content-Type' content='text/html' />
+<meta charset="utf-8"> 
 <style>
 #qr-canvas{
     width:150px;
@@ -67,6 +68,10 @@
 
 }
 
+#imagecode{
+
+}
+
 </style>
 
 </head>
@@ -77,7 +82,7 @@
 <p>Seu código promocional é:</p>
 <p id='code'>{{$transqr}}</p>
 <div id='qr-canvas'>
-<img id='imagecode' src=\"cid:qrcode\" />
+<img id='imagecode' src="{!!$message->embedData(QrCode::format('png')->size(150)->generate($transqr), 'QrCode.png', 'image/png')!!}" />
 </div>
 
 <div class = 'buss-info-container'>
