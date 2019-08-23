@@ -3,6 +3,13 @@
 
 
     <div id="pwd-form-container" class="admin-login" style="padding: 20px; position:relative;  transition: 0.7s;">
+        
+                        <div style="width: 95%;" class="shadow-light boxedtoast"  id="toastlogin">
+                        <div class="toastprogressbar"></div>
+                        <label class="title" for="titles">Title</label>
+                        <label class="content" for="Content">Lorem ipsum dolor sit amet</label>
+                    </div>
+
         <transition name="fade">
         <div id="loading-overlay" v-if="loadingMss" >
         <spinner-small ></spinner-small>
@@ -298,6 +305,7 @@ methods:{
           this.hasResponse = false;
           this.responseContent = "Llene todos los campos";
           this.loadingMss = false;
+          custom.boxmsg('Llene todos los campos', 2500, toastlogin);
     }
     else{
     axios.post('/login',{
@@ -325,6 +333,7 @@ methods:{
 
       if(error.response.status == 422){
         this.responseContent = "Contrasena Incorrecta";
+        custom.boxmsg('Contrasena Incorrecta', 2500, toastlogin);
       }
     })
   }
@@ -340,6 +349,7 @@ methods:{
           this.hasError = true;
           this.hasResponse = false;
           this.responseContent = "Llene todos los campos";
+          custom.boxmsg('Llene todos los campos', 2500, toastlogin);
           this.loadingMss = false;
       }else{
         this.$store.state.userdata.email = this.username;
@@ -356,6 +366,7 @@ methods:{
             this.loading = false;
             var clientmail = document.getElementById('clientmail');
             clientmail.className = "invalid-data";
+            custom.boxtoast('Email no existe', "El email no esta registrado, seguro que has venido por aca antes?", 3500, toastlogin);
 
           }else if(response.data.response == 'successNoSession'){
             this.formselected = "pwd-form";
@@ -382,12 +393,15 @@ methods:{
           clientmail.className = "invalid-data";
           if (error.response.data.error == "invalid_credentials"){
             this.responseContent = "Contrasena Incorrecta";
+            custom.boxmsg('Contrasena Incorrecta', 2500, toastlogin);
           }
           else if(error.response.data.error == "invalid_request"){
             this.responseContent = "Hubo un problema en la respuesta";
+            custom.boxmsg('Hubo un problema en la respuesta', 2500, toastlogin);
           }
           else{
             this.responseContent = error.response.data.message;
+            custom.boxtoast('Error', this.responseContent, 2500, toastlogin);
           }
           this.loadingMss = false;
         })

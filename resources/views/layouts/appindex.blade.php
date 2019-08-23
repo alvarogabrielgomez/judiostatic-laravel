@@ -71,6 +71,12 @@
     <div id="app">
     <div id="themoderfoquer">
 
+        <div class="shadow"  id="toastdiv">
+          <div class="toastprogressbar"></div>
+            <label class="title" for="titles">Title</label>
+            <label class="content" for="Content">Lorem ipsum dolor sit amet</label>
+        </div>
+
         <header id="header" class="index-h">
             <div id="header-container">
               <nav id="header-logo">

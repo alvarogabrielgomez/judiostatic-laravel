@@ -2130,6 +2130,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
   data: function data() {
@@ -2216,6 +2223,7 @@ __webpack_require__.r(__webpack_exports__);
         this.hasResponse = false;
         this.responseContent = "Llene todos los campos";
         this.loadingMss = false;
+        custom.boxmsg('Llene todos los campos', 2500, toastlogin);
       } else {
         axios.post('/login', {
           email: this.$store.state.userdata.email,
@@ -2241,6 +2249,7 @@ __webpack_require__.r(__webpack_exports__);
 
           if (error.response.status == 422) {
             _this.responseContent = "Contrasena Incorrecta";
+            custom.boxmsg('Contrasena Incorrecta', 2500, toastlogin);
           }
         });
       }
@@ -2256,6 +2265,7 @@ __webpack_require__.r(__webpack_exports__);
         this.hasError = true;
         this.hasResponse = false;
         this.responseContent = "Llene todos los campos";
+        custom.boxmsg('Llene todos los campos', 2500, toastlogin);
         this.loadingMss = false;
       } else {
         this.$store.state.userdata.email = this.username;
@@ -2274,6 +2284,7 @@ __webpack_require__.r(__webpack_exports__);
             _this2.loading = false;
             var clientmail = document.getElementById('clientmail');
             clientmail.className = "invalid-data";
+            custom.boxtoast('Email no existe', "El email no esta registrado, seguro que has venido por aca antes?", 3500, toastlogin);
           } else if (response.data.response == 'successNoSession') {
             var selectpwd = function selectpwd() {
               var inputpwd = document.getElementById('clientpwd');
@@ -2301,10 +2312,13 @@ __webpack_require__.r(__webpack_exports__);
 
           if (error.response.data.error == "invalid_credentials") {
             _this2.responseContent = "Contrasena Incorrecta";
+            custom.boxmsg('Contrasena Incorrecta', 2500, toastlogin);
           } else if (error.response.data.error == "invalid_request") {
             _this2.responseContent = "Hubo un problema en la respuesta";
+            custom.boxmsg('Hubo un problema en la respuesta', 2500, toastlogin);
           } else {
             _this2.responseContent = error.response.data.message;
+            custom.boxtoast('Error', _this2.responseContent, 2500, toastlogin);
           }
 
           _this2.loadingMss = false;
@@ -6197,6 +6211,8 @@ var render = function() {
         attrs: { id: "pwd-form-container" }
       },
       [
+        _vm._m(0),
+        _vm._v(" "),
         _c("transition", { attrs: { name: "fade" } }, [
           _vm.loadingMss
             ? _c(
@@ -6208,7 +6224,7 @@ var render = function() {
             : _vm._e()
         ]),
         _vm._v(" "),
-        _vm._m(0),
+        _vm._m(1),
         _vm._v(" "),
         _c("transition", { attrs: { name: "slide-horizontal" } }, [
           _vm.stepactual == 1
@@ -6529,6 +6545,30 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "shadow-light boxedtoast",
+        staticStyle: { width: "95%" },
+        attrs: { id: "toastlogin" }
+      },
+      [
+        _c("div", { staticClass: "toastprogressbar" }),
+        _vm._v(" "),
+        _c("label", { staticClass: "title", attrs: { for: "titles" } }, [
+          _vm._v("Title")
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "content", attrs: { for: "Content" } }, [
+          _vm._v("Lorem ipsum dolor sit amet")
+        ])
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -21651,7 +21691,6 @@ window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
  //require('./custom');
 
 window.custom = __webpack_require__(/*! ./custom */ "./resources/js/custom.js");
-custom.toast('Test', 'Lorem Ipsum Dolor Sit Amet', 4000);
 window.Laravel = {
   csrfToken: document.head.querySelector("meta[name='csrf-token']").getAttribute('content')
 };
@@ -22452,11 +22491,18 @@ var custom = {
     var msgwindow = document.getElementById('toastdiv');
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
+    msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
+    msgwindow.querySelector('.title').style.display = 'block';
     msgwindow.querySelector('.title').innerText = title;
     msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
+    msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {
       msgwindow.style.transform = 'translateY(100px)';
       msgwindow.style.opacity = "0";
+      msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '100ms';
+      msgwindow.querySelector('.toastprogressbar').style.transitionDuration = '0ms';
+      msgwindow.querySelector('.toastprogressbar').style.width = '0%';
     }, time);
     return msg;
   },
@@ -22464,13 +22510,56 @@ var custom = {
     var msgwindow = document.getElementById('toastdiv');
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
+    msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
     msgwindow.querySelector('.title').style.display = 'none';
     msgwindow.querySelector('.content').innerText = _msg;
+    msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
+    msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {
       msgwindow.style.transform = 'translateY(100px)';
       msgwindow.style.opacity = "0";
+      msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '100ms';
+      msgwindow.querySelector('.toastprogressbar').style.transitionDuration = '0ms';
+      msgwindow.querySelector('.toastprogressbar').style.width = '0%';
     }, time);
     return _msg;
+  },
+  boxtoast: function boxtoast(title, msg, time, div) {
+    var msgwindow = div;
+    msgwindow.style.transform = 'translateY(0px)';
+    msgwindow.style.opacity = "100";
+    msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
+    msgwindow.querySelector('.title').style.display = 'block';
+    msgwindow.querySelector('.title').innerText = title;
+    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
+    msgwindow.querySelector('.toastprogressbar').style.width = '100%';
+    setTimeout(function () {
+      msgwindow.style.transform = 'translateY(-100px)';
+      msgwindow.style.opacity = "0";
+      msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '100ms';
+      msgwindow.querySelector('.toastprogressbar').style.transitionDuration = '0ms';
+      msgwindow.querySelector('.toastprogressbar').style.width = '0%';
+    }, time);
+    return msg;
+  },
+  boxmsg: function boxmsg(msg, time, div) {
+    var msgwindow = div;
+    msgwindow.style.transform = 'translateY(0px)';
+    msgwindow.style.opacity = "100";
+    msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
+    msgwindow.querySelector('.title').style.display = 'none';
+    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
+    msgwindow.querySelector('.toastprogressbar').style.width = '100%';
+    setTimeout(function () {
+      msgwindow.style.transform = 'translateY(-100px)';
+      msgwindow.style.opacity = "0";
+      msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '100ms';
+      msgwindow.querySelector('.toastprogressbar').style.transitionDuration = '0ms';
+      msgwindow.querySelector('.toastprogressbar').style.width = '0%';
+    }, time);
+    return msg;
   }
 };
 module.exports = custom;

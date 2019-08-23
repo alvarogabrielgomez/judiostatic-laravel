@@ -5,7 +5,6 @@ window.axios = require('axios');
 import {store} from './store/store';
 //require('./custom');
 window.custom = require('./custom');
-custom.toast('Test','Lorem Ipsum Dolor Sit Amet',4000);
 
 
 window.Laravel = {

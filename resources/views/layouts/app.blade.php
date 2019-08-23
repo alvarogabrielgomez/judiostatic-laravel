@@ -74,7 +74,11 @@
    
         <div id="themoderfoquer">
 
-            <div class="shadow"  id="toastdiv"><label class="title" for="title">Title</label><label class="content" for="Content">Lorem ipsum dolor sit amet</label></div>
+            <div class="shadow"  id="toastdiv">
+                    <div class="toastprogressbar"></div>
+                <label class="title" for="titles">Title</label>
+                <label class="content" for="Content">Lorem ipsum dolor sit amet</label>
+            </div>
 
             <header id="header">
                 <div id="header-container">

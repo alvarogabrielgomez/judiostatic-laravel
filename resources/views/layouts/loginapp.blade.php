@@ -50,6 +50,11 @@
 <body>
    
         <div id="themoderfoquer">
+                <div class="shadow"  id="toastdiv">
+                        <div class="toastprogressbar"></div>
+                        <label class="title" for="titles">Title</label>
+                        <label class="content" for="Content">Lorem ipsum dolor sit amet</label>
+                    </div>
 
         @yield('content')
         
