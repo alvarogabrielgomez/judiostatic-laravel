@@ -2083,60 +2083,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
   data: function data() {
@@ -2253,6 +2199,11 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
       }
+    },
+    loadingShow: function loadingShow() {
+      this.loading = true;
+      this.loadingMss = true;
+      this.hasResponse = false;
     },
     formSubmit: function formSubmit() {
       var _this2 = this;
@@ -2669,124 +2620,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -4741,7 +4574,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.google-icon{\r\n  font-size: 14px;\r\n  color: var(--red);\r\n  margin-right:4px;\n}\n.stepslogin{\r\n      position: absolute;\r\n    width: 100%;\r\n    height: 100%;\n}\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  -webkit-transition: 0.7s;\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n.title-login-center {\r\n    padding: 1px 27px;\r\n    text-align: center;\r\n    font-size: 0.92em;\r\n    font-weight: 600;\r\n    color: #464646;\r\n    margin-top: 30px!important;\n}\n#logo-form {\r\n  width: 100%;\n}\n.trans-black-logo-form {\r\n  width: 91px;\r\n  height: 31px;\r\n  margin: 10px auto 3px;\r\n  background-image: url(/images/omeleth_trans_black.png);\r\n  background-position: center;\r\n  background-size: cover;\r\n  background-repeat: no-repeat;\n}\n.opcion-alt {\r\n  font-size: 12px;\r\n  display: table;\r\n  -webkit-transform: translate(2px);\r\n          transform: translate(2px);\r\n  color: #bc2d19;\r\n  width: auto !important;\n}\n.login-submit {\r\n  position: absolute;\r\n  border-radius: 0px;\r\n  box-shadow: 0px 0px transparent !important;\r\n  bottom: 0px;\r\n  width: 100%;\r\n      z-index: 10000;\n}\n.admin-login {\r\n  min-width: 377px !important;\r\n  max-width: 1000px !important;\r\n  width: -webkit-min-content;\r\n  width: -moz-min-content;\r\n  width: min-content;\r\n  width: moz-min-content;\r\n  padding: 0px !important;\r\n  background-color: #fff;\r\n  margin: 86px auto !important;\r\n  border-radius: 5px !important;\n}\n.nav-login {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: vertical;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
+exports.push([module.i, "\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  -webkit-transition: 0.7s;\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n#logo-form {\r\n  width: 100%;\n}\n.nav-login {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: vertical;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
 
 // exports
 
@@ -4779,7 +4612,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#qr{\r\n    position: absolute;\r\n    width: 80px;\r\n    height: 80px;\r\n    top: 14px;\r\n    background-color: #ababab;\r\n    right: 23px;\n}\n#pwd-form-container{\r\n    margin: 17px 21px 0;\r\n    padding: 42px 42px 36px;\r\n    border: 1px solid #eaeced;\r\n    max-width: 377px;\r\n    overflow: hidden;\r\n    min-height: 109px;\n}\n#continuar-anterior{\r\n    position: absolute;\r\n    right: 13px;\r\n    bottom: 68px;\r\n    font-size: 12px;\n}\n#continuar-anterior a{\r\n      color: #ba2d2b;\n}\n.fade-enter-active, .fade-leave-active {\r\n  -webkit-transition: opacity .26s!important;\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\r\n/* form starting stylings ------------------------------- */\n.group { \r\n  position:relative; \r\n  margin-bottom:17px;\n}\n#insert-form, #pwd-form{\r\ndisplay: -webkit-box;\r\ndisplay: flex;\r\n    width: 100%;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\r\n    padding: 26px 0px 8px 1px;\n}\ninput{\r\n  border-radius: 4px;\r\n  font-size:15px;\r\n  padding: 14px 10px 14px 14px;\r\n  display:block;\r\n  width:285px;\r\n  border:1px solid #cacaca;\r\n    border-bottom: 1px solid rgb(210, 210, 210);\r\n      -webkit-transition:0.2s ease all;\r\n      transition:0.2s ease all;\n}\r\n/* LABEL ======================================= */\nlabel{\r\n  padding: 0px 5px;\r\n  color:#999; \r\n  font-size:15px;\r\n  font-weight:normal;\r\n  position:absolute;\r\n  pointer-events:none;\r\n  left:10px;\r\n  top:11px;\r\n  transition:0.15s ease all; \r\n  -moz-transition:0.15s ease all; \r\n  -webkit-transition:0.15s ease all;\r\n      background-color:#fff;\n}\r\n/* active state */\ninput:focus{\r\n    border: 1px solid var(--highlight-input);\r\n    -webkit-transition: 0.2s ease all;\r\n    transition: 0.2s ease all;\r\n    box-shadow: inset 0px 0 0 1px var(--highlight-input);\r\n  outline:none;\n}\ninput:focus ~ label, input:valid ~ label {\r\n    top: -12px;\r\n    left: 8px;\r\n    font-size: 11.5px;\n}\ninput:focus ~ label{\r\n    color: var(--highlight-input);\n}\r\n\r\n/* BOTTOM BARS ================================= */\r\n/* .bar \t{ position:relative; display:block; width:300px; }\r\n.bar:before, .bar:after \t{\r\n  content:'';\r\n  height:2px; \r\n  width:0;\r\n  bottom:1px; \r\n  position:absolute;\r\n  background:#5264AE; \r\n  transition:0.2s ease all; \r\n  -moz-transition:0.2s ease all; \r\n  -webkit-transition:0.2s ease all;\r\n}\r\n.bar:before {\r\n  left:50%;\r\n}\r\n.bar:after {\r\n  right:50%; \r\n} */\r\n/* active state */\ninput:focus ~ .bar:before, input:focus ~ .bar:after {\r\n  width:50%;\n}\r\n/* HIGHLIGHTER ================================== */\n.highlight {\r\n    position: absolute;\r\n    height: 60%;\r\n    width: 100px;\r\n    border-radius: 2px;\r\n    top: 19%;\r\n    left: 11px;\r\n    pointer-events: none;\r\n    opacity: 0.5;\r\n    z-index: 10;\n}\r\n/* active state */\ninput:focus ~ .highlight {\r\n  -webkit-animation:inputHighlighter 0.3s ease;\r\n  animation:inputHighlighter 0.3s ease;\n}\r\n/* ANIMATIONS ================ */\n@-webkit-keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n@keyframes inputHighlighter {\nfrom { background:#5264AE;\n}\nto \t{ width:0; background:transparent;\n}\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  -webkit-transition: 1s;\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\n  \t-webkit-transition: all .5s ease-in-out;\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content{\r\n\r\n-webkit-transition: -webkit-transform .5s ease-in-out;\r\n\r\ntransition: -webkit-transform .5s ease-in-out;\r\n\r\ntransition: transform .5s ease-in-out;\r\n\r\ntransition: transform .5s ease-in-out, -webkit-transform .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.lineacont > .seleccion{\r\n top: 70px;\n}\n.lineacont > .opciones{\r\n bottom: 186px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    right: -17px;\r\n    top: -9px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 165px;\r\n    right: -17px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    -webkit-box-flex: 10;\r\n            flex: 10;\n}\n.row-centered{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: horizontal;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: row;\r\n    -webkit-box-align: center;\r\n            align-items: center;\n}\n.row-linea{\r\n      -webkit-box-flex: 2;\r\n              flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3, #steplogin{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  -webkit-transition: all .2s ease-in-out;\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: -webkit-box;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    position: relative;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: -webkit-box;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  -webkit-box-align: center;\r\n          align-items: center;\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n#qr{\r\n    position: absolute;\r\n    width: 80px;\r\n    height: 80px;\r\n    top: 14px;\r\n    background-color: #ababab;\r\n    right: 23px;\n}\n#continuar-anterior{\r\n    position: absolute;\r\n    right: 13px;\r\n    bottom: 68px;\r\n    font-size: 12px;\n}\n#continuar-anterior a{\r\n      color: #ba2d2b;\n}\n.fade-enter-active, .fade-leave-active {\r\n  -webkit-transition: opacity .26s!important;\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  -webkit-transition: 1s;\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\n  \t-webkit-transition: all .5s ease-in-out;\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content{\r\n\r\n-webkit-transition: -webkit-transform .5s ease-in-out;\r\n\r\ntransition: -webkit-transform .5s ease-in-out;\r\n\r\ntransition: transform .5s ease-in-out;\r\n\r\ntransition: transform .5s ease-in-out, -webkit-transform .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.lineacont > .seleccion{\r\n top: 70px;\n}\n.lineacont > .opciones{\r\n bottom: 186px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    right: -17px;\r\n    top: -9px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 165px;\r\n    right: -17px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    -webkit-box-flex: 10;\r\n            flex: 10;\n}\n.row-centered{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: horizontal;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: row;\r\n    -webkit-box-align: center;\r\n            align-items: center;\n}\n.row-linea{\r\n      -webkit-box-flex: 2;\r\n              flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3, #steplogin{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  -webkit-transition: all .2s ease-in-out;\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: -webkit-box;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    position: relative;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: -webkit-box;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  -webkit-box-align: center;\r\n          align-items: center;\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -6246,59 +6079,56 @@ var render = function() {
                       }
                     },
                     [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "group",
-                          staticStyle: { margin: "auto" }
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.username,
-                                expression: "username"
-                              }
-                            ],
-                            attrs: {
-                              id: "clientmail",
-                              type: "email",
-                              name: "email",
-                              required: ""
-                            },
-                            domProps: { value: _vm.username },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.username = $event.target.value
-                              }
+                      _c("div", { staticClass: "group-input group-centrado" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.username,
+                              expression: "username"
                             }
-                          }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "highlight" }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "bar" }),
-                          _vm._v(" "),
-                          _c("label", [_vm._v("Email")])
-                        ]
-                      ),
+                          ],
+                          staticClass: "input-material",
+                          staticStyle: { width: "285px" },
+                          attrs: {
+                            id: "clientmail",
+                            type: "email",
+                            name: "email",
+                            required: ""
+                          },
+                          domProps: { value: _vm.username },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.username = $event.target.value
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "highlight" }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "bar" }),
+                        _vm._v(" "),
+                        _c("label", { staticClass: "label-material" }, [
+                          _vm._v("Email")
+                        ])
+                      ]),
                       _vm._v(" "),
                       _c(
                         "div",
                         {
-                          staticClass: "group",
-                          staticStyle: { margin: "13px auto 0px", width: "81%" }
+                          staticClass: "group-input",
+                          staticStyle: { margin: "13px auto 0px", width: "85%" }
                         },
                         [
                           _c(
                             "a",
                             {
                               staticClass: "opcion-alt",
-                              attrs: { href: "iforgot/reset-password.php" }
+                              attrs: { href: "/register" }
                             },
                             [_vm._v("Crear una nueva cuenta")]
                           ),
@@ -6321,7 +6151,8 @@ var render = function() {
                               {
                                 staticClass: "opcion-alt",
                                 staticStyle: { display: "inline-block" },
-                                attrs: { href: "/login/google" }
+                                attrs: { href: "/login/google" },
+                                on: { click: _vm.loadingShow }
                               },
                               [_vm._v("Login with Google")]
                             )
@@ -6362,52 +6193,49 @@ var render = function() {
                       }
                     },
                     [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "group",
-                          staticStyle: { margin: "auto" }
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.password,
-                                expression: "password"
-                              }
-                            ],
-                            attrs: {
-                              id: "clientpwd",
-                              type: "password",
-                              name: "password",
-                              required: ""
-                            },
-                            domProps: { value: _vm.password },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.password = $event.target.value
-                              }
+                      _c("div", { staticClass: "group-input group-centrado" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.password,
+                              expression: "password"
                             }
-                          }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "highlight" }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "bar" }),
-                          _vm._v(" "),
-                          _c("label", [_vm._v("Password")])
-                        ]
-                      ),
+                          ],
+                          staticClass: "input-material",
+                          staticStyle: { width: "285px" },
+                          attrs: {
+                            id: "clientpwd",
+                            type: "password",
+                            name: "password",
+                            required: ""
+                          },
+                          domProps: { value: _vm.password },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.password = $event.target.value
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "highlight" }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "bar" }),
+                        _vm._v(" "),
+                        _c("label", { staticClass: "label-material" }, [
+                          _vm._v("Password")
+                        ])
+                      ]),
                       _vm._v(" "),
                       _c(
                         "div",
                         {
-                          staticClass: "group",
-                          staticStyle: { margin: "13px auto 0px", width: "81%" }
+                          staticClass: "group-input",
+                          staticStyle: { margin: "13px auto 0px", width: "85%" }
                         },
                         [
                           _c(
@@ -6469,7 +6297,7 @@ var render = function() {
                       _c(
                         "div",
                         {
-                          staticClass: "group",
+                          staticClass: "group-input",
                           staticStyle: { margin: "auto" }
                         },
                         [
@@ -6482,7 +6310,7 @@ var render = function() {
                       _c(
                         "div",
                         {
-                          staticClass: "group",
+                          staticClass: "group-input",
                           staticStyle: { margin: "13px auto 0px", width: "81%" }
                         },
                         [
@@ -6964,8 +6792,10 @@ var render = function() {
                         [
                           this.$store.state.userdata.email == ""
                             ? _c("div", { attrs: { id: "new-user-form" } }, [
-                                _c("div", { staticClass: "group" }, [
+                                _c("div", { staticClass: "group-input" }, [
                                   _c("input", {
+                                    staticClass: "input-material",
+                                    staticStyle: { width: "285px" },
                                     attrs: {
                                       id: "clientfirst",
                                       type: "text",
@@ -6978,11 +6808,17 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("span", { staticClass: "bar" }),
                                   _vm._v(" "),
-                                  _c("label", [_vm._v("Nombre")])
+                                  _c(
+                                    "label",
+                                    { staticClass: "label-material" },
+                                    [_vm._v("Nombre")]
+                                  )
                                 ]),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "group" }, [
+                                _c("div", { staticClass: "group-input" }, [
                                   _c("input", {
+                                    staticClass: "input-material",
+                                    staticStyle: { width: "285px" },
                                     attrs: {
                                       id: "clientlast",
                                       type: "text",
@@ -6995,11 +6831,17 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("span", { staticClass: "bar" }),
                                   _vm._v(" "),
-                                  _c("label", [_vm._v("Apellido")])
+                                  _c(
+                                    "label",
+                                    { staticClass: "label-material" },
+                                    [_vm._v("Apellido")]
+                                  )
                                 ]),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "group" }, [
+                                _c("div", { staticClass: "group-input" }, [
                                   _c("input", {
+                                    staticClass: "input-material",
+                                    staticStyle: { width: "285px" },
                                     attrs: {
                                       id: "clientemail",
                                       type: "email",
@@ -7012,7 +6854,11 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("span", { staticClass: "bar" }),
                                   _vm._v(" "),
-                                  _c("label", [_vm._v("Email")])
+                                  _c(
+                                    "label",
+                                    { staticClass: "label-material" },
+                                    [_vm._v("Email")]
+                                  )
                                 ])
                               ])
                             : _vm._e(),
@@ -7327,7 +7173,7 @@ var render = function() {
                           _c(
                             "div",
                             {
-                              staticClass: "group",
+                              staticClass: "group-input",
                               staticStyle: { margin: "auto" }
                             },
                             [
@@ -7340,6 +7186,8 @@ var render = function() {
                                     expression: "password"
                                   }
                                 ],
+                                staticClass: "input-material",
+                                staticStyle: { width: "285px" },
                                 attrs: {
                                   id: "clientpwd",
                                   type: "password",
@@ -7361,7 +7209,9 @@ var render = function() {
                               _vm._v(" "),
                               _c("span", { staticClass: "bar" }),
                               _vm._v(" "),
-                              _c("label", [_vm._v("Password")])
+                              _c("label", { staticClass: "label-material" }, [
+                                _vm._v("Password")
+                              ])
                             ]
                           ),
                           _vm._v(" "),

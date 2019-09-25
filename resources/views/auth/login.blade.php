@@ -1,8 +1,8 @@
 @extends('layouts.loginapp')
-
+@section('title', 'Login')
 @section('content')
 <section>
-<div id="main-container" style="margin-top: 0px;">
+<div id="main-container" style="margin-top: 0px; min-height: 594px;">
     <div class="login-img" ></div>
      <div id='main-login-container'>
 

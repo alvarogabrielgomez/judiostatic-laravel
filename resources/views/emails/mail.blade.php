@@ -92,7 +92,7 @@
         </div>
 </div>
 
-<p><br>Você pode mostrar este código quando chegar a $post_buss_name e seu desconto será feito imediatamente</p>
+<p><br>Você pode mostrar este código quando chegar a {{$post_buss_name}} e seu desconto será feito imediatamente</p>
 <p>Você pode conferir outros cupons em nosso site</p>
 <div class='deal-map-box'>O endereço do lugar é
  <a href='https://www.google.com.br/maps/search/{{$post_buss_dir}}'>{{$post_buss_dir}}</a></div>

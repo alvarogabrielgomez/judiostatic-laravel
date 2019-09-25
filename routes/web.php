@@ -16,25 +16,14 @@ use function GuzzleHttp\json_decode;
 |
 */
 
-
+// Rutas laravel predefinidas de PASSPORT
 Auth::routes();
 
-Route::get('/', 'MainController@index')->name('/');
-
-// Route::group(['middleware' => 'cors'], function(){
-//     Passport::routes();
-// });
-
+// Gets Direcciones Normales
+Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('deals', 'DealsController');
-Route::resource('modalwindow', 'ModalwindowController');
-Route::resource('documents', 'DocumentsController');
-
-Route::post('/enviaremail', 'DealsController@enviaremail')->name('enviaremail');
-
-Route::post('/dealsubmituser', 'DealsController@dealsubmituser')->name('dealsubmituser');
-
-Route::get('/carousel', 'DealsController@carousel')->name('carousel');
-
+Route::get('/', 'MainController@index')->name('/');
+Route::get('/deals', 'DealsController@index')->name('deals');
 Route::get('/documents/{lang}/{document}', function(Request $request){
     $document = $request->document;
     $lenguaje = $request->lang;
@@ -69,30 +58,27 @@ Route::get('/documents/{lang}/{document}', function(Request $request){
 
 
 });
-
-Route::get('/qrcode', 'Pokemoncontroller@qrcode')->name('qrcode');
-
-Route::get('/deals', 'DealsController@index')->name('deals');
-Route::get('/modalwindow', 'ModalwindowController@index')->name('modalwindow');
-Route::get('/modalwindow/deals/{id}', 'ModalwindowController@show');
 Route::get('/settings', 'SettingsController@index')->name('settings');
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::post('/checkuser', 'DealsController@checkuser')->name('checkuser');
+// Gets direcciones de partials
+Route::get('/carousel', 'DealsController@carousel')->name('carousel');
 
-
+// Herramientas para login y tokens publicos
 Route::get('/refreshCsrfToken', 'AuthController@refreshCsrfToken')->name('refreshCsrfToken');
+Route::post('/checkuser', 'DealsController@checkuser')->name('checkuser');
+Route::post('/dealsubmituser', 'DealsController@dealsubmituser')->name('dealsubmituser');
 
-/////
-
+// Callbacks Socialite
 Route::get('/login/github', 'Auth\LoginController@redirectToProvider');
 Route::get('/login/github/callback', 'Auth\LoginController@handleProviderCallback');
-
 Route::get('/login/google', 'Auth\LoginController@redirectToProvider');
 Route::get('/login/google/callback', 'Auth\LoginController@handleProviderCallback');
 
+// Tools Publicas
+Route::get('/qrcode', 'ToolsController@qrcode')->name('qrcode');
+Route::post('/enviaremail', 'DealsController@enviaremail')->name('enviaremail');
 
-
+// Herramientas API PUBLICAS
 Route::get('/v1/getTokenApi', function(Request $request){
     $request->request->add([
         'grant_type' => 'password',

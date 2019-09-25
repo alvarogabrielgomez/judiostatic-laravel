@@ -85,23 +85,23 @@
                     <!-- FORM MOSTRADO SI NO ESTA INICIADA LA SESION -->
                     <div id="new-user-form" v-if="this.$store.state.userdata.email == '' ">
 
-                    <div class="group">
-                      <input id="clientfirst" type="text" name="client_first" required>
+                    <div class="group-input">
+                      <input class="input-material" id="clientfirst" type="text" name="client_first" required style="width:285px;">
                       <span class="highlight"></span>
                       <span class="bar"></span>
-                      <label>Nombre</label>
+                      <label class="label-material">Nombre</label>
                     </div>
-                    <div class="group">
-                      <input id="clientlast" type="text" name="client_last" required>
+                    <div class="group-input">
+                      <input class="input-material" id="clientlast" type="text" name="client_last" required style="width:285px;">
                       <span class="highlight"></span>
                       <span class="bar"></span>
-                      <label>Apellido</label>
+                      <label class="label-material">Apellido</label>
                     </div>
-                    <div class="group">
-                      <input id="clientemail" type="email" name="email" required>
+                    <div class="group-input">
+                      <input class="input-material" id="clientemail" type="email" name="email" required style="width:285px;">
                       <span class="highlight"></span>
                       <span class="bar"></span>
-                      <label>Email</label>
+                      <label class="label-material">Email</label>
                     </div>
                     </div>
                     <!-- FORM MOSTRADO SI LA SESION ESTA INICIADA -->
@@ -213,11 +213,11 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                 <div id="pwd-form-container">
                   <form @submit.prevent="formSubmit" id="pwd-form">
 
-                    <div class="group" style="margin: auto;">
-                      <input id="clientpwd" type="password" name="password" required v-model="password">
+                    <div class="group-input" style="margin: auto;">
+                      <input  class="input-material" id="clientpwd" type="password" name="password" required v-model="password" style="width:285px;">
                       <span class="highlight"></span>
                       <span class="bar"></span>
-                      <label>Password</label>
+                      <label class="label-material">Password</label>
                     </div>
                   
                     <transition name="fade" mode="out-in">
@@ -271,14 +271,7 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
     background-color: #ababab;
     right: 23px;
 }
-#pwd-form-container{
-    margin: 17px 21px 0;
-    padding: 42px 42px 36px;
-    border: 1px solid #eaeced;
-    max-width: 377px;
-    overflow: hidden;
-    min-height: 109px;
-}
+
 #continuar-anterior{
     position: absolute;
     right: 13px;
@@ -299,117 +292,6 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
 #resultados{
     height: 100%;
     max-height: 300px;
-}
-/* form starting stylings ------------------------------- */
-.group { 
-  position:relative; 
-  margin-bottom:17px; 
-}
-
-#insert-form, #pwd-form{
-display: flex;
-    width: 100%;
-    box-sizing: border-box;
-    height: 100%;
-    flex-direction: column;
-    padding: 26px 0px 8px 1px;
-}
-
-input{
-  border-radius: 4px;
-  font-size:15px;
-  padding: 14px 10px 14px 14px;
-  display:block;
-  width:285px;
-  border:1px solid #cacaca;
-    border-bottom: 1px solid rgb(210, 210, 210);
-      transition:0.2s ease all; 
-}
-/* LABEL ======================================= */
-label{
-  padding: 0px 5px;
-  color:#999; 
-  font-size:15px;
-  font-weight:normal;
-  position:absolute;
-  pointer-events:none;
-  left:10px;
-  top:11px;
-  transition:0.15s ease all; 
-  -moz-transition:0.15s ease all; 
-  -webkit-transition:0.15s ease all;
-      background-color:#fff;
-}
-/* active state */
-input:focus{
-    border: 1px solid var(--highlight-input);
-    transition: 0.2s ease all;
-    box-shadow: inset 0px 0 0 1px var(--highlight-input);
-  outline:none; 
-}
-input:focus ~ label, input:valid ~ label {
-    top: -12px;
-    left: 8px;
-    font-size: 11.5px;
-}
-input:focus ~ label{
-    color: var(--highlight-input);
-
-}
-
-/* BOTTOM BARS ================================= */
-/* .bar 	{ position:relative; display:block; width:300px; }
-.bar:before, .bar:after 	{
-  content:'';
-  height:2px; 
-  width:0;
-  bottom:1px; 
-  position:absolute;
-  background:#5264AE; 
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
-  -webkit-transition:0.2s ease all;
-}
-.bar:before {
-  left:50%;
-}
-.bar:after {
-  right:50%; 
-} */
-/* active state */
-input:focus ~ .bar:before, input:focus ~ .bar:after {
-  width:50%;
-}
-/* HIGHLIGHTER ================================== */
-.highlight {
-    position: absolute;
-    height: 60%;
-    width: 100px;
-    border-radius: 2px;
-    top: 19%;
-    left: 11px;
-    pointer-events: none;
-    opacity: 0.5;
-    z-index: 10;
-}
-/* active state */
-input:focus ~ .highlight {
-  -webkit-animation:inputHighlighter 0.3s ease;
-  -moz-animation:inputHighlighter 0.3s ease;
-  animation:inputHighlighter 0.3s ease;
-}
-/* ANIMATIONS ================ */
-@-webkit-keyframes inputHighlighter {
-	from { background:#5264AE; }
-  to 	{ width:0; background:transparent; }
-}
-@-moz-keyframes inputHighlighter {
-	from { background:#5264AE; }
-  to 	{ width:0; background:transparent; }
-}
-@keyframes inputHighlighter {
-	from { background:#5264AE; }
-  to 	{ width:0; background:transparent; }
 }
 
 .steps{

@@ -8,7 +8,7 @@
                         <div class="toastprogressbar"></div>
                         <label class="title" for="titles">Title</label>
                         <label class="content" for="Content">Lorem ipsum dolor sit amet</label>
-                    </div>
+                        </div>
 
         <transition name="fade">
         <div id="loading-overlay" v-if="loadingMss" >
@@ -39,16 +39,16 @@
       <!-- <h1 class="title-login-center">Inicia sesion</h1> -->
         </div>
         <form id="emailform" action="#" @submit.prevent="formSubmit">
-          <div class="group" style="margin: auto;">
-            <input id="clientmail" type="email" name="email" required v-model="username">
+          <div class="group-input group-centrado">
+            <input class="input-material" id="clientmail" type="email" name="email" required v-model="username" style="width:285px;">
             <span class="highlight"></span>
             <span class="bar"></span>
-            <label>Email</label>
+            <label class="label-material">Email</label>
           </div>
-          <div class="group" style="margin:13px auto 0px;;width: 81%;">          
-            <a class="opcion-alt" href="iforgot/reset-password.php">Crear una nueva cuenta</a>
+          <div class="group-input" style="margin:13px auto 0px;;width: 85%;">          
+            <a class="opcion-alt" href="/register">Crear una nueva cuenta</a>
             <a class="opcion-alt" href="iforgot/reset-password.php">Olvide el password</a>
-            <span><i class="fab fa-google google-icon"></i><a class="opcion-alt" href="/login/google" style="display:inline-block;">Login with Google</a></span>
+            <span><i class="fab fa-google google-icon"></i><a v-on:click="loadingShow" class="opcion-alt" href="/login/google" style="display:inline-block;">Login with Google</a></span>
           </div>
 
         </form>
@@ -68,13 +68,13 @@
      <h1 class="title-login-center">Bienvenido de nuevo, {{this.$store.state.userdata.client_first}}</h1>
         </div>
         <form id="pwdform" action="#" @submit.prevent="login">
-          <div class="group" style="margin: auto;">
-                      <input id="clientpwd" type="password" name="password" required v-model="password">
+          <div class="group-input group-centrado">
+                      <input class="input-material" id="clientpwd" type="password" name="password" required v-model="password"style="width:285px;">
                       <span class="highlight"></span>
                       <span class="bar"></span>
-                      <label>Password</label>
+                      <label class="label-material">Password</label>
           </div>
-          <div class="group" style="margin:13px auto 0px;;width: 81%;">          
+          <div class="group-input" style="margin:13px auto 0px;width: 85%;">          
             <a class="opcion-alt" href="iforgot/reset-password.php">Olvide el password</a>
             <a class="opcion-alt" style="cursor:pointer;" v-on:click="stepactual = 1" >Volver</a>
       
@@ -98,7 +98,7 @@
      <h1 class="title-login-center"><i class="fab fa-google"></i>&nbsp;&nbsp;Login with Google.</h1>
         </div>
         <form id="oauthform" action="#" @submit.prevent="login">
-          <div class="group" style="margin: auto;">
+          <div class="group-input" style="margin: auto;">
 
             
           <!-- AJA -->
@@ -106,7 +106,7 @@
 
 
           </div>
-          <div class="group" style="margin:13px auto 0px;;width: 81%;">          
+          <div class="group-input" style="margin:13px auto 0px;;width: 81%;">          
             <a class="opcion-alt" style="cursor:pointer;" v-on:click="stepactual = 1" >Volver</a>
       
           </div>
@@ -130,16 +130,6 @@
 <style>
 
 
-.google-icon{
-  font-size: 14px;
-  color: var(--red);
-  margin-right:4px;
-}
-.stepslogin{
-      position: absolute;
-    width: 100%;
-    height: 100%;
-}
 .slide-horizontal-leave-active,
 .slide-horizontal-enter-active {
   transition: 0.7s;
@@ -152,53 +142,9 @@
   transform: translate(-100%, 0);
 }
 
-.title-login-center {
-    padding: 1px 27px;
-    text-align: center;
-    font-size: 0.92em;
-    font-weight: 600;
-    color: #464646;
-    margin-top: 30px!important;
-}
 
 #logo-form {
   width: 100%;
-}
-.trans-black-logo-form {
-  width: 91px;
-  height: 31px;
-  margin: 10px auto 3px;
-  background-image: url(/images/omeleth_trans_black.png);
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.opcion-alt {
-  font-size: 12px;
-  display: table;
-  transform: translate(2px);
-  color: #bc2d19;
-  width: auto !important;
-}
-
-.login-submit {
-  position: absolute;
-  border-radius: 0px;
-  box-shadow: 0px 0px transparent !important;
-  bottom: 0px;
-  width: 100%;
-      z-index: 10000;
-}
-.admin-login {
-  min-width: 377px !important;
-  max-width: 1000px !important;
-  width: min-content;
-  width: moz-min-content;
-  padding: 0px !important;
-  background-color: #fff;
-  margin: 86px auto !important;
-  border-radius: 5px !important;
 }
 
 .nav-login {
@@ -339,7 +285,11 @@ methods:{
   }
   },
 
-
+  loadingShow: function loadingShow(){
+      this.loading = true;
+      this.loadingMss = true;
+      this.hasResponse = false;  
+  },
 
   formSubmit: function formSubmit(){
       this.loadingMss = true;

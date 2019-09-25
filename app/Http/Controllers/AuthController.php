@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class AuthController extends Controller
 {
-
-
 
     public function registerApi(Request $request)
     {
@@ -130,5 +129,6 @@ class AuthController extends Controller
     public function refreshCsrfToken(){
         return ['csrfToken' => csrf_token()];
     }
+
 
 }

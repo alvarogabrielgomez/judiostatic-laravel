@@ -4,7 +4,7 @@
 <section id="main-hero">
         <div id="main-hero-img">
             <div id="main-hero-img-carousel" class="animated fadeIn">
-                <div id="main-hero-img-carousel-textcontainer">
+                <div class="main-hero-img-carousel-textcontainer">
     
                     <p id="textbloq1">As melhores ofertas no momento certo</p>
             
