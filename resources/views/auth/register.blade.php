@@ -8,7 +8,7 @@
           <nav id="header-logo">
             <ul>
               <!-- <li id="header-logo-img"><a href="#"><img src="" alt=""></a></li> -->
-              <li id=""><div id="header-logo-container" class="animated fadeIn hero-logo"></div></li>
+              <li id=""><div id="header-logo-container-register" class="animated fadeIn hero-logo"></div></li>
             </ul>
           </nav>
         </div>          
@@ -28,24 +28,38 @@
                         <a href="#main"><div id="main-hero-arrow"></div></a>
                     </div>
                     <div class="main-hero-img-register-textcontainer register-box">
-                        <div class="register-form-box">
-                                <div id="nav-bar" class="light-bar-t" style="position: absolute; top: 11px; left:0px; margin-top: 0px !important; z-index: 1000;"><div id="nav-bar-container"><nav><ul class="light-bar-text"><li><a href="/"><div id="home-icon"></div></a></li> <li class="navbar-divisor">&gt;</li> <li>Register</li></ul></nav></div></div>
-                                <div class="leyenda-registrar">
+                        <form method="POST" action="/registering" class="register-form-box" id="register-from">
+                            @csrf    
+                            <div id="loading-overlay" style="top: 0px;left: 0px;opacity: 0;display:none;">
+                                    <div class="loader-small-container">
+                                        <div class="loader-small">Loading...</div>
+                                    </div>
+                                </div>
 
+                                <div id="nav-bar" class="light-bar-t" style="position: absolute; top: 11px; left:0px; margin-top: 0px !important; z-index: 1000;"><div id="nav-bar-container"><nav><ul class="light-bar-text"><li><a href="/"><div id="home-icon"></div></a></li> <li class="navbar-divisor">&gt;</li> <li>Register</li></ul></nav></div></div>
+                                <div id="logo-form-register" style=""><div class="lefty-trans-black-logo-form"></div></div>
+                                <div class="leyenda-registrar">
                                 <h2 style="margin-bottom: 13px;"><strong>Cree su cuenta Omeleth</strong></h2>
                                 <p style="margin: 0px;">Y acceda a todas las ventajas</p>
                                 </div>
 
                                 <div class="form-container-view">
-                                <div style="margin-top: 63px;" class="container-input-2col">
+                                <div style="margin-top: 63px;justify-content:left;" class="container-input-2col">
                                     <div class="group-input group-row material-sm">
-                                            <input class="input-material" id="clientpwd" type="text" name="client_first" required>
+                                            <input class="input-material" id="client_first" type="text" name="client_first" required>
                                             <span class="highlight"></span>
                                             <span class="bar"></span>
                                             <label class="label-material">Nome</label>
+
+                                            @if ($errors->has('name'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('name') }}</strong>
+                                            </span>
+                                        @endif
+
                                     </div>
                                     <div class="group-input group-row material-sm">
-                                            <input class="input-material" id="clientpwd" type="text" name="client_last" required>
+                                            <input class="input-material" id="client_last" type="text" name="client_last" required>
                                             <span class="highlight"></span>
                                             <span class="bar"></span>
                                             <label class="label-material">Sobrenome</label>
@@ -54,21 +68,37 @@
                                 </div>
 
                                 <div class="group-input group-centrado material-sm">
-                                        <input style="width: 420px;" class="input-material" id="clientpwd" type="email" name="email" required>
+                                        <input style="width: 91.5%;max-width: 471px;" class="input-material" id="email" type="email" name="email" required>
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
                                         <label class="label-material">E-mail</label>
+
+                                        @if ($errors->has('email'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('email') }}</strong>
+                                        </span>
+                                        @endif
+
+
                                 </div>
                                 <br>
-                                <div style="" class="container-input-2col" style="margin-top: -6px;">
+                                <div style="justify-content:left;" class="container-input-2col" style="margin-top: -6px;">
                                 <div class="group-input group-row material-sm">
-                                        <input class="input-material" id="clientpwd" type="password" name="password" required>
+                                        <input class="input-material" id="password" type="password" name="password" required>
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
                                         <label class="label-material">Sehna</label>
+
+                                        @if ($errors->has('password'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('password') }}</strong>
+                                        </span>
+                                    @endif
+
+
                                 </div>
                                 <div class="group-input group-row material-sm">
-                                        <input class="input-material" id="clientpwd" type="password" name="password_confirm" required>
+                                        <input class="input-material" id="password_confirmation" type="password" name="password_confirmation" required>
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
                                         <label class="label-material">Confirmar</label>
@@ -77,8 +107,12 @@
                                 <label style="font-size: 0.8em;width: 300px;display: block;">Use oito ou mais caracteres com uma combinação de letras, números e símbolos</label>
                             <br>
                             </div>
-                            <button form="emailform" type="submit" name="login-submit" class="button red login-submit">Siguiente</button>
-                        </div>
+                            <button form="register-from" type="submit" name="register-submit" class="button red register-submit">Siguiente</button>
+                        
+                        
+                        
+                        </form>
+                           
                     </div>
                 </div>
 

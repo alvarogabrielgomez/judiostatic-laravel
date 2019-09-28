@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use judiostatic\Post;
+use judiostatic\Buss;
+
 
 class PostTableSeeder extends Seeder
 {

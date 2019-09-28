@@ -82,44 +82,55 @@ class AuthController extends Controller
     //Primero se Revisa si existe el usuario
         $users = User::where('email', '=', $request->email)
         ->first();
-        $client_first = "";
-        $client_last = "";
-        $client_id = "";
+        $client_first = $request->client_first;
+        $client_last = $request->client_last;
+        $client_id = $request->client_id;
+        $hasPass = false;
         // El usuario si existia en la tabla Users
         if($users != null){
-            
+            $client_first = $users->client_first;
+            $client_last = $users->client_last;
+            $email = $users->email;
+            $client_id = $users->id;
+
             if($users->active != 1){
                 // Si el usuario no esta activo
-                $client_first = $users->client_first;
-                $client_last = $users->client_last;
-                $email = $users->email;
+                // $client_first = $users->client_first;
+                // $client_last = $users->client_last;
+                // $email = $users->email;
                 $response = "error";
                 $responseContent = "Usuário Banido ou desativado";
             }else if($users->active == 1){
                 // Si el usuario esta activo
-                $client_first = $users->client_first;
-                $client_last = $users->client_last;
-                $email = $users->email;
-                $client_id = $users->id;
+                // $client_first = $users->client_first;
+                // $client_last = $users->client_last;
+                // $email = $users->email;
+                // $client_id = $users->id;
+
+                if($users->password == "" || Hash::check('secret', $users->password)){
+                    $hasPass = false;
+                }else{
+                    $hasPass = true;
+                }
 
                 //Aca se tiene que revisar si esta en sesion
                 if(Auth::check()){
-                    
-                    
+                         
                     $response = "success";
                     $responseContent = "Esta en Session ";     
                 }else{
                     $response = "successNoSession";
                     $responseContent = "Escriba su contrasena para continuar."; 
                 }
+
             }
         }else{
           // El usuario no existia en la tabla Users 
-          $email = "";
-          $response = "error";
+          $email = $request->email;
+          $response = "successNotExists";
           $responseContent = "Usuario No existe";
-    }
-    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response,'client_id' => $client_id, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
+        }
+    return response()->json(array( 'responseContent' => $responseContent, 'response' => $response, 'hasPass' => $hasPass, 'client_id' => $client_id, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
 
      }
 

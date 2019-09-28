@@ -101,7 +101,7 @@ var custom = {
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
     msgwindow.querySelector('.title').style.display = 'block';
     msgwindow.querySelector('.title').innerText = title;
-    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.content').innerHTML = msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {
@@ -119,7 +119,7 @@ var custom = {
     msgwindow.style.opacity = "100";
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
     msgwindow.querySelector('.title').style.display = 'none';
-    msgwindow.querySelector('.content').innerText = _msg;
+    msgwindow.querySelector('.content').innerHTML = _msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {
@@ -138,7 +138,7 @@ var custom = {
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
     msgwindow.querySelector('.title').style.display = 'block';
     msgwindow.querySelector('.title').innerText = title;
-    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.content').innerHTML = msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {
@@ -156,7 +156,7 @@ var custom = {
     msgwindow.style.opacity = "100";
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
     msgwindow.querySelector('.title').style.display = 'none';
-    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.content').innerHTML = msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {

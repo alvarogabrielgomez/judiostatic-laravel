@@ -1,4 +1,6 @@
 <?php
+use judiostatic\Post;
+use judiostatic\Buss;
 
 use Laravel\Passport\Passport;
 use Illuminate\Http\Request;
@@ -67,6 +69,9 @@ Route::get('/carousel', 'DealsController@carousel')->name('carousel');
 Route::get('/refreshCsrfToken', 'AuthController@refreshCsrfToken')->name('refreshCsrfToken');
 Route::post('/checkuser', 'DealsController@checkuser')->name('checkuser');
 Route::post('/dealsubmituser', 'DealsController@dealsubmituser')->name('dealsubmituser');
+Route::post('/registering', 'Auth\RegisterController@register');
+Route::post('/registerStateless', 'Auth\RegisterController@registerStateless');
+Route::post('/newPwd', 'Auth\ForgotPasswordController@newPwd');
 
 // Callbacks Socialite
 Route::get('/login/github', 'Auth\LoginController@redirectToProvider');

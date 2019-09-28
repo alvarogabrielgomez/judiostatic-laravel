@@ -6,7 +6,7 @@ toast : function(title, msg, time){
         msgwindow.querySelector('.toastprogressbar').style.transitionDelay  = '0ms';
         msgwindow.querySelector('.title').style.display = 'block';
         msgwindow.querySelector('.title').innerText = title;
-        msgwindow.querySelector('.content').innerText = msg;
+        msgwindow.querySelector('.content').innerHTML = msg;
         msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time+'ms';
         msgwindow.querySelector('.toastprogressbar').style.width = '100%';
         setTimeout(() => {
@@ -25,7 +25,7 @@ msg : function(msg, time){
     msgwindow.style.opacity = "100";
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay  = '0ms';
     msgwindow.querySelector('.title').style.display = 'none';
-    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.content').innerHTML = msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time+'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(() => {
@@ -46,7 +46,7 @@ boxtoast : function(title, msg, time, div){
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay  = '0ms';
     msgwindow.querySelector('.title').style.display = 'block';
     msgwindow.querySelector('.title').innerText = title;
-    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.content').innerHTML = msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time+'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(() => {
@@ -65,7 +65,7 @@ boxmsg : function(msg, time, div){
     msgwindow.style.opacity = "100";
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay  = '0ms';
     msgwindow.querySelector('.title').style.display = 'none';
-    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.content').innerHTML = msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time+'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(() => {

@@ -170,7 +170,9 @@ class DealsController extends AuthController
                         $transactions->buss_id = $request->buss_id;
                         $transactions->client_id = $request->client_id;
                         $transactions->trans_qr = $transqr;
-                        if($request->app_id){$transactions->app_id = $request->app_id;};
+                        if($request->app_id){
+                            $transactions->app_id = $request->app_id;
+                        };
                         $transactions->save();
 
                         $response = "success";

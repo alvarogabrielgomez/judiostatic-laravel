@@ -6,8 +6,8 @@
         
                         <div style="width: 95%;" class="shadow-light boxedtoast"  id="toastlogin">
                         <div class="toastprogressbar"></div>
-                        <label class="title" for="titles">Title</label>
-                        <label class="content" for="Content">Lorem ipsum dolor sit amet</label>
+                        <div class="title">Title</div>
+                        <div class="content">Lorem ipsum dolor sit amet</div>
                         </div>
 
         <transition name="fade">
@@ -69,7 +69,7 @@
         </div>
         <form id="pwdform" action="#" @submit.prevent="login">
           <div class="group-input group-centrado">
-                      <input class="input-material" id="clientpwd" type="password" name="password" required v-model="password"style="width:285px;">
+                      <input class="input-material" id="clientpwd" type="password" name="password" required v-model="password" style="width:285px;">
                       <span class="highlight"></span>
                       <span class="bar"></span>
                       <label class="label-material">Password</label>
@@ -95,25 +95,19 @@
       <div class="nav-login">
         <div id="logo-form">
           <div class="trans-black-logo-form"></div>
-     <h1 class="title-login-center"><i class="fab fa-google"></i>&nbsp;&nbsp;Login with Google.</h1>
+     <h1 class="title-login-center">Solo falta crear tu contraseña y todo estará listo, {{this.$store.state.userdata.client_first}}</h1>
         </div>
-        <form id="oauthform" action="#" @submit.prevent="login">
-          <div class="group-input" style="margin: auto;">
-
-            
-          <!-- AJA -->
-          <a href="login/github">LOGIN</a>
-
-
+        <form style ="margin:0;" id="new-pwd-form" action="#" @submit.prevent="submitPwd">
+          <div class="group-input group-centrado">
+          <p style="padding: 0px 22px;">	Enviaremos un Email para que puedas crear tu nueva contraseña.</p>
           </div>
-          <div class="group-input" style="margin:13px auto 0px;;width: 81%;">          
+
+          <!-- <div class="group-input" style="margin:13px auto 0px;width: 85%;">          
             <a class="opcion-alt" style="cursor:pointer;" v-on:click="stepactual = 1" >Volver</a>
-      
-          </div>
+          </div> -->
 
         </form>
       </div>
-           
 
       </div>
       </transition>
@@ -122,6 +116,7 @@
     <transition name="slide-horizontal">
         <button v-if="botoncontinuar" form="emailform" type="submit" class="button red login-submit" name="login-submit">Siguiente</button>
         <button v-if="botonsubmit" form="pwdform" type="submit" class="button red login-submit" name="login-submit">Login</button>
+        <button v-if="botonPwd" form="new-pwd-form" type="submit" class="button red login-submit" name="login-submit">Crear Contraseña</button>
     </transition>
     </div>
   </div>
@@ -140,11 +135,6 @@
 }
 .slide-horizontal-leave-to {
   transform: translate(-100%, 0);
-}
-
-
-#logo-form {
-  width: 100%;
 }
 
 .nav-login {
@@ -179,6 +169,7 @@ data(){
         loadingMss: false,
         botoncontinuar:true,
         botonsubmit:false,
+        botonPwd:false,
         responseMss: "success",
         responseContent: "",
         username:'',
@@ -186,14 +177,15 @@ data(){
         steps: { "step":{
           "1":"Ingrese email", 
           "2":"Ingrese password", 
-          "3":"Registrar"
+          "3":"Nueva Pwd"
           },
           "Next":
           "Next Step"
         },
         hasError:false,
         hasResponse:false,
-        formselected:"emailform"
+        formselected:"emailform",
+        hasPass:false
     }
 },
 mounted(){
@@ -216,27 +208,35 @@ updated(){
       this.steps.Next = this.steps.step[this.next];
       const pwdformContainer = document.getElementById('pwd-form-container');
       if(this.stepactual == 1){
-          this.formselected = "emailform";
-          pwdformContainer.style.height = "420px";          
+        pwdformContainer.style.height = "420px";          
+        this.formselected = "emailform";
         this.botoncontinuar = true;
         this.botonsubmit = false;
+        this.botonPwd = false;
       }else if(this.stepactual == 2){
         pwdformContainer.style.height = "400px";
         this.formselected = "pwdform";
         this.botoncontinuar = false;
         this.botonsubmit = true;
+        this.botonPwd = false;
       }else if(this.stepactual == 3){
+        this.formselected = "new-pwd-form";
         this.botoncontinuar = false;
         this.botonsubmit = false;
+        this.botonPwd = true;
+        pwdformContainer.style.height = "341px";  
       }
 // Switcher de Spinner
       if(this.responseMss == 'success'){
         this.showing = true;
         this.loading = false;
+      }else if(this.responseMss == 'successNotExists'){
+        this.showing = false;
+        this.loading = false;
       }else if(this.responseMss == 'error'){
         this.showing = false;
         this.loading = false;
-      }else if(this.responseMss != 'success' || this.responseMss != 'error'){
+      }else if(this.responseMss != 'success' && this.responseMss != 'error' && this.responseMss != 'successNotExists'){
         this.loading = true;
       }
 
@@ -246,12 +246,21 @@ methods:{
     this.loadingMss = true;
     this.hasError = false;
     this.hasResponse = false;
+    var clientpwd = document.getElementById('clientpwd');
     if(this.password == ''){
           this.hasError = true;
           this.hasResponse = false;
           this.responseContent = "Llene todos los campos";
           this.loadingMss = false;
+          clientpwd.className += " invalid-data";
           custom.boxmsg('Llene todos los campos', 2500, toastlogin);
+    }else if(this.password.length < 8){
+          this.hasError = true;
+          this.hasResponse = false;
+          this.responseContent = "La contraseña tiene que ser mayor a 8 caracteres";
+          this.loadingMss = false;
+          clientpwd.className += " invalid-data";
+          custom.boxmsg('Es muy corto para ser una contraseña', 2700, toastlogin);
     }
     else{
     axios.post('/login',{
@@ -270,7 +279,7 @@ methods:{
     })
     .catch((error) => {
       var clientpwd = document.getElementById('clientpwd');
-      clientpwd.className = "invalid-data";
+      clientpwd.className += " invalid-data";
       clientpwd.focus();
       clientpwd.select();
       console.log(error.response);
@@ -280,6 +289,10 @@ methods:{
       if(error.response.status == 422){
         this.responseContent = "Contrasena Incorrecta";
         custom.boxmsg('Contrasena Incorrecta', 2500, toastlogin);
+      }
+      else if(error.response.status == 429){
+        this.responseContent = "Has hecho muchos intentos seguidos en poco tiempo";
+        custom.boxmsg('Oye, tranquilo viejo, has hecho muchos intentos seguidos', 60000, toastlogin);
       }
     })
   }
@@ -309,38 +322,49 @@ methods:{
         .then((response) => {
           this.hasResponse = true;
           this.loadingMss = false;
-          if(response.data.response == 'error'){
+          if(response.data.response == 'successNotExists'){
             this.hasError = true;
-            this.responseMss = "error";
+            this.responseMss = "successNotExists";
             this.responseContent = response.data.responseContent;
             this.loading = false;
             var clientmail = document.getElementById('clientmail');
-            clientmail.className = "invalid-data";
-            custom.boxtoast('Email no existe', "El email no esta registrado, seguro que has venido por aca antes?", 3500, toastlogin);
-
+            clientmail.className += " invalid-data";
+            custom.boxtoast('Email no existe', "El email no esta registrado, <a href='/register' style='font-weight:800;color:var(--red);'>seguro que has venido por aca antes?</a>", 5500, toastlogin);
+      
           }else if(response.data.response == 'successNoSession'){
             this.formselected = "pwd-form";
             this.hasError = false;
             this.responseMss = "success";
-            this.$store.state.userdata = response.data;
-            this.responseContent = response.data.responseContent;
+            this.loading = false;
             this.resume = true;
             this.showing = true;
-            this.loading = false;
-            this.passToNext();
-            function selectpwd(){
-            var inputpwd = document.getElementById('clientpwd');
-            inputpwd.focus();
-            inputpwd.select();
+            this.$store.state.userdata = response.data;
+            this.responseContent = response.data.responseContent;
+
+            if(this.$store.state.userdata.hasPass === false){
+              this.hasPass = false;
+            }else if(this.$store.state.userdata.hasPass === true){
+              this.hasPass = true;
             }
-            setTimeout(selectpwd, 1000);
+
+            if(this.hasPass){
+              this.passToNext();
+              function selectpwd(){
+                var inputpwd = document.getElementById('clientpwd');
+              inputpwd.focus();
+              inputpwd.select();
+              }
+              setTimeout(selectpwd, 1000);
+            }else{
+              this.passToNext(3);
+            }
 
           }
         })
           .catch((error) => {
           this.hasError = true;
           var clientmail = document.getElementById('clientmail');
-          clientmail.className = "invalid-data";
+          clientmail.className += " invalid-data";
           if (error.response.data.error == "invalid_credentials"){
             this.responseContent = "Contrasena Incorrecta";
             custom.boxmsg('Contrasena Incorrecta', 2500, toastlogin);
@@ -358,9 +382,41 @@ methods:{
       }
 
   },
+  submitPwd: function submitPwd(){
+    this.loadingMss = true;
+    this.hasResponse = false;
+    this.loading = true;
+    var input = {'email':this.$store.state.userdata.email}
+    
+    axios.post('/newPwd', input)
+      .then((response) => {
+        if(response.data.response == 'success'){
+          this.hasError = false;
+          this.loadingMss = false;
+          this.responseMss = "success";
+          this.loading = false;
+          this.resume = true;
+          this.showing = true;
+          this.responseContent = response.data.responseContent;
+          this.passToNext(1);
+          custom.boxmsg(this.responseContent, 3700, toastlogin);
+        }
+      })
+      .catch((error) => {
+        this.hasError = true;
+        this.loadingMss = false;
+        this.responseMss = "error";
+        this.resume = false;
+        this.loading = false;
+      })
+  },
 
-  passToNext: function(){
-    this.stepactual += 1;
+  passToNext: function(step = 0){
+    if(step === 0){
+      this.stepactual += 1;
+    }else{
+      this.stepactual = step;
+    }
   },
 }
 };

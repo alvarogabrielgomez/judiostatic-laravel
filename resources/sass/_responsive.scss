@@ -61,8 +61,11 @@
       flex: 50%;
     }
   }
-  
+
   @media only screen and (max-width: 800px) and (min-width: 100px) {
+
+
+
     #main-login {
       margin: auto;
     }
@@ -328,5 +331,30 @@
       div {
         height: inherit;
       }
+    }
+  }
+
+  @media only screen and (max-width: 1000px) and (min-width: 100px) { //  exclusivo pa los betas mobiles de /register
+  
+    #header-logo-container-register {
+      margin: 47px -9px!important;
+      display:none;
+    }
+    .register-info-box{
+      position: absolute;
+    }
+    .register-box{
+      background-image:url();
+      background-color: transparent;
+    }
+    .register-form-box{
+      box-shadow: rgba(70, 70, 70, 0.45) 0px 2px 8px 0px;
+      padding-top: 64px;
+    }
+    #logo-form-register {
+      display: block;
+    }
+    .register-info-box{
+      display:none!important;
     }
   }

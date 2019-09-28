@@ -73,6 +73,9 @@
                        <span></span>
                        
                     </p>
+                    <p v-if="loged == false">
+                      Su cuenta sera creada automaticamente.
+                    </p>
                 </div>
 
                 <div v-if="resume" id="continuar-anterior">
@@ -213,16 +216,24 @@ https://medium.com/justlaravel/vuejs-crud-operations-in-laravel-a5e0be901247 -->
                 <div id="pwd-form-container">
                   <form @submit.prevent="formSubmit" id="pwd-form">
 
-                    <div class="group-input" style="margin: auto;">
+                    <div v-if="hasPass == true" class="group-input" style="margin: auto;">
                       <input  class="input-material" id="clientpwd" type="password" name="password" required v-model="password" style="width:285px;">
                       <span class="highlight"></span>
                       <span class="bar"></span>
                       <label class="label-material">Password</label>
                     </div>
+
+                    <div>
+                      <p style="margin-top: 0px;">
+                        Oops, aun <strong>no tienes contraseña</strong>, {{$store.state.userdata.client_first}}. Ve a <strong><a style="color: var(--red);" href="/login">Login</a></strong> y crea tu contraseña.
+                      </p>
+                    </div>
                   
                     <transition name="fade" mode="out-in">
+                      <div v-if="hasPass == true">
                     <p style="top:44px;" class="alert alert-danger" v-if = hasError>{{responseContent}}</p>
                     <p style="top:44px;" class="alert alert-normal" v-if = hasResponse>{{responseContent}}</p>
+                      </div>
                     </transition>
                 </form>
                 </div>
@@ -355,7 +366,7 @@ background: #21a961;
 
 .modal, #modalwindow, #modal-content{
 
-transition: transform .5s ease-in-out;
+transition: all .5s ease-in-out;
 
 }
 
@@ -690,7 +701,7 @@ export default {
             stepactual:1,
             loading: false,
             loadingMss: false,
-            showing:false,
+            showing:true,
             botoncontinuar:true,
             botonsubmit:false,
             botonterminar:false,
@@ -709,6 +720,7 @@ export default {
             resume:false,
             hasError:false,
             hasResponse:false,
+            hasPass:false,
             password:'',
             newUser:{'client_first':'', 'client_last':'', 'email':''},
             formselected:"insert-form",
@@ -766,6 +778,7 @@ export default {
 
 
 // Swicher de Boton y demas
+      var modal = document.getElementById('modal-content');
       this.next = this.stepactual+1 
       this.steps.Next = this.steps.step[this.next];
       if(this.stepactual == 1){
@@ -774,10 +787,12 @@ export default {
         this.botonterminar = false;
       }
       if(this.stepactual == 2 || this.stepactual == 4){
+        
         if(this.stepactual == 2){
           this.formselected = "insert-form";
         }else if (this.stepactual == 4){
           this.formselected = "pwd-form";
+          modal.removeAttribute("style");
         }
         this.botoncontinuar = false;
         this.botonsubmit = true;
@@ -786,10 +801,6 @@ export default {
         this.botoncontinuar = false;
         this.botonsubmit = false;
         this.botonterminar = true;
-        // var modal = document.getElementById('modalwindow');
-        // document.getElementById("terminar-btn").onclick = function() {
-        //   modal.style.display = "none";
-        // } 
       }
         else{
         this.botoncontinuar = true;
@@ -800,18 +811,24 @@ export default {
       if(this.$store.state.userdata.client_last == null){
         this.$store.state.userdata.client_last = " ";
       }
+     // Modifica tamaño de la ventana si es step2
+      if(this.stepactual == 2 && this.loged == false){
+          modal.style.minHeight = '580px';
+      }else{
+          modal.removeAttribute("style");
+      }
 
 // Switcher de Spinner
       if(this.responseMss == 'success'){
-        this.showing = true;
+        //this.showing = true;
         this.loading = false;
       }else if(this.responseMss == 'error'){
-        this.showing = false;
+        //this.showing = false;
         this.loading = false;
-      }else if(this.responseMss != 'success' || this.responseMss != 'error' || this.responseMss != 'successNoSession'){
+      }else if(this.responseMss != 'success' && this.responseMss != 'error' && this.responseMss != 'successNoSession'){
         this.loading = true;
       }else if(this.hasError == true){
-        this.showing = false;
+        //this.showing = false;
         this.loading = false;
       }
 
@@ -868,8 +885,71 @@ export default {
       // setTimeout(selectPwd, 1000);
     },
 
-    passToCupon: function(){
-      this.insertTransaction();
+    passToCupon: function(newUser = false){
+      if(newUser){
+        this.hasResponse = false;
+        this.loadingMss = true;
+
+        this.newUserRegister().then(response => {
+          if(response.data.response == 'success'){
+          //console.log(response);
+            this.password = "secret";
+            this.hasError = false;
+            this.loadingMss = false;
+            this.hasResponse = true;
+            this.responseContent = response.data.responseContent;
+            this.$store.state.userdata.client_id = response.data.client_id;
+            axios.post('/login',{
+              email: this.$store.state.userdata.email,
+              password: this.password,
+            }) 
+            .then((response) => {
+              this.password = "";
+              if(response.status == 200){
+                this.hasError = false;
+                this.responseMss = "success";
+                var response = response.data;
+                this.responseContent = "Token Listo";
+                this.insertTransaction();
+              }else{
+                this.hasError = true;
+                this.responseContent = "No fue posible iniciar tu cuenta";
+              }
+
+            })
+            .catch((error) => {
+              this.password = "";
+              this.responseMss = "error";
+              this.hasError = true;
+              if (error.response.status == 422){
+                this.responseContent = "Contrasena Incorrecta";
+              }
+              else if(error.response.data.error == "invalid_request"){
+                this.responseContent = "Hubo un problema en la respuesta";
+              }
+              else if (error.response.state == 419){
+                this.responseContent = "Reload Page";
+              }
+
+              else{
+                this.responseContent = error.response.data.message;
+              }
+            })
+          }
+          else if(response.data.response == 'error'){
+            this.hasError = true;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.loadingMss = false;
+          this.hasError = true;
+          this.hasResponse = true;
+          this.responseContent = error;
+        })
+      }else{
+        this.insertTransaction();
+      }
     },
 
     logout:function logout(){
@@ -907,6 +987,12 @@ export default {
           this.responseContent = error;
         })
     },
+    newUserRegister(){
+      const URL = "/registerStateless";
+      this.$store.state.userdata
+      var input = this.$store.state.userdata;
+      return axios.post(URL, input)
+    },
 
     formSubmit: function formSubmit(){
       if(this.formselected == "pwd-form"){
@@ -918,7 +1004,7 @@ export default {
       const lastInput  = form.querySelector('input[name=client_last]');
       const emailInput  = form.querySelector('input[name=email]');
       this.newUser = {'client_first':firstInput.value, 'client_last':lastInput.value, 'email':emailInput.value};
-
+      
       this.loadingMss = true;
       this.hasResponse = false;
       var input = this.newUser;
@@ -948,28 +1034,54 @@ export default {
           this.loadingMss = false;
           this.newUser = {};
           if(response.data.response == 'error'){
+            this.loged = false;
             this.hasError = true;
             this.responseMss = "error";
             this.responseContent = response.data.responseContent;
+            this.loading = false;
+
+          }else if(response.data.response == 'successNotExists'){
+            this.loged = true;
+            this.hasError = false;
+            this.responseMss = "successNotExists";
+            this.responseContent = response.data.responseContent;
+            this.loading = false;
+
+            this.$store.state.userdata = response.data;
+
+            console.log(this.$store.state.userdata);
+            this.passToCupon(true);
 
           }else if(response.data.response == 'success'){
+            this.loged = true;
             this.hasError = false;
             this.responseMss = "success";
-            this.$store.state.userdata = response.data;
             this.responseContent = response.data.responseContent;
-            
+            this.loading = false;
+
+            this.$store.state.userdata = response.data;
+
             //console.log(this.$store.state.userdata);
             this.passToCupon();
 
           }else if(response.data.response == 'successNoSession'){
-            this.formselected = "pwd-form";
+            this.loged = true;
             this.hasError = false;
             this.responseMss = "successNoSession";
-            this.$store.state.userdata = response.data;
             this.responseContent = response.data.responseContent;
-            this.resume = true;
-            this.showing = true;
             this.loading = false;
+            
+            this.$store.state.userdata = response.data;
+
+            if(this.$store.state.userdata.hasPass === false){
+              this.hasPass = false;
+            }else if(this.$store.state.userdata.hasPass === true){
+              this.hasPass = true;
+            }
+
+            this.formselected = "pwd-form";
+            this.resume = true;
+            //this.showing = true; // Muestra el nombre encima
             this.passToPWD();
             //console.log(this.$store.state.userdata);
           }
@@ -982,7 +1094,7 @@ export default {
           if(error.response.data.errors.email != ""){
             this.responseContent = "Tiene que introducir un Email válido";
             var inputemail = document.getElementById('clientemail');
-            inputemail.className = "invalid-data"
+            inputemail.className += " invalid-data"
             inputemail.focus();
             inputemail.select();
             console.log(error);
@@ -991,7 +1103,7 @@ export default {
           else if (error.response.state == 419){
             this.responseContent = "Reload Page";
             var inputemail = document.getElementById('clientemail');
-            inputemail.className = "invalid-data"
+            inputemail.className += " invalid-data"
             inputemail.focus();
             inputemail.select();
             //console.log(error);
@@ -1024,7 +1136,17 @@ export default {
           this.hasResponse = false;
           this.responseMss = "error";
           this.responseContent = "Llene todos los campos";
-           this.loadingMss = false;
+          this.loadingMss = false;
+      }else if(this.password.length < 8){
+          this.hasError = true;
+          this.hasResponse = false; 
+          this.responseMss = "error";
+          this.responseContent = "La contraseña tiene que ser mayor a 8 caracteres";
+          this.loadingMss = false;
+
+          this.password = "";
+          var inputpwd = document.getElementById('clientpwd');
+          inputpwd.className += " invalid-data";
       }else{
         this.hasError = false;
         axios.post('/login',{
@@ -1058,7 +1180,7 @@ export default {
             var inputpwd = document.getElementById('clientpwd');
             inputpwd.focus();
             inputpwd.select();
-            inputpwd.className = "invalid-data"
+            inputpwd.className += " invalid-data"
           }
           else if(error.response.data.error == "invalid_request"){
             this.responseContent = "Hubo un problema en la respuesta";
@@ -1067,7 +1189,7 @@ export default {
           else if (error.response.state == 419){
             this.responseContent = "Reload Page";
             var inputemail = document.getElementById('clientemail');
-            inputemail.className = "invalid-data"
+            inputemail.className += " invalid-data"
             inputemail.focus();
             inputemail.select();
             //console.log(error);
@@ -1103,7 +1225,7 @@ export default {
             this.loadingMss = false;
           
             if(response.data.response == "success"){
-              this.showing = true;
+              //this.showing = true;
               this.stepactual = 3;
               this.responseMss = "success";
               this.responseContent = "TransQR returned";
@@ -1114,7 +1236,7 @@ export default {
             else if(response.data.response == "error"){
               this.hasResponse = false;
               this.hasError = true;
-              this.showing = false;
+              
               this.responseMss = "error";
               this.responseContent = response.data.data.message;
             }

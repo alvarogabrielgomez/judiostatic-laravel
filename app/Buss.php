@@ -2,6 +2,7 @@
 
 namespace judiostatic;
 
+use judiostatic\Post;
 use Illuminate\Database\Eloquent\Model;
 
 class Buss extends Model
@@ -12,4 +13,9 @@ class Buss extends Model
     {
         return 'slug';
     }
+
+     public function posts()
+     {
+         return $this->hasManyThrough('judiostatic\Post');
+     }
 }

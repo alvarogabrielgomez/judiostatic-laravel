@@ -2073,16 +2073,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
   data: function data() {
@@ -2093,6 +2083,7 @@ __webpack_require__.r(__webpack_exports__);
       loadingMss: false,
       botoncontinuar: true,
       botonsubmit: false,
+      botonPwd: false,
       responseMss: "success",
       responseContent: "",
       username: '',
@@ -2101,13 +2092,14 @@ __webpack_require__.r(__webpack_exports__);
         "step": {
           "1": "Ingrese email",
           "2": "Ingrese password",
-          "3": "Registrar"
+          "3": "Nueva Pwd"
         },
         "Next": "Next Step"
       },
       hasError: false,
       hasResponse: false,
-      formselected: "emailform"
+      formselected: "emailform",
+      hasPass: false
     };
   },
   mounted: function mounted() {
@@ -2131,28 +2123,36 @@ __webpack_require__.r(__webpack_exports__);
     var pwdformContainer = document.getElementById('pwd-form-container');
 
     if (this.stepactual == 1) {
-      this.formselected = "emailform";
       pwdformContainer.style.height = "420px";
+      this.formselected = "emailform";
       this.botoncontinuar = true;
       this.botonsubmit = false;
+      this.botonPwd = false;
     } else if (this.stepactual == 2) {
       pwdformContainer.style.height = "400px";
       this.formselected = "pwdform";
       this.botoncontinuar = false;
       this.botonsubmit = true;
+      this.botonPwd = false;
     } else if (this.stepactual == 3) {
+      this.formselected = "new-pwd-form";
       this.botoncontinuar = false;
       this.botonsubmit = false;
+      this.botonPwd = true;
+      pwdformContainer.style.height = "341px";
     } // Switcher de Spinner
 
 
     if (this.responseMss == 'success') {
       this.showing = true;
       this.loading = false;
+    } else if (this.responseMss == 'successNotExists') {
+      this.showing = false;
+      this.loading = false;
     } else if (this.responseMss == 'error') {
       this.showing = false;
       this.loading = false;
-    } else if (this.responseMss != 'success' || this.responseMss != 'error') {
+    } else if (this.responseMss != 'success' && this.responseMss != 'error' && this.responseMss != 'successNotExists') {
       this.loading = true;
     }
   },
@@ -2163,13 +2163,22 @@ __webpack_require__.r(__webpack_exports__);
       this.loadingMss = true;
       this.hasError = false;
       this.hasResponse = false;
+      var clientpwd = document.getElementById('clientpwd');
 
       if (this.password == '') {
         this.hasError = true;
         this.hasResponse = false;
         this.responseContent = "Llene todos los campos";
         this.loadingMss = false;
+        clientpwd.className += " invalid-data";
         custom.boxmsg('Llene todos los campos', 2500, toastlogin);
+      } else if (this.password.length < 8) {
+        this.hasError = true;
+        this.hasResponse = false;
+        this.responseContent = "La contraseña tiene que ser mayor a 8 caracteres";
+        this.loadingMss = false;
+        clientpwd.className += " invalid-data";
+        custom.boxmsg('Es muy corto para ser una contraseña', 2700, toastlogin);
       } else {
         axios.post('/login', {
           email: this.$store.state.userdata.email,
@@ -2186,7 +2195,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         })["catch"](function (error) {
           var clientpwd = document.getElementById('clientpwd');
-          clientpwd.className = "invalid-data";
+          clientpwd.className += " invalid-data";
           clientpwd.focus();
           clientpwd.select();
           console.log(error.response);
@@ -2196,6 +2205,9 @@ __webpack_require__.r(__webpack_exports__);
           if (error.response.status == 422) {
             _this.responseContent = "Contrasena Incorrecta";
             custom.boxmsg('Contrasena Incorrecta', 2500, toastlogin);
+          } else if (error.response.status == 429) {
+            _this.responseContent = "Has hecho muchos intentos seguidos en poco tiempo";
+            custom.boxmsg('Oye, tranquilo viejo, has hecho muchos intentos seguidos', 60000, toastlogin);
           }
         });
       }
@@ -2228,38 +2240,48 @@ __webpack_require__.r(__webpack_exports__);
           _this2.hasResponse = true;
           _this2.loadingMss = false;
 
-          if (response.data.response == 'error') {
+          if (response.data.response == 'successNotExists') {
             _this2.hasError = true;
-            _this2.responseMss = "error";
+            _this2.responseMss = "successNotExists";
             _this2.responseContent = response.data.responseContent;
             _this2.loading = false;
             var clientmail = document.getElementById('clientmail');
-            clientmail.className = "invalid-data";
-            custom.boxtoast('Email no existe', "El email no esta registrado, seguro que has venido por aca antes?", 3500, toastlogin);
+            clientmail.className += " invalid-data";
+            custom.boxtoast('Email no existe', "El email no esta registrado, <a href='/register' style='font-weight:800;color:var(--red);'>seguro que has venido por aca antes?</a>", 5500, toastlogin);
           } else if (response.data.response == 'successNoSession') {
-            var selectpwd = function selectpwd() {
-              var inputpwd = document.getElementById('clientpwd');
-              inputpwd.focus();
-              inputpwd.select();
-            };
-
             _this2.formselected = "pwd-form";
             _this2.hasError = false;
             _this2.responseMss = "success";
-            _this2.$store.state.userdata = response.data;
-            _this2.responseContent = response.data.responseContent;
+            _this2.loading = false;
             _this2.resume = true;
             _this2.showing = true;
-            _this2.loading = false;
+            _this2.$store.state.userdata = response.data;
+            _this2.responseContent = response.data.responseContent;
 
-            _this2.passToNext();
+            if (_this2.$store.state.userdata.hasPass === false) {
+              _this2.hasPass = false;
+            } else if (_this2.$store.state.userdata.hasPass === true) {
+              _this2.hasPass = true;
+            }
 
-            setTimeout(selectpwd, 1000);
+            if (_this2.hasPass) {
+              var selectpwd = function selectpwd() {
+                var inputpwd = document.getElementById('clientpwd');
+                inputpwd.focus();
+                inputpwd.select();
+              };
+
+              _this2.passToNext();
+
+              setTimeout(selectpwd, 1000);
+            } else {
+              _this2.passToNext(3);
+            }
           }
         })["catch"](function (error) {
           _this2.hasError = true;
           var clientmail = document.getElementById('clientmail');
-          clientmail.className = "invalid-data";
+          clientmail.className += " invalid-data";
 
           if (error.response.data.error == "invalid_credentials") {
             _this2.responseContent = "Contrasena Incorrecta";
@@ -2276,8 +2298,45 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
+    submitPwd: function submitPwd() {
+      var _this3 = this;
+
+      this.loadingMss = true;
+      this.hasResponse = false;
+      this.loading = true;
+      var input = {
+        'email': this.$store.state.userdata.email
+      };
+      axios.post('/newPwd', input).then(function (response) {
+        if (response.data.response == 'success') {
+          _this3.hasError = false;
+          _this3.loadingMss = false;
+          _this3.responseMss = "success";
+          _this3.loading = false;
+          _this3.resume = true;
+          _this3.showing = true;
+          _this3.responseContent = response.data.responseContent;
+
+          _this3.passToNext(1);
+
+          custom.boxmsg(_this3.responseContent, 3700, toastlogin);
+        }
+      })["catch"](function (error) {
+        _this3.hasError = true;
+        _this3.loadingMss = false;
+        _this3.responseMss = "error";
+        _this3.resume = false;
+        _this3.loading = false;
+      });
+    },
     passToNext: function passToNext() {
-      this.stepactual += 1;
+      var step = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+      if (step === 0) {
+        this.stepactual += 1;
+      } else {
+        this.stepactual = step;
+      }
     }
   }
 });
@@ -3297,6 +3356,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'dealsubmit',
   props: ["descuento", "postdata", "userdata", "buylimits"],
@@ -3310,7 +3380,7 @@ __webpack_require__.r(__webpack_exports__);
       stepactual: 1,
       loading: false,
       loadingMss: false,
-      showing: false,
+      showing: true,
       botoncontinuar: true,
       botonsubmit: false,
       botonterminar: false,
@@ -3328,6 +3398,7 @@ __webpack_require__.r(__webpack_exports__);
       resume: false,
       hasError: false,
       hasResponse: false,
+      hasPass: false,
       password: '',
       newUser: {
         'client_first': '',
@@ -3381,6 +3452,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   updated: function updated() {
     // Swicher de Boton y demas
+    var modal = document.getElementById('modal-content');
     this.next = this.stepactual + 1;
     this.steps.Next = this.steps.step[this.next];
 
@@ -3395,6 +3467,7 @@ __webpack_require__.r(__webpack_exports__);
         this.formselected = "insert-form";
       } else if (this.stepactual == 4) {
         this.formselected = "pwd-form";
+        modal.removeAttribute("style");
       }
 
       this.botoncontinuar = false;
@@ -3403,10 +3476,7 @@ __webpack_require__.r(__webpack_exports__);
     } else if (this.stepactual == 3) {
       this.botoncontinuar = false;
       this.botonsubmit = false;
-      this.botonterminar = true; // var modal = document.getElementById('modalwindow');
-      // document.getElementById("terminar-btn").onclick = function() {
-      //   modal.style.display = "none";
-      // } 
+      this.botonterminar = true;
     } else {
       this.botoncontinuar = true;
       this.botonsubmit = false;
@@ -3415,19 +3485,26 @@ __webpack_require__.r(__webpack_exports__);
 
     if (this.$store.state.userdata.client_last == null) {
       this.$store.state.userdata.client_last = " ";
+    } // Modifica tamaño de la ventana si es step2
+
+
+    if (this.stepactual == 2 && this.loged == false) {
+      modal.style.minHeight = '580px';
+    } else {
+      modal.removeAttribute("style");
     } // Switcher de Spinner
 
 
     if (this.responseMss == 'success') {
-      this.showing = true;
+      //this.showing = true;
       this.loading = false;
     } else if (this.responseMss == 'error') {
-      this.showing = false;
+      //this.showing = false;
       this.loading = false;
-    } else if (this.responseMss != 'success' || this.responseMss != 'error' || this.responseMss != 'successNoSession') {
+    } else if (this.responseMss != 'success' && this.responseMss != 'error' && this.responseMss != 'successNoSession') {
       this.loading = true;
     } else if (this.hasError == true) {
-      this.showing = false;
+      //this.showing = false;
       this.loading = false;
     }
   },
@@ -3473,30 +3550,90 @@ __webpack_require__.r(__webpack_exports__);
       // setTimeout(selectPwd, 1000);
     },
     passToCupon: function passToCupon() {
-      this.insertTransaction();
+      var _this = this;
+
+      var newUser = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+      if (newUser) {
+        this.hasResponse = false;
+        this.loadingMss = true;
+        this.newUserRegister().then(function (response) {
+          if (response.data.response == 'success') {
+            //console.log(response);
+            _this.password = "secret";
+            _this.hasError = false;
+            _this.loadingMss = false;
+            _this.hasResponse = true;
+            _this.responseContent = response.data.responseContent;
+            _this.$store.state.userdata.client_id = response.data.client_id;
+            axios.post('/login', {
+              email: _this.$store.state.userdata.email,
+              password: _this.password
+            }).then(function (response) {
+              _this.password = "";
+
+              if (response.status == 200) {
+                _this.hasError = false;
+                _this.responseMss = "success";
+                var response = response.data;
+                _this.responseContent = "Token Listo";
+
+                _this.insertTransaction();
+              } else {
+                _this.hasError = true;
+                _this.responseContent = "No fue posible iniciar tu cuenta";
+              }
+            })["catch"](function (error) {
+              _this.password = "";
+              _this.responseMss = "error";
+              _this.hasError = true;
+
+              if (error.response.status == 422) {
+                _this.responseContent = "Contrasena Incorrecta";
+              } else if (error.response.data.error == "invalid_request") {
+                _this.responseContent = "Hubo un problema en la respuesta";
+              } else if (error.response.state == 419) {
+                _this.responseContent = "Reload Page";
+              } else {
+                _this.responseContent = error.response.data.message;
+              }
+            });
+          } else if (response.data.response == 'error') {
+            _this.hasError = true;
+          }
+        })["catch"](function (error) {
+          console.log(error);
+          _this.loadingMss = false;
+          _this.hasError = true;
+          _this.hasResponse = true;
+          _this.responseContent = error;
+        });
+      } else {
+        this.insertTransaction();
+      }
     },
     logout: function logout() {
-      var _this = this;
+      var _this2 = this;
 
       this.loadingMss = true;
       this.hasResponse = false;
       this.hasError = false;
       axios.post('/logout').then(function (response) {
-        _this.refreshCsrfToken().then(function (response) {
+        _this2.refreshCsrfToken().then(function (response) {
           window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
-          _this.loadingMss = false;
-          _this.hasResponse = true;
-          _this.responseContent = "Sesion cerrada";
-          _this.loged = false;
-          _this.$store.state.userdata = {
+          _this2.loadingMss = false;
+          _this2.hasResponse = true;
+          _this2.responseContent = "Sesion cerrada";
+          _this2.loged = false;
+          _this2.$store.state.userdata = {
             'client_id': '',
             'email': '',
             'client_first': '',
             'client_last': ''
           };
-          _this.resume = false;
-          _this.activelimits = 0;
-          _this.steps.step[2] = "Ingrese su nombre"; // function selectname(){
+          _this2.resume = false;
+          _this2.activelimits = 0;
+          _this2.steps.step[2] = "Ingrese su nombre"; // function selectname(){
           //   var inputfirst = document.getElementById('clientfirst');
           //   inputfirst.focus();
           //   inputfirst.select();
@@ -3506,14 +3643,20 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
         });
       })["catch"](function (error) {
-        _this.loadingMss = false;
-        _this.hasError = true;
-        _this.hasResponse = false;
-        _this.responseContent = error;
+        _this2.loadingMss = false;
+        _this2.hasError = true;
+        _this2.hasResponse = false;
+        _this2.responseContent = error;
       });
     },
+    newUserRegister: function newUserRegister() {
+      var URL = "/registerStateless";
+      this.$store.state.userdata;
+      var input = this.$store.state.userdata;
+      return axios.post(URL, input);
+    },
     formSubmit: function formSubmit() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.formselected == "pwd-form") {
         this.formPwdSubmit();
@@ -3547,62 +3690,83 @@ __webpack_require__.r(__webpack_exports__);
           //   window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
           this.hasError = false;
           axios.post('/checkuser', input).then(function (response) {
-            _this2.hasResponse = true;
-            _this2.loadingMss = false;
-            _this2.newUser = {};
+            _this3.hasResponse = true;
+            _this3.loadingMss = false;
+            _this3.newUser = {};
 
             if (response.data.response == 'error') {
-              _this2.hasError = true;
-              _this2.responseMss = "error";
-              _this2.responseContent = response.data.responseContent;
+              _this3.loged = false;
+              _this3.hasError = true;
+              _this3.responseMss = "error";
+              _this3.responseContent = response.data.responseContent;
+              _this3.loading = false;
+            } else if (response.data.response == 'successNotExists') {
+              _this3.loged = true;
+              _this3.hasError = false;
+              _this3.responseMss = "successNotExists";
+              _this3.responseContent = response.data.responseContent;
+              _this3.loading = false;
+              _this3.$store.state.userdata = response.data;
+              console.log(_this3.$store.state.userdata);
+
+              _this3.passToCupon(true);
             } else if (response.data.response == 'success') {
-              _this2.hasError = false;
-              _this2.responseMss = "success";
-              _this2.$store.state.userdata = response.data;
-              _this2.responseContent = response.data.responseContent; //console.log(this.$store.state.userdata);
+              _this3.loged = true;
+              _this3.hasError = false;
+              _this3.responseMss = "success";
+              _this3.responseContent = response.data.responseContent;
+              _this3.loading = false;
+              _this3.$store.state.userdata = response.data; //console.log(this.$store.state.userdata);
 
-              _this2.passToCupon();
+              _this3.passToCupon();
             } else if (response.data.response == 'successNoSession') {
-              _this2.formselected = "pwd-form";
-              _this2.hasError = false;
-              _this2.responseMss = "successNoSession";
-              _this2.$store.state.userdata = response.data;
-              _this2.responseContent = response.data.responseContent;
-              _this2.resume = true;
-              _this2.showing = true;
-              _this2.loading = false;
+              _this3.loged = true;
+              _this3.hasError = false;
+              _this3.responseMss = "successNoSession";
+              _this3.responseContent = response.data.responseContent;
+              _this3.loading = false;
+              _this3.$store.state.userdata = response.data;
 
-              _this2.passToPWD(); //console.log(this.$store.state.userdata);
+              if (_this3.$store.state.userdata.hasPass === false) {
+                _this3.hasPass = false;
+              } else if (_this3.$store.state.userdata.hasPass === true) {
+                _this3.hasPass = true;
+              }
+
+              _this3.formselected = "pwd-form";
+              _this3.resume = true; //this.showing = true; // Muestra el nombre encima
+
+              _this3.passToPWD(); //console.log(this.$store.state.userdata);
 
             } // })
 
           })["catch"](function (error) {
-            _this2.hasError = true;
+            _this3.hasError = true;
 
             if (error.response.data.errors.email != "") {
-              _this2.responseContent = "Tiene que introducir un Email válido";
+              _this3.responseContent = "Tiene que introducir un Email válido";
               var inputemail = document.getElementById('clientemail');
-              inputemail.className = "invalid-data";
+              inputemail.className += " invalid-data";
               inputemail.focus();
               inputemail.select();
               console.log(error);
             } else if (error.response.state == 419) {
-              _this2.responseContent = "Reload Page";
+              _this3.responseContent = "Reload Page";
               var inputemail = document.getElementById('clientemail');
-              inputemail.className = "invalid-data";
+              inputemail.className += " invalid-data";
               inputemail.focus();
               inputemail.select(); //console.log(error);
             } else {
-              _this2.responseContent = error.response.data.message;
+              _this3.responseContent = error.response.data.message;
             }
 
-            _this2.loadingMss = false;
+            _this3.loadingMss = false;
           });
         }
       }
     },
     formPwdSubmit: function formPwdSubmit() {
-      var _this3 = this;
+      var _this4 = this;
 
       //El resto de los datos ya estan en memoria en userdata.
       this.loadingMss = true;
@@ -3621,97 +3785,105 @@ __webpack_require__.r(__webpack_exports__);
         this.responseMss = "error";
         this.responseContent = "Llene todos los campos";
         this.loadingMss = false;
+      } else if (this.password.length < 8) {
+        this.hasError = true;
+        this.hasResponse = false;
+        this.responseMss = "error";
+        this.responseContent = "La contraseña tiene que ser mayor a 8 caracteres";
+        this.loadingMss = false;
+        this.password = "";
+        var inputpwd = document.getElementById('clientpwd');
+        inputpwd.className += " invalid-data";
       } else {
         this.hasError = false;
         axios.post('/login', {
           email: this.$store.state.userdata.email,
           password: this.password
         }).then(function (response) {
-          _this3.password = "";
-          _this3.hasResponse = true;
-          _this3.loadingMss = false;
-          _this3.newUser = {};
+          _this4.password = "";
+          _this4.hasResponse = true;
+          _this4.loadingMss = false;
+          _this4.newUser = {};
 
           if (response.status == 200) {
-            _this3.hasError = false;
-            _this3.responseMss = "success";
+            _this4.hasError = false;
+            _this4.responseMss = "success";
             var response = response.data;
-            _this3.responseContent = "Token Listo";
+            _this4.responseContent = "Token Listo";
 
-            if (_this3.$store.state.userdata.email != "") {
-              _this3.steps.step[2] = "Confirme";
-              _this3.resume = false;
-              _this3.loged = true;
+            if (_this4.$store.state.userdata.email != "") {
+              _this4.steps.step[2] = "Confirme";
+              _this4.resume = false;
+              _this4.loged = true;
             }
 
-            _this3.passToCupon();
+            _this4.passToCupon();
           }
         })["catch"](function (error) {
-          _this3.password = "";
-          _this3.responseMss = "error";
-          _this3.hasError = true;
+          _this4.password = "";
+          _this4.responseMss = "error";
+          _this4.hasError = true;
 
           if (error.response.status == 422) {
-            _this3.responseContent = "Contrasena Incorrecta";
+            _this4.responseContent = "Contrasena Incorrecta";
             var inputpwd = document.getElementById('clientpwd');
             inputpwd.focus();
             inputpwd.select();
-            inputpwd.className = "invalid-data";
+            inputpwd.className += " invalid-data";
           } else if (error.response.data.error == "invalid_request") {
-            _this3.responseContent = "Hubo un problema en la respuesta";
+            _this4.responseContent = "Hubo un problema en la respuesta";
           } else if (error.response.state == 419) {
-            _this3.responseContent = "Reload Page";
+            _this4.responseContent = "Reload Page";
             var inputemail = document.getElementById('clientemail');
-            inputemail.className = "invalid-data";
+            inputemail.className += " invalid-data";
             inputemail.focus();
             inputemail.select(); //console.log(error);
           } else {
-            _this3.responseMss = "error";
-            _this3.responseContent = error.response.data.message;
+            _this4.responseMss = "error";
+            _this4.responseContent = error.response.data.message;
           }
 
-          _this3.loadingMss = false;
+          _this4.loadingMss = false;
         });
       }
     },
     insertTransaction: function insertTransaction() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.loadingMss = true;
       this.hasResponse = false;
       this.refreshCsrfToken().then(function (response) {
         window.axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
         axios.post('/api/v1/inserttrans', {
-          post_id: _this4.deal.post_id,
-          client_id: _this4.$store.state.userdata.client_id,
-          buss_id: _this4.deal.buss_id,
+          post_id: _this5.deal.post_id,
+          client_id: _this5.$store.state.userdata.client_id,
+          buss_id: _this5.deal.buss_id,
           app_id: "1"
         }).then(function (response) {
-          _this4.hasResponse = true;
-          _this4.hasError = false;
-          _this4.loadingMss = false;
+          _this5.hasResponse = true;
+          _this5.hasError = false;
+          _this5.loadingMss = false;
 
           if (response.data.response == "success") {
-            _this4.showing = true;
-            _this4.stepactual = 3;
-            _this4.responseMss = "success";
-            _this4.responseContent = "TransQR returned";
-            _this4.activelimits++;
-            _this4.transqr = response.data.data.transqr;
+            //this.showing = true;
+            _this5.stepactual = 3;
+            _this5.responseMss = "success";
+            _this5.responseContent = "TransQR returned";
+            _this5.activelimits++;
+            _this5.transqr = response.data.data.transqr;
 
-            _this4.enviaremail();
+            _this5.enviaremail();
           } else if (response.data.response == "error") {
-            _this4.hasResponse = false;
-            _this4.hasError = true;
-            _this4.showing = false;
-            _this4.responseMss = "error";
-            _this4.responseContent = response.data.data.message;
+            _this5.hasResponse = false;
+            _this5.hasError = true;
+            _this5.responseMss = "error";
+            _this5.responseContent = response.data.data.message;
           }
         })["catch"](function (error) {
-          _this4.hasResponse = false;
-          _this4.hasError = true;
-          _this4.responseContent = error;
-          _this4.loadingMss = false;
+          _this5.hasResponse = false;
+          _this5.hasError = true;
+          _this5.responseContent = error;
+          _this5.loadingMss = false;
           console.log(error);
         });
       })["catch"](function (error) {
@@ -3720,7 +3892,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     enviaremail: function enviaremail() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.post('/enviaremail', {
         name: this.$store.state.userdata.client_first,
@@ -3734,18 +3906,18 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         //currentObj.output = response.data;
         if (response.data.response == "success") {
-          _this5.responseMss = "success";
-          _this5.responseContent = "Email Enviado";
+          _this6.responseMss = "success";
+          _this6.responseContent = "Email Enviado";
           custom.toast('Listo!', 'Email Enviado', 4000);
         } else if (response.data.response == "error") {
-          _this5.responseMss = "error";
-          _this5.responseContent = "Error al enviar Email";
+          _this6.responseMss = "error";
+          _this6.responseContent = "Error al enviar Email";
           custom.toast('Error', 'Error al enviar Email', 4000);
         }
       })["catch"](function (error) {
         //currentObj.output = error;
-        _this5.responseMss = "error";
-        _this5.responseContent = error;
+        _this6.responseMss = "error";
+        _this6.responseContent = error;
       });
     } // formSubmit: function formSubmit(){
     //   let currentObj = this;
@@ -4574,7 +4746,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  -webkit-transition: 0.7s;\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n#logo-form {\r\n  width: 100%;\n}\n.nav-login {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: vertical;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
+exports.push([module.i, "\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  -webkit-transition: 0.7s;\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n.nav-login {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: vertical;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
 
 // exports
 
@@ -4612,7 +4784,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#qr{\r\n    position: absolute;\r\n    width: 80px;\r\n    height: 80px;\r\n    top: 14px;\r\n    background-color: #ababab;\r\n    right: 23px;\n}\n#continuar-anterior{\r\n    position: absolute;\r\n    right: 13px;\r\n    bottom: 68px;\r\n    font-size: 12px;\n}\n#continuar-anterior a{\r\n      color: #ba2d2b;\n}\n.fade-enter-active, .fade-leave-active {\r\n  -webkit-transition: opacity .26s!important;\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  -webkit-transition: 1s;\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\n  \t-webkit-transition: all .5s ease-in-out;\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content{\r\n\r\n-webkit-transition: -webkit-transform .5s ease-in-out;\r\n\r\ntransition: -webkit-transform .5s ease-in-out;\r\n\r\ntransition: transform .5s ease-in-out;\r\n\r\ntransition: transform .5s ease-in-out, -webkit-transform .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.lineacont > .seleccion{\r\n top: 70px;\n}\n.lineacont > .opciones{\r\n bottom: 186px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    right: -17px;\r\n    top: -9px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 165px;\r\n    right: -17px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    -webkit-box-flex: 10;\r\n            flex: 10;\n}\n.row-centered{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: horizontal;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: row;\r\n    -webkit-box-align: center;\r\n            align-items: center;\n}\n.row-linea{\r\n      -webkit-box-flex: 2;\r\n              flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3, #steplogin{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  -webkit-transition: all .2s ease-in-out;\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: -webkit-box;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    position: relative;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: -webkit-box;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  -webkit-box-align: center;\r\n          align-items: center;\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n#qr{\r\n    position: absolute;\r\n    width: 80px;\r\n    height: 80px;\r\n    top: 14px;\r\n    background-color: #ababab;\r\n    right: 23px;\n}\n#continuar-anterior{\r\n    position: absolute;\r\n    right: 13px;\r\n    bottom: 68px;\r\n    font-size: 12px;\n}\n#continuar-anterior a{\r\n      color: #ba2d2b;\n}\n.fade-enter-active, .fade-leave-active {\r\n  -webkit-transition: opacity .26s!important;\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  -webkit-transition: 1s;\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\n  \t-webkit-transition: all .5s ease-in-out;\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content{\r\n\r\n-webkit-transition: all .5s ease-in-out;\r\n\r\ntransition: all .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.lineacont > .seleccion{\r\n top: 70px;\n}\n.lineacont > .opciones{\r\n bottom: 186px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    right: -17px;\r\n    top: -9px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 165px;\r\n    right: -17px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    -webkit-box-flex: 10;\r\n            flex: 10;\n}\n.row-centered{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: horizontal;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: row;\r\n    -webkit-box-align: center;\r\n            align-items: center;\n}\n.row-linea{\r\n      -webkit-box-flex: 2;\r\n              flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3, #steplogin{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  -webkit-transition: all .2s ease-in-out;\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: -webkit-box;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    position: relative;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: -webkit-box;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  -webkit-box-align: center;\r\n          align-items: center;\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -6277,58 +6449,33 @@ var render = function() {
                     _c("div", { staticClass: "trans-black-logo-form" }),
                     _vm._v(" "),
                     _c("h1", { staticClass: "title-login-center" }, [
-                      _c("i", { staticClass: "fab fa-google" }),
-                      _vm._v("  Login with Google.")
+                      _vm._v(
+                        "Solo falta crear tu contraseña y todo estará listo, " +
+                          _vm._s(this.$store.state.userdata.client_first)
+                      )
                     ])
                   ]),
                   _vm._v(" "),
                   _c(
                     "form",
                     {
-                      attrs: { id: "oauthform", action: "#" },
+                      staticStyle: { margin: "0" },
+                      attrs: { id: "new-pwd-form", action: "#" },
                       on: {
                         submit: function($event) {
                           $event.preventDefault()
-                          return _vm.login($event)
+                          return _vm.submitPwd($event)
                         }
                       }
                     },
                     [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "group-input",
-                          staticStyle: { margin: "auto" }
-                        },
-                        [
-                          _c("a", { attrs: { href: "login/github" } }, [
-                            _vm._v("LOGIN")
-                          ])
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "group-input",
-                          staticStyle: { margin: "13px auto 0px", width: "81%" }
-                        },
-                        [
-                          _c(
-                            "a",
-                            {
-                              staticClass: "opcion-alt",
-                              staticStyle: { cursor: "pointer" },
-                              on: {
-                                click: function($event) {
-                                  _vm.stepactual = 1
-                                }
-                              }
-                            },
-                            [_vm._v("Volver")]
+                      _c("div", { staticClass: "group-input group-centrado" }, [
+                        _c("p", { staticStyle: { padding: "0px 22px" } }, [
+                          _vm._v(
+                            "\tEnviaremos un Email para que puedas crear tu nueva contraseña."
                           )
-                        ]
-                      )
+                        ])
+                      ])
                     ]
                   )
                 ])
@@ -6365,6 +6512,21 @@ var render = function() {
                 },
                 [_vm._v("Login")]
               )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.botonPwd
+            ? _c(
+                "button",
+                {
+                  staticClass: "button red login-submit",
+                  attrs: {
+                    form: "new-pwd-form",
+                    type: "submit",
+                    name: "login-submit"
+                  }
+                },
+                [_vm._v("Crear Contraseña")]
+              )
             : _vm._e()
         ])
       ],
@@ -6387,11 +6549,9 @@ var staticRenderFns = [
       [
         _c("div", { staticClass: "toastprogressbar" }),
         _vm._v(" "),
-        _c("label", { staticClass: "title", attrs: { for: "titles" } }, [
-          _vm._v("Title")
-        ]),
+        _c("div", { staticClass: "title" }, [_vm._v("Title")]),
         _vm._v(" "),
-        _c("label", { staticClass: "content", attrs: { for: "Content" } }, [
+        _c("div", { staticClass: "content" }, [
           _vm._v("Lorem ipsum dolor sit amet")
         ])
       ]
@@ -6751,7 +6911,15 @@ var render = function() {
                       _c("strong", [_vm._v(_vm._s(this.deal.buss_name))]),
                       _vm._v(" "),
                       _c("span")
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _vm.loged == false
+                      ? _c("p", [
+                          _vm._v(
+                            "\r\n                      Su cuenta sera creada automaticamente.\r\n                    "
+                          )
+                        ])
+                      : _vm._e()
                   ]),
                   _vm._v(" "),
                   _vm.resume
@@ -7170,75 +7338,110 @@ var render = function() {
                           }
                         },
                         [
-                          _c(
-                            "div",
-                            {
-                              staticClass: "group-input",
-                              staticStyle: { margin: "auto" }
-                            },
-                            [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.password,
-                                    expression: "password"
-                                  }
-                                ],
-                                staticClass: "input-material",
-                                staticStyle: { width: "285px" },
-                                attrs: {
-                                  id: "clientpwd",
-                                  type: "password",
-                                  name: "password",
-                                  required: ""
+                          _vm.hasPass == true
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass: "group-input",
+                                  staticStyle: { margin: "auto" }
                                 },
-                                domProps: { value: _vm.password },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.password,
+                                        expression: "password"
+                                      }
+                                    ],
+                                    staticClass: "input-material",
+                                    staticStyle: { width: "285px" },
+                                    attrs: {
+                                      id: "clientpwd",
+                                      type: "password",
+                                      name: "password",
+                                      required: ""
+                                    },
+                                    domProps: { value: _vm.password },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.password = $event.target.value
+                                      }
                                     }
-                                    _vm.password = $event.target.value
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "highlight" }),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "bar" }),
-                              _vm._v(" "),
-                              _c("label", { staticClass: "label-material" }, [
-                                _vm._v("Password")
-                              ])
-                            ]
-                          ),
+                                  }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "highlight" }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "bar" }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    { staticClass: "label-material" },
+                                    [_vm._v("Password")]
+                                  )
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("div", [
+                            _c("p", { staticStyle: { "margin-top": "0px" } }, [
+                              _vm._v("\r\n                        Oops, aun "),
+                              _c("strong", [_vm._v("no tienes contraseña")]),
+                              _vm._v(
+                                ", " +
+                                  _vm._s(
+                                    _vm.$store.state.userdata.client_first
+                                  ) +
+                                  ". Ve a "
+                              ),
+                              _c("strong", [
+                                _c(
+                                  "a",
+                                  {
+                                    staticStyle: { color: "var(--red)" },
+                                    attrs: { href: "/login" }
+                                  },
+                                  [_vm._v("Login")]
+                                )
+                              ]),
+                              _vm._v(
+                                " y crea tu contraseña.\r\n                      "
+                              )
+                            ])
+                          ]),
                           _vm._v(" "),
                           _c(
                             "transition",
                             { attrs: { name: "fade", mode: "out-in" } },
                             [
-                              _vm.hasError
-                                ? _c(
-                                    "p",
-                                    {
-                                      staticClass: "alert alert-danger",
-                                      staticStyle: { top: "44px" }
-                                    },
-                                    [_vm._v(_vm._s(_vm.responseContent))]
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.hasResponse
-                                ? _c(
-                                    "p",
-                                    {
-                                      staticClass: "alert alert-normal",
-                                      staticStyle: { top: "44px" }
-                                    },
-                                    [_vm._v(_vm._s(_vm.responseContent))]
-                                  )
+                              _vm.hasPass == true
+                                ? _c("div", [
+                                    _vm.hasError
+                                      ? _c(
+                                          "p",
+                                          {
+                                            staticClass: "alert alert-danger",
+                                            staticStyle: { top: "44px" }
+                                          },
+                                          [_vm._v(_vm._s(_vm.responseContent))]
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm.hasResponse
+                                      ? _c(
+                                          "p",
+                                          {
+                                            staticClass: "alert alert-normal",
+                                            staticStyle: { top: "44px" }
+                                          },
+                                          [_vm._v(_vm._s(_vm.responseContent))]
+                                        )
+                                      : _vm._e()
+                                  ])
                                 : _vm._e()
                             ]
                           )
@@ -22344,7 +22547,7 @@ var custom = {
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
     msgwindow.querySelector('.title').style.display = 'block';
     msgwindow.querySelector('.title').innerText = title;
-    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.content').innerHTML = msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {
@@ -22362,7 +22565,7 @@ var custom = {
     msgwindow.style.opacity = "100";
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
     msgwindow.querySelector('.title').style.display = 'none';
-    msgwindow.querySelector('.content').innerText = _msg;
+    msgwindow.querySelector('.content').innerHTML = _msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {
@@ -22381,7 +22584,7 @@ var custom = {
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
     msgwindow.querySelector('.title').style.display = 'block';
     msgwindow.querySelector('.title').innerText = title;
-    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.content').innerHTML = msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {
@@ -22399,7 +22602,7 @@ var custom = {
     msgwindow.style.opacity = "100";
     msgwindow.querySelector('.toastprogressbar').style.transitionDelay = '0ms';
     msgwindow.querySelector('.title').style.display = 'none';
-    msgwindow.querySelector('.content').innerText = msg;
+    msgwindow.querySelector('.content').innerHTML = msg;
     msgwindow.querySelector('.toastprogressbar').style.transitionDuration = time + 'ms';
     msgwindow.querySelector('.toastprogressbar').style.width = '100%';
     setTimeout(function () {

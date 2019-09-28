@@ -3,6 +3,7 @@
 namespace judiostatic\Http\Controllers\Auth;
 
 use judiostatic\User;
+use Illuminate\Http\Request;
 use judiostatic\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -52,7 +53,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'client_first' => ['required', 'string', 'max:255'],
             'client_last' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:clients'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -65,6 +66,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+    
         return User::create([
             'client_first' => $data['first'],
             'client_last' => $data['last'],
@@ -72,4 +74,84 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+
+    protected function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $user = User::where('email', '=', $request->input('email'))->first();
+        //$this->guard()->login($user);
+
+        if($user){
+            //return redirect()->route('auth.register')->with('status', 'exists');
+            return $this->registered($request, $user);
+        }
+        else{
+            $user = User::create([
+                'email' => $request->input('email'),
+                'client_first' => $request->input('client_first'),
+                'client_last' => $request->input('client_last'),
+                'password' => Hash::make($request->input('password')),
+                //'username' => $googleUser->nickname,
+                //'avatar' => $googleUser->avatar,
+                //'provider_id' => $googleUser->getId(),
+                'provider_name' => 'Omeleth',
+                'active' => '1',
+                ]);
+                return redirect($this->redirectPath());
+        }
+            
+    }
+
+    protected function registerStateless(Request $request)
+    {
+        $client_id = "";
+        $client_first = $request->client_first;
+        $client_last = $request->client_last;
+        $email = $request->email;
+        $responseContent = "";
+        $response = "error";
+
+        $request->validate([
+            'client_first' => ['required', 'string', 'max:255'],
+            'client_last' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            //'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = User::where('email', '=', $request->input('email'))->first();
+        //$this->guard()->login($user);
+
+        if($user){
+            //return redirect()->route('auth.register')->with('status', 'exists');
+            $responseContent = "Usuario Existe";
+            $response = "error";
+        }
+        else{
+            try {
+                $user = User::create([
+                    'email' => $email,
+                    'client_first' => $client_first,
+                    'client_last' => $client_last,
+                    'password' => Hash::make('secret'),
+                    //'username' => $googleUser->nickname,
+                    //'avatar' => $googleUser->avatar,
+                    //'provider_id' => $googleUser->getId(),
+                    'provider_name' => 'Omeleth',
+                    'active' => '1',
+                ]);
+                $user = User::where('email', $email)->first();
+                $client_id = $user->id;
+                $responseContent = "Usuario Creado";
+                $response = "success"; 
+            } catch (\Throwable $th) {
+                $responseContent = "No se pudo crear usuario";
+                $response = "error";
+            }
+
+            return response()->json(array( 'responseContent' => $responseContent, 'response' => $response, 'client_id' => $client_id, 'client_first' => $client_first, 'client_last' => $client_last, 'email' => $email), 200);
+        }
+            
+    }
+
 }
