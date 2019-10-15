@@ -6,6 +6,8 @@ use judiostatic\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Laravel\Socialite\Facades\Socialite;
 use judiostatic\User;
+use judiostatic\Role;
+use judiostatic\SocialProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Laravel\Passport\Passport;
@@ -67,7 +69,7 @@ class LoginController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function redirectToProvider()
+    public function redirectToGoogleProvider()
     {
         return Socialite::driver('google')->redirect();
     }
@@ -77,7 +79,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function handleProviderCallback()
+    public function handleGoogleProviderCallback()
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
 
@@ -92,17 +94,23 @@ class LoginController extends Controller
         //dd($googleUser);
         // $user->token;
         // Add to database
-        $user = User::create([
-            'email' => $googleUser->getEmail(),
-            'client_first' => $googleUser->user["given_name"],
-            'client_last' => $googleUser->user["family_name"],
-            //'username' => $googleUser->nickname,
-            'avatar' => $googleUser->avatar,
-            'provider_id' => $googleUser->getId(),
-            'provider_name' => 'Google',
-            'active' => '1',
-            ]);
+        $role_user = Role::where('name', 'user')->first();
+        $social_provider = SocialProvider::where('name', 'Google')->first();
 
+        $user = new User();
+        $user->email = $googleUser->getEmail();
+        $user->client_first = $googleUser->user["given_name"];
+        $user->client_last = $googleUser->user["family_name"];
+        $user->avatar = $googleUser->avatar;
+        $user->provider_id = $googleUser->getId();
+        $user->active = '1';
+        $user->save();
+        $user->roles()->attach($role_user);
+        $user->socialProviders()->attach($social_provider);
+
+        //'username' => $googleUser->nickname,
+
+        //dd(User::find(1)->socialProviders()->where('provider_name', 'Google')->first());
         // LOGIN
         Auth::login($user, true);
         return redirect($this->redirectTo);

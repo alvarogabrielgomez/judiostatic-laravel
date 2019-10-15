@@ -2168,24 +2168,23 @@ __webpack_require__.r(__webpack_exports__);
       if (this.password == '') {
         this.hasError = true;
         this.hasResponse = false;
-        this.responseContent = "Llene todos los campos";
+        this.responseContent = this.trans.get('UILogin.complete_all_fields');
         this.loadingMss = false;
         clientpwd.className += " invalid-data";
-        custom.boxmsg('Llene todos los campos', 2500, toastlogin);
+        custom.boxmsg(this.trans.get('UILogin.complete_all_fields'), 2500, toastlogin);
       } else if (this.password.length < 8) {
         this.hasError = true;
         this.hasResponse = false;
         this.responseContent = "La contraseña tiene que ser mayor a 8 caracteres";
         this.loadingMss = false;
         clientpwd.className += " invalid-data";
-        custom.boxmsg('Es muy corto para ser una contraseña', 2700, toastlogin);
+        custom.boxmsg(this.trans.get('UILogin.short_pwd'), 2700, toastlogin);
       } else {
         axios.post('/login', {
           email: this.$store.state.userdata.email,
           password: this.password
         }).then(function (response) {
-          console.log(response);
-
+          // console.log(response);
           if (response.status == 200) {
             _this.hasResponse = true;
             _this.hasError = false;
@@ -2197,17 +2196,17 @@ __webpack_require__.r(__webpack_exports__);
           var clientpwd = document.getElementById('clientpwd');
           clientpwd.className += " invalid-data";
           clientpwd.focus();
-          clientpwd.select();
-          console.log(error.response);
+          clientpwd.select(); //console.log(error.response);
+
           _this.hasError = true;
           _this.loadingMss = false;
 
           if (error.response.status == 422) {
-            _this.responseContent = "Contrasena Incorrecta";
-            custom.boxmsg('Contrasena Incorrecta', 2500, toastlogin);
+            _this.responseContent = _this.trans.get('UILogin.invalid_pwd');
+            custom.boxmsg(_this.trans.get('UILogin.invalid_pwd'), 2500, toastlogin);
           } else if (error.response.status == 429) {
             _this.responseContent = "Has hecho muchos intentos seguidos en poco tiempo";
-            custom.boxmsg('Oye, tranquilo viejo, has hecho muchos intentos seguidos', 60000, toastlogin);
+            custom.boxmsg(_this.trans.get('UILogin.throttle'), 60000, toastlogin);
           }
         });
       }
@@ -2247,7 +2246,7 @@ __webpack_require__.r(__webpack_exports__);
             _this2.loading = false;
             var clientmail = document.getElementById('clientmail');
             clientmail.className += " invalid-data";
-            custom.boxtoast('Email no existe', "El email no esta registrado, <a href='/register' style='font-weight:800;color:var(--red);'>seguro que has venido por aca antes?</a>", 5500, toastlogin);
+            custom.boxtoast(_this2.trans.get('UILogin.email_not_exists'), _this2.trans.get('UILogin.not_user'), 5500, toastlogin);
           } else if (response.data.response == 'successNoSession') {
             _this2.formselected = "pwd-form";
             _this2.hasError = false;
@@ -3367,12 +3366,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'dealsubmit',
   props: ["descuento", "postdata", "userdata", "buylimits"],
   data: function data() {
     return {
       deal: {},
+      qrcode: "",
       activelimits: 0,
       spinnersize: 48,
       next: 2,
@@ -3602,7 +3603,7 @@ __webpack_require__.r(__webpack_exports__);
             _this.hasError = true;
           }
         })["catch"](function (error) {
-          console.log(error);
+          // console.log(error);
           _this.loadingMss = false;
           _this.hasError = true;
           _this.hasResponse = true;
@@ -3639,8 +3640,7 @@ __webpack_require__.r(__webpack_exports__);
           //   inputfirst.select();
           // }
           // setTimeout(selectname, 700);
-        })["catch"](function (error) {
-          console.log(error);
+        })["catch"](function (error) {//console.log(error);
         });
       })["catch"](function (error) {
         _this2.loadingMss = false;
@@ -3654,6 +3654,14 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.state.userdata;
       var input = this.$store.state.userdata;
       return axios.post(URL, input);
+    },
+    generarQr: function generarQr() {
+      return axios.get('/tools/qrcode', {
+        params: {
+          data: 'omeleth_transqr:' + this.transqr,
+          size: 90
+        }
+      });
     },
     formSubmit: function formSubmit() {
       var _this3 = this;
@@ -3706,8 +3714,7 @@ __webpack_require__.r(__webpack_exports__);
               _this3.responseMss = "successNotExists";
               _this3.responseContent = response.data.responseContent;
               _this3.loading = false;
-              _this3.$store.state.userdata = response.data;
-              console.log(_this3.$store.state.userdata);
+              _this3.$store.state.userdata = response.data; //console.log(this.$store.state.userdata);
 
               _this3.passToCupon(true);
             } else if (response.data.response == 'success') {
@@ -3748,8 +3755,7 @@ __webpack_require__.r(__webpack_exports__);
               var inputemail = document.getElementById('clientemail');
               inputemail.className += " invalid-data";
               inputemail.focus();
-              inputemail.select();
-              console.log(error);
+              inputemail.select(); // console.log(error);
             } else if (error.response.state == 419) {
               _this3.responseContent = "Reload Page";
               var inputemail = document.getElementById('clientemail');
@@ -3872,6 +3878,22 @@ __webpack_require__.r(__webpack_exports__);
             _this5.activelimits++;
             _this5.transqr = response.data.data.transqr;
 
+            _this5.generarQr().then(function (response) {
+              console.log("Generando Imagen");
+
+              if (response.data.response == "success") {
+                _this5.qrcode = response.data.qrcode;
+                _this5.responseMss = "success";
+                _this5.responseContent = "QRCode generado";
+              } else {
+                _this5.responseMss = "error";
+                _this5.responseContent = "No se pudo generar QRCode";
+              }
+            })["catch"](function (error) {
+              _this5.responseMss = "error";
+              _this5.responseContent = "No se pudo generar QRCode";
+            });
+
             _this5.enviaremail();
           } else if (response.data.response == "error") {
             _this5.hasResponse = false;
@@ -3883,12 +3905,11 @@ __webpack_require__.r(__webpack_exports__);
           _this5.hasResponse = false;
           _this5.hasError = true;
           _this5.responseContent = error;
-          _this5.loadingMss = false;
-          console.log(error);
+          _this5.loadingMss = false; // console.log(error);
         });
       })["catch"](function (error) {
         /** handle error **/
-        console.log(error);
+        //console.log(error);
       });
     },
     enviaremail: function enviaremail() {
@@ -4727,7 +4748,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.loader,\r\n.loader:after {\r\n  border-radius: 50%;\r\n  width: 10em;\r\n  height: 10em;\n}\n.loader {\r\n  margin: 60px auto;\r\n  font-size: 10px;\r\n  position: relative;\r\n  text-indent: -9999em;\r\n  border-top: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-right: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-bottom: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-left: 1.1em solid #0f172b;\r\n  -webkit-transform: translateZ(0);\r\n  transform: translateZ(0);\r\n  -webkit-animation: load8 1.1s infinite linear;\r\n  animation: load8 1.1s infinite linear;\n}\n@-webkit-keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\n@keyframes load8 {\n0% {\r\n    -webkit-transform: rotate(0deg);\r\n    transform: rotate(0deg);\n}\n100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\n}\n}\r\n", ""]);
+exports.push([module.i, "\n.loader,\r\n.loader:after {\r\n  border-radius: 50%;\r\n  width: 10em;\r\n  height: 10em;\n}\n.loader {\r\n  margin: 60px auto;\r\n  font-size: 10px;\r\n  position: relative;\r\n  text-indent: -9999em;\r\n  border-top: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-right: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-bottom: 1.1em solid rgba(15,23,43, 0.2);\r\n  border-left: 1.1em solid #0f172b;\r\n  transform: translateZ(0);\r\n  -webkit-animation: load8 1.1s infinite linear;\r\n  animation: load8 1.1s infinite linear;\n}\n@-webkit-keyframes load8 {\n0% {\r\n    transform: rotate(0deg);\n}\n100% {\r\n    transform: rotate(360deg);\n}\n}\n@keyframes load8 {\n0% {\r\n    transform: rotate(0deg);\n}\n100% {\r\n    transform: rotate(360deg);\n}\n}\r\n", ""]);
 
 // exports
 
@@ -4746,7 +4767,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  -webkit-transition: 0.7s;\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  -webkit-transform: translate(100%, 0);\r\n          transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  -webkit-transform: translate(-100%, 0);\r\n          transform: translate(-100%, 0);\n}\n.nav-login {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: -webkit-box;\r\n  display: flex;\r\n  -webkit-box-orient: vertical;\r\n  -webkit-box-direction: normal;\r\n          flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
+exports.push([module.i, "\n.slide-horizontal-leave-active,\r\n.slide-horizontal-enter-active {\r\n  transition: 0.7s;\n}\n.slide-horizontal-enter {\r\n  transform: translate(100%, 0);\n}\n.slide-horizontal-leave-to {\r\n  transform: translate(-100%, 0);\n}\n.nav-login {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: row;\r\n  flex-flow: wrap;\r\n  align-content: center;\r\n  height: 420px;\n}\n.nav-login a {\r\n  width: 100%;\r\n  margin-top: 9px;\n}\n.nav-login form {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: column;\r\n  width: 100%;\r\n    margin: 28px 0px 10px 0px;\n}\r\n", ""]);
 
 // exports
 
@@ -4765,7 +4786,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.fade-enter-active, .fade-leave-active {\r\n  -webkit-transition: opacity .7s;\r\n  transition: opacity .7s;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\r\n", ""]);
+exports.push([module.i, "\n.fade-enter-active, .fade-leave-active {\r\n  transition: opacity .7s;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\r\n", ""]);
 
 // exports
 
@@ -4784,7 +4805,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#qr{\r\n    position: absolute;\r\n    width: 80px;\r\n    height: 80px;\r\n    top: 14px;\r\n    background-color: #ababab;\r\n    right: 23px;\n}\n#continuar-anterior{\r\n    position: absolute;\r\n    right: 13px;\r\n    bottom: 68px;\r\n    font-size: 12px;\n}\n#continuar-anterior a{\r\n      color: #ba2d2b;\n}\n.fade-enter-active, .fade-leave-active {\r\n  -webkit-transition: opacity .26s!important;\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  -webkit-transition: 1s;\r\n  transition: 1s;\n}\n.slide-enter {\r\n  -webkit-transform: translate(0, 100%);\r\n          transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  -webkit-transform: translate(0, -100%);\r\n          transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\n  \t-webkit-transition: all .5s ease-in-out;\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content{\r\n\r\n-webkit-transition: all .5s ease-in-out;\r\n\r\ntransition: all .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  height: 120%;\r\n  top: 0px;\n}\n.lineacont > .seleccion{\r\n top: 70px;\n}\n.lineacont > .opciones{\r\n bottom: 186px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    right: -17px;\r\n    top: -9px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 165px;\r\n    right: -17px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    height: 100%;\r\n    -webkit-box-flex: 10;\r\n            flex: 10;\n}\n.row-centered{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: horizontal;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: row;\r\n    -webkit-box-align: center;\r\n            align-items: center;\n}\n.row-linea{\r\n      -webkit-box-flex: 2;\r\n              flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3, #steplogin{\r\n    display: -webkit-box;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n            flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  -webkit-transition: all .2s ease-in-out;\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    -webkit-transition: all .2s ease-in-out;\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: -webkit-box;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    position: relative;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: -webkit-box;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  -webkit-box-align: center;\r\n          align-items: center;\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n#qr{\r\n    position: absolute;\r\n    width: 80px;\r\n    height: 80px;\r\n    top: 14px;\r\n    background-color: #ababab;\r\n    right: 23px;\r\n    background-size: contain;\n}\n#continuar-anterior{\r\n    position: absolute;\r\n    right: 13px;\r\n    bottom: 68px;\r\n    font-size: 12px;\n}\n#continuar-anterior a{\r\n      color: #ba2d2b;\n}\n.fade-enter-active, .fade-leave-active {\r\n  transition: opacity .26s!important;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\r\n  opacity: 0;\n}\n#resultados{\r\n    height: 100%;\r\n    max-height: 300px;\n}\n.steps{\r\n\r\n    position: absolute;\r\n    width: 100%;\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    height: 100%;\r\n    background-color: #FFF;\n}\n.slide-leave-active,\r\n.slide-enter-active {\r\n  transition: 1s;\n}\n.slide-enter {\r\n  transform: translate(0, 100%);\n}\n.slide-leave-to {\r\n  transform: translate(0, -100%);\n}\n.footer-btn{\r\n    position: absolute;\r\n    border-radius: 0px;\r\n    width: 100%;\r\n    height: 56px;\r\n    line-height: 1.9em;\r\n    bottom: 0px;\n}\n.footer-btn:hover{\r\n    background: #21a961;\n}\n.footer-btn:active{\r\ntransition: all .5s ease-in-out;\r\nbackground: #21a961;\r\n    box-shadow: inset 0 0 0px 1px #32d07c;\n}\n.next-selection{\r\n    z-index: 1000;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 50px;\r\n    bottom: 83px;\r\n    margin-left: 109px;\n}\n.next-selection h2{\r\n    line-height: 1em;\r\n    font-size: 1em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #484848;\r\n    text-align: left;\r\n    margin: 13px 1px;\r\n    font-weight: 400;\n}\n.modal, #modalwindow, #modal-content{\r\n\r\ntransition: all .5s ease-in-out;\n}\n.linea{\r\n    width: 58%;\r\n    height: 100%;\r\n    position: absolute;\r\n    border-right: 1px solid #c7c7c7;\r\n    top: 80px;\n}\n.lineacont{\r\n  /* height: 120%; */\r\n  top: 0px;\n}\n.lineacont > .seleccion{\r\n top: 70px;\n}\n.lineacont > .opciones{\r\n bottom: 86px;\n}\n.seleccion{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    right: -17px;\r\n    top: -9px;\r\n    background-color: #d6d6d6;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\r\n    color: #fff;\r\n    text-shadow: 1px 1px 5px #9a9a9a;\n}\n.opciones{\r\n    position: absolute;\r\n    width: 30px;\r\n    height: 30px;\r\n    bottom: 165px;\r\n    right: -17px;\r\n    background-color: #ffffff;\r\n    display: block;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n\r\n    line-height: 1.85em;\r\n    border: 1px solid #d6d6d6;\n}\n.title-step{\r\n  width: 100%;\r\n  height: 50px;\r\n  margin-top: 64px;\n}\n.title-step h1{\r\n    line-height: 1em;\r\n    font-size: 1.2em;\r\n    font-family: 'Oxygen', sans-serif;\r\n    color: #292828;\r\n    text-align: left;\r\n    margin: 13px 1px!important;\r\n    font-weight: 400;\n}\n.content-row{\r\n    /* height: 100%; */\r\n    flex: 10;\n}\n.row-centered{\r\n    display: flex;\r\n    flex-direction: column;\n}\n.content-step{\r\n    height: 100%;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: stretch;\n}\n.row-linea{\r\n      flex: 2;\r\n      position: relative;\n}\n#step1, #step2, #step3, #steplogin{\r\n    display: flex;\r\n    flex-direction: column;\n}\n#step1{\r\nz-index: 10;\n}\n#step2{\r\n  z-index: 9;\n}\n#step3{\r\n  z-index: 8;\n}\n#modalwindow{\r\n    transition: all .2s ease-in-out;\n}\r\n\r\n  \r\n  /* Add Animation */\n@-webkit-keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\n@keyframes animatetop {\nfrom {top:-300px; opacity:0}\nto {top:0; opacity:1}\n}\r\n  \r\n  /* The Close Button */\n.close {\r\n    color: rgb(180, 27, 27);\r\n    float: left;\r\n    margin: 22px;\r\n    font-size: 28px;\r\n    font-weight: bold;\r\n    width: 25px;\r\n    height: 25px;\r\n    background-color:antiquewhite;\r\n    border-radius: 50%;\n}\n.close::before{\r\n  content:\"\\D7\";\r\n    text-align: center;\r\n    left: 25px;\r\n    top: 20px;\r\n    position: absolute;\r\n    vertical-align: middle;\n}\n.close:hover,\r\n  .close:focus {\r\n    color: #000;\r\n    text-decoration: none;\r\n    cursor: pointer;\n}\n.modal-header {\r\n    \r\n    color: #656565;\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index:1000;\r\n    background: #fff;\n}\n.modal-footer {\r\n    margin-top: 5px;\r\n    position: absolute;\r\n    bottom: 0px!important;\r\n    width: 100%;\r\n    z-index: 1000;\r\n    height: 56px;\r\n    background:#fff;\n}\n.modal-footer div{\r\n    background-color: #efefef!important;\r\n    color: #656565!important;\n}\n.modal-footer div a{\r\n    color: #656565!important;\n}\n.titulomodal{\r\n    font-size: 16px;\r\n    padding: 14px;\n}\n.modal-body{\r\n  transition: all .2s ease-in-out;\n}\n.modal-body img{\r\n    transition: all .2s ease-in-out;\r\n    overflow: hidden;\r\n    width: 35%;\r\n    height: 102px;\r\n    max-width: 155px;\r\n    max-height: 152px;\r\n    min-width: 156px;\r\n    float: left;\n}\n.buss-info-container{\r\n    display: block;\r\n    max-width: 467px;\r\n    padding: 15px;\r\n    margin: auto;\r\n    background-color: #fbfbf2;\r\n    min-height: 101px;\r\n    overflow: auto;\r\n    display: flex;\n}\n.deal-submit{\r\n  width: 100%;\r\n  height: 100%;\n}\n.buss-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 64%;\n}\n.buss-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.buss-info-dir{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.modal-continue{\r\n    box-sizing: border-box;\r\n    position: relative;\r\n    display: block;\r\n    width: 100%;\r\n    max-width: 499px;\r\n    margin: auto;\r\n    margin-top: 18px;\r\n    margin-bottom: 15px;\n}\n.modal-continue a {\r\n    color: #FFF!important;\r\n    text-decoration: none;\n}\n.deal-info-metadata{\r\n    padding: 0px 10PX;\r\n    float: right;\r\n    BOX-SIZING: BORDER-BOX;\r\n    WIDTH: 100%;\n}\n.deal-info-name{\r\n    padding: 0px 18px;\r\n    font-size: 18px;\r\n    font-weight: 600;\r\n    word-wrap: break-word;\n}\n.deal-info-box{\r\n    padding: 4px 18px;\r\n    font-size: 14px;\r\n    height: 70px;\r\n    overflow-y: auto;\r\n    word-wrap: break-word;\n}\n.deal-info{\r\n  \r\n    display: block;\r\n    position: relative;\r\n    max-width: 498px;\r\n    padding: 2px 23px;\r\n    background-color: #fbfbf2;\r\n    overflow: auto;\r\n    box-sizing: border-box;\n}\n.deal-white{\r\nbackground: #FFF;\n}\n.insert-page{\r\n  MARGIN: AUTO;\r\n  DISPLAY: BLOCK;\r\n  width: 100%;\n}\n.codigo-final{\r\n  text-align: center;\r\n  box-sizing: border-box;\r\n  background-color: #ffffd6;\r\n  padding: 8px;\r\n  font-size: 27px;\n}\n#dos-botones{\r\n  width: 100%;\r\n  display: flex;\r\n\r\n  margin: auto;\r\n  align-items: center;\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -4931,6 +4952,705 @@ function toComment(sourceMap) {
 
 	return '/*# ' + data + ' */';
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/lang.js/src/lang.js":
+/*!******************************************!*\
+  !*** ./node_modules/lang.js/src/lang.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ *  Lang.js for Laravel localization in JavaScript.
+ *
+ *  @version 1.1.12
+ *  @license MIT https://github.com/rmariuzzo/Lang.js/blob/master/LICENSE
+ *  @site    https://github.com/rmariuzzo/Lang.js
+ *  @author  Rubens Mariuzzo <rubens@mariuzzo.com>
+ */
+
+(function(root, factory) {
+    'use strict';
+
+    if (true) {
+        // AMD support.
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else {}
+
+}(this, function() {
+    'use strict';
+
+    function inferLocale() {
+        if (typeof document !== 'undefined' && document.documentElement) {
+            return document.documentElement.lang;
+        }
+    };
+
+    function convertNumber(str) {
+        if (str === '-Inf') {
+            return -Infinity;
+        } else if (str === '+Inf' || str === 'Inf' || str === '*') {
+            return Infinity;
+        }
+        return parseInt(str, 10);
+    }
+
+    // Derived from: https://github.com/symfony/translation/blob/460390765eb7bb9338a4a323b8a4e815a47541ba/Interval.php
+    var intervalRegexp = /^({\s*(\-?\d+(\.\d+)?[\s*,\s*\-?\d+(\.\d+)?]*)\s*})|([\[\]])\s*(-Inf|\*|\-?\d+(\.\d+)?)\s*,\s*(\+?Inf|\*|\-?\d+(\.\d+)?)\s*([\[\]])$/;
+    var anyIntervalRegexp = /({\s*(\-?\d+(\.\d+)?[\s*,\s*\-?\d+(\.\d+)?]*)\s*})|([\[\]])\s*(-Inf|\*|\-?\d+(\.\d+)?)\s*,\s*(\+?Inf|\*|\-?\d+(\.\d+)?)\s*([\[\]])/;
+
+    // Default options //
+
+    var defaults = {
+        locale: 'en'/** The default locale if not set. */
+    };
+
+    // Constructor //
+
+    var Lang = function(options) {
+        options = options || {};
+        this.locale = options.locale || inferLocale() || defaults.locale;
+        this.fallback = options.fallback;
+        this.messages = options.messages;
+    };
+
+    // Methods //
+
+    /**
+     * Set messages source.
+     *
+     * @param messages {object} The messages source.
+     *
+     * @return void
+     */
+    Lang.prototype.setMessages = function(messages) {
+        this.messages = messages;
+    };
+
+    /**
+     * Get the current locale.
+     *
+     * @return {string} The current locale.
+     */
+    Lang.prototype.getLocale = function() {
+        return this.locale || this.fallback;
+    };
+
+    /**
+     * Set the current locale.
+     *
+     * @param locale {string} The locale to set.
+     *
+     * @return void
+     */
+    Lang.prototype.setLocale = function(locale) {
+        this.locale = locale;
+    };
+
+    /**
+     * Get the fallback locale being used.
+     *
+     * @return void
+     */
+    Lang.prototype.getFallback = function() {
+        return this.fallback;
+    };
+
+    /**
+     * Set the fallback locale being used.
+     *
+     * @param fallback {string} The fallback locale.
+     *
+     * @return void
+     */
+    Lang.prototype.setFallback = function(fallback) {
+        this.fallback = fallback;
+    };
+
+    /**
+     * This method act as an alias to get() method.
+     *
+     * @param key {string} The key of the message.
+     * @param locale {string} The locale of the message
+     *
+     * @return {boolean} true if the given key is defined on the messages source, otherwise false.
+     */
+    Lang.prototype.has = function(key, locale) {
+        if (typeof key !== 'string' || !this.messages) {
+            return false;
+        }
+
+        return this._getMessage(key, locale) !== null;
+    };
+
+    /**
+     * Get a translation message.
+     *
+     * @param key {string} The key of the message.
+     * @param replacements {object} The replacements to be done in the message.
+     * @param locale {string} The locale to use, if not passed use the default locale.
+     *
+     * @return {string} The translation message, if not found the given key.
+     */
+    Lang.prototype.get = function(key, replacements, locale) {
+        if (!this.has(key, locale)) {
+            return key;
+        }
+
+        var message = this._getMessage(key, locale);
+        if (message === null) {
+            return key;
+        }
+
+        if (replacements) {
+            message = this._applyReplacements(message, replacements);
+        }
+
+        return message;
+    };
+
+    /**
+     * This method act as an alias to get() method.
+     *
+     * @param key {string} The key of the message.
+     * @param replacements {object} The replacements to be done in the message.
+     *
+     * @return {string} The translation message, if not found the given key.
+     */
+    Lang.prototype.trans = function(key, replacements) {
+        return this.get(key, replacements);
+    };
+
+    /**
+     * Gets the plural or singular form of the message specified based on an integer value.
+     *
+     * @param key {string} The key of the message.
+     * @param count {number} The number of elements.
+     * @param replacements {object} The replacements to be done in the message.
+     * @param locale {string} The locale to use, if not passed use the default locale.
+     *
+     * @return {string} The translation message according to an integer value.
+     */
+    Lang.prototype.choice = function(key, number, replacements, locale) {
+        // Set default values for parameters replace and locale
+        replacements = typeof replacements !== 'undefined'
+            ? replacements
+            : {};
+
+        // The count must be replaced if found in the message
+        replacements.count = number;
+
+        // Message to get the plural or singular
+        var message = this.get(key, replacements, locale);
+
+        // Check if message is not null or undefined
+        if (message === null || message === undefined) {
+            return message;
+        }
+
+        // Separate the plural from the singular, if any
+        var messageParts = message.split('|');
+
+        // Get the explicit rules, If any
+        var explicitRules = [];
+
+        for (var i = 0; i < messageParts.length; i++) {
+            messageParts[i] = messageParts[i].trim();
+
+            if (anyIntervalRegexp.test(messageParts[i])) {
+                var messageSpaceSplit = messageParts[i].split(/\s/);
+                explicitRules.push(messageSpaceSplit.shift());
+                messageParts[i] = messageSpaceSplit.join(' ');
+            }
+        }
+
+        // Check if there's only one message
+        if (messageParts.length === 1) {
+            // Nothing to do here
+            return message;
+        }
+
+        // Check the explicit rules
+        for (var j = 0; j < explicitRules.length; j++) {
+            if (this._testInterval(number, explicitRules[j])) {
+                return messageParts[j];
+            }
+        }
+
+        locale = locale || this._getLocale(key);
+        var pluralForm = this._getPluralForm(number, locale);
+
+        return messageParts[pluralForm];
+    };
+
+    /**
+     * This method act as an alias to choice() method.
+     *
+     * @param key {string} The key of the message.
+     * @param count {number} The number of elements.
+     * @param replacements {object} The replacements to be done in the message.
+     *
+     * @return {string} The translation message according to an integer value.
+     */
+    Lang.prototype.transChoice = function(key, count, replacements) {
+        return this.choice(key, count, replacements);
+    };
+
+    /**
+     * Parse a message key into components.
+     *
+     * @param key {string} The message key to parse.
+     * @param key {string} The message locale to parse
+     * @return {object} A key object with source and entries properties.
+     */
+    Lang.prototype._parseKey = function(key, locale) {
+        if (typeof key !== 'string' || typeof locale !== 'string') {
+            return null;
+        }
+
+        var segments = key.split('.');
+        var source = segments[0].replace(/\//g, '.');
+
+        return {
+            source: locale + '.' + source,
+            sourceFallback: this.getFallback() + '.' + source,
+            entries: segments.slice(1)
+        };
+    };
+
+    /**
+     * Returns a translation message. Use `Lang.get()` method instead, this methods assumes the key exists.
+     *
+     * @param key {string} The key of the message.
+     * @param locale {string} The locale of the message
+     *
+     * @return {string} The translation message for the given key.
+     */
+    Lang.prototype._getMessage = function(key, locale) {
+        locale = locale || this.getLocale();
+        
+        key = this._parseKey(key, locale);
+
+        // Ensure message source exists.
+        if (this.messages[key.source] === undefined && this.messages[key.sourceFallback] === undefined) {
+            return null;
+        }
+
+        // Get message from default locale.
+        var message = this.messages[key.source];
+        var entries = key.entries.slice();
+        var subKey = entries.join('.');
+        message = message !== undefined ? this._getValueInKey(message, subKey) : undefined;
+
+
+        // Get message from fallback locale.
+        if (typeof message !== 'string' && this.messages[key.sourceFallback]) {
+            message = this.messages[key.sourceFallback];
+            entries = key.entries.slice();
+            subKey = '';
+            while (entries.length && message !== undefined) {
+                var subKey = !subKey ? entries.shift() : subKey.concat('.', entries.shift());
+                if (message[subKey]) {
+                    message = message[subKey]
+                    subKey = '';
+                }
+            }
+        }
+
+        if (typeof message !== 'string') {
+            return null;
+        }
+
+        return message;
+    };
+
+    Lang.prototype._getValueInKey = function(obj, str) {
+        // If the full key exists just return the value
+        if (typeof obj[str] === 'string') {
+            return obj[str]
+        }
+
+        str = str.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+        str = str.replace(/^\./, '');           // strip a leading dot
+
+        var parts = str.split('.');
+
+        for (var i = 0, n = parts.length; i < n; ++i) {
+            var currentKey = parts.slice(0, i + 1).join('.');
+            var restOfTheKey = parts.slice(i + 1, parts.length).join('.')
+            
+            if (obj[currentKey]) {
+                return this._getValueInKey(obj[currentKey], restOfTheKey)
+            }
+        }
+
+        return obj;
+    };
+
+    /**
+     * Return the locale to be used between default and fallback.
+     * @param {String} key
+     * @return {String}
+     */
+    Lang.prototype._getLocale = function(key) {
+        key = this._parseKey(key, this.locale)
+        if (this.messages[key.source]) {
+            return this.locale;
+        }
+        if (this.messages[key.sourceFallback]) {
+            return this.fallback;
+        }
+        return null;
+    };
+
+    /**
+     * Find a message in a translation tree using both dotted keys and regular ones
+     *
+     * @param pathSegments {array} An array of path segments such as ['family', 'father']
+     * @param tree {object} The translation tree
+     */
+    Lang.prototype._findMessageInTree = function(pathSegments, tree) {
+        while (pathSegments.length && tree !== undefined) {
+            var dottedKey = pathSegments.join('.');
+            if (tree[dottedKey]) {
+                tree = tree[dottedKey];
+                break;
+            }
+
+            tree = tree[pathSegments.shift()]
+        }
+
+        return tree;
+    };
+
+    /**
+     * Sort replacement keys by length in descending order.
+     *
+     * @param a {string} Replacement key
+     * @param b {string} Sibling replacement key
+     * @return {number}
+     * @private
+     */
+    Lang.prototype._sortReplacementKeys = function(a, b) {
+        return b.length - a.length;
+    };
+
+    /**
+     * Apply replacements to a string message containing placeholders.
+     *
+     * @param message {string} The text message.
+     * @param replacements {object} The replacements to be done in the message.
+     *
+     * @return {string} The string message with replacements applied.
+     */
+    Lang.prototype._applyReplacements = function(message, replacements) {
+        var keys = Object.keys(replacements).sort(this._sortReplacementKeys);
+
+        keys.forEach(function(replace) {
+            message = message.replace(new RegExp(':' + replace, 'gi'), function (match) {
+                var value = replacements[replace];
+
+                // Capitalize all characters.
+                var allCaps = match === match.toUpperCase();
+                if (allCaps) {
+                    return value.toUpperCase();
+                }
+
+                // Capitalize first letter.
+                var firstCap = match === match.replace(/\w/i, function(letter) {
+                    return letter.toUpperCase();
+                });
+                if (firstCap) {
+                    return value.charAt(0).toUpperCase() + value.slice(1);
+                }
+
+                return value;
+            })
+        });
+        return message;
+    };
+
+    /**
+     * Checks if the given `count` is within the interval defined by the {string} `interval`
+     *
+     * @param  count     {int}    The amount of items.
+     * @param  interval  {string} The interval to be compared with the count.
+     * @return {boolean}          Returns true if count is within interval; false otherwise.
+     */
+    Lang.prototype._testInterval = function(count, interval) {
+        /**
+         * From the Symfony\Component\Translation\Interval Docs
+         *
+         * Tests if a given number belongs to a given math interval.
+         *
+         * An interval can represent a finite set of numbers:
+         *
+         *  {1,2,3,4}
+         *
+         * An interval can represent numbers between two numbers:
+         *
+         *  [1, +Inf]
+         *  ]-1,2[
+         *
+         * The left delimiter can be [ (inclusive) or ] (exclusive).
+         * The right delimiter can be [ (exclusive) or ] (inclusive).
+         * Beside numbers, you can use -Inf and +Inf for the infinite.
+         */
+
+        if (typeof interval !== 'string') {
+            throw 'Invalid interval: should be a string.';
+        }
+
+        interval = interval.trim();
+
+        var matches = interval.match(intervalRegexp);
+        if (!matches) {
+            throw 'Invalid interval: ' + interval;
+        }
+
+        if (matches[2]) {
+            var items = matches[2].split(',');
+            for (var i = 0; i < items.length; i++) {
+                if (parseInt(items[i], 10) === count) {
+                    return true;
+                }
+            }
+        } else {
+            // Remove falsy values.
+            matches = matches.filter(function(match) {
+                return !!match;
+            });
+
+            var leftDelimiter = matches[1];
+            var leftNumber = convertNumber(matches[2]);
+            if (leftNumber === Infinity) {
+                leftNumber = -Infinity;
+            }
+            var rightNumber = convertNumber(matches[3]);
+            var rightDelimiter = matches[4];
+
+            return (leftDelimiter === '[' ? count >= leftNumber : count > leftNumber)
+                && (rightDelimiter === ']' ? count <= rightNumber : count < rightNumber);
+        }
+
+        return false;
+    };
+
+    /**
+     * Returns the plural position to use for the given locale and number.
+     *
+     * The plural rules are derived from code of the Zend Framework (2010-09-25),
+     * which is subject to the new BSD license (http://framework.zend.com/license/new-bsd).
+     * Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
+     *
+     * @param {Number} count
+     * @param {String} locale
+     * @return {Number}
+     */
+    Lang.prototype._getPluralForm = function(count, locale) {
+        switch (locale) {
+            case 'az':
+            case 'bo':
+            case 'dz':
+            case 'id':
+            case 'ja':
+            case 'jv':
+            case 'ka':
+            case 'km':
+            case 'kn':
+            case 'ko':
+            case 'ms':
+            case 'th':
+            case 'tr':
+            case 'vi':
+            case 'zh':
+                return 0;
+
+            case 'af':
+            case 'bn':
+            case 'bg':
+            case 'ca':
+            case 'da':
+            case 'de':
+            case 'el':
+            case 'en':
+            case 'eo':
+            case 'es':
+            case 'et':
+            case 'eu':
+            case 'fa':
+            case 'fi':
+            case 'fo':
+            case 'fur':
+            case 'fy':
+            case 'gl':
+            case 'gu':
+            case 'ha':
+            case 'he':
+            case 'hu':
+            case 'is':
+            case 'it':
+            case 'ku':
+            case 'lb':
+            case 'ml':
+            case 'mn':
+            case 'mr':
+            case 'nah':
+            case 'nb':
+            case 'ne':
+            case 'nl':
+            case 'nn':
+            case 'no':
+            case 'om':
+            case 'or':
+            case 'pa':
+            case 'pap':
+            case 'ps':
+            case 'pt':
+            case 'so':
+            case 'sq':
+            case 'sv':
+            case 'sw':
+            case 'ta':
+            case 'te':
+            case 'tk':
+            case 'ur':
+            case 'zu':
+                return (count == 1)
+                    ? 0
+                    : 1;
+
+            case 'am':
+            case 'bh':
+            case 'fil':
+            case 'fr':
+            case 'gun':
+            case 'hi':
+            case 'hy':
+            case 'ln':
+            case 'mg':
+            case 'nso':
+            case 'xbr':
+            case 'ti':
+            case 'wa':
+                return ((count === 0) || (count === 1))
+                    ? 0
+                    : 1;
+
+            case 'be':
+            case 'bs':
+            case 'hr':
+            case 'ru':
+            case 'sr':
+            case 'uk':
+                return ((count % 10 == 1) && (count % 100 != 11))
+                    ? 0
+                    : (((count % 10 >= 2) && (count % 10 <= 4) && ((count % 100 < 10) || (count % 100 >= 20)))
+                        ? 1
+                        : 2);
+
+            case 'cs':
+            case 'sk':
+                return (count == 1)
+                    ? 0
+                    : (((count >= 2) && (count <= 4))
+                        ? 1
+                        : 2);
+
+            case 'ga':
+                return (count == 1)
+                    ? 0
+                    : ((count == 2)
+                        ? 1
+                        : 2);
+
+            case 'lt':
+                return ((count % 10 == 1) && (count % 100 != 11))
+                    ? 0
+                    : (((count % 10 >= 2) && ((count % 100 < 10) || (count % 100 >= 20)))
+                        ? 1
+                        : 2);
+
+            case 'sl':
+                return (count % 100 == 1)
+                    ? 0
+                    : ((count % 100 == 2)
+                        ? 1
+                        : (((count % 100 == 3) || (count % 100 == 4))
+                            ? 2
+                            : 3));
+
+            case 'mk':
+                return (count % 10 == 1)
+                    ? 0
+                    : 1;
+
+            case 'mt':
+                return (count == 1)
+                    ? 0
+                    : (((count === 0) || ((count % 100 > 1) && (count % 100 < 11)))
+                        ? 1
+                        : (((count % 100 > 10) && (count % 100 < 20))
+                            ? 2
+                            : 3));
+
+            case 'lv':
+                return (count === 0)
+                    ? 0
+                    : (((count % 10 == 1) && (count % 100 != 11))
+                        ? 1
+                        : 2);
+
+            case 'pl':
+                return (count == 1)
+                    ? 0
+                    : (((count % 10 >= 2) && (count % 10 <= 4) && ((count % 100 < 12) || (count % 100 > 14)))
+                        ? 1
+                        : 2);
+
+            case 'cy':
+                return (count == 1)
+                    ? 0
+                    : ((count == 2)
+                        ? 1
+                        : (((count == 8) || (count == 11))
+                            ? 2
+                            : 3));
+
+            case 'ro':
+                return (count == 1)
+                    ? 0
+                    : (((count === 0) || ((count % 100 > 0) && (count % 100 < 20)))
+                        ? 1
+                        : 2);
+
+            case 'ar':
+                return (count === 0)
+                    ? 0
+                    : ((count == 1)
+                        ? 1
+                        : ((count == 2)
+                            ? 2
+                            : (((count % 100 >= 3) && (count % 100 <= 10))
+                                ? 3
+                                : (((count % 100 >= 11) && (count % 100 <= 99))
+                                    ? 4
+                                    : 5))));
+
+            default:
+                return 0;
+        }
+    };
+
+    return Lang;
+
+}));
 
 
 /***/ }),
@@ -6229,7 +6949,32 @@ var render = function() {
             : _vm._e()
         ]),
         _vm._v(" "),
-        _vm._m(1),
+        _c(
+          "div",
+          {
+            staticClass: "light-bar-t",
+            staticStyle: {
+              position: "absolute",
+              top: "11px",
+              "margin-top": "0px!important",
+              "z-index": "1000"
+            },
+            attrs: { id: "nav-bar" }
+          },
+          [
+            _c("div", { attrs: { id: "nav-bar-container" } }, [
+              _c("nav", [
+                _c("ul", { staticClass: "light-bar-text" }, [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "navbar-divisor" }, [_vm._v(">")]),
+                  _vm._v(" "),
+                  _c("li", [_vm._v(_vm._s(_vm.trans.get("UILogin.login")))])
+                ])
+              ])
+            ])
+          ]
+        ),
         _vm._v(" "),
         _c("transition", { attrs: { name: "slide-horizontal" } }, [
           _vm.stepactual == 1
@@ -6302,7 +7047,13 @@ var render = function() {
                               staticClass: "opcion-alt",
                               attrs: { href: "/register" }
                             },
-                            [_vm._v("Crear una nueva cuenta")]
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.trans.get("UILogin.create_new_account")
+                                )
+                              )
+                            ]
                           ),
                           _vm._v(" "),
                           _c(
@@ -6311,7 +7062,11 @@ var render = function() {
                               staticClass: "opcion-alt",
                               attrs: { href: "iforgot/reset-password.php" }
                             },
-                            [_vm._v("Olvide el password")]
+                            [
+                              _vm._v(
+                                _vm._s(_vm.trans.get("UILogin.forgot_pwd"))
+                              )
+                            ]
                           ),
                           _vm._v(" "),
                           _c("span", [
@@ -6326,7 +7081,11 @@ var render = function() {
                                 attrs: { href: "/login/google" },
                                 on: { click: _vm.loadingShow }
                               },
-                              [_vm._v("Login with Google")]
+                              [
+                                _vm._v(
+                                  _vm._s(_vm.trans.get("UILogin.login_google"))
+                                )
+                              ]
                             )
                           ])
                         ]
@@ -6347,7 +7106,8 @@ var render = function() {
                     _vm._v(" "),
                     _c("h1", { staticClass: "title-login-center" }, [
                       _vm._v(
-                        "Bienvenido de nuevo, " +
+                        _vm._s(_vm.trans.get("UILogin.welcome_again")) +
+                          ", " +
                           _vm._s(this.$store.state.userdata.client_first)
                       )
                     ])
@@ -6399,7 +7159,7 @@ var render = function() {
                         _c("span", { staticClass: "bar" }),
                         _vm._v(" "),
                         _c("label", { staticClass: "label-material" }, [
-                          _vm._v("Password")
+                          _vm._v(_vm._s(_vm.trans.get("UILogin.password")))
                         ])
                       ]),
                       _vm._v(" "),
@@ -6416,7 +7176,11 @@ var render = function() {
                               staticClass: "opcion-alt",
                               attrs: { href: "iforgot/reset-password.php" }
                             },
-                            [_vm._v("Olvide el password")]
+                            [
+                              _vm._v(
+                                _vm._s(_vm.trans.get("UILogin.forgot_pwd"))
+                              )
+                            ]
                           ),
                           _vm._v(" "),
                           _c(
@@ -6430,7 +7194,7 @@ var render = function() {
                                 }
                               }
                             },
-                            [_vm._v("Volver")]
+                            [_vm._v(_vm._s(_vm.trans.get("pagination.back")))]
                           )
                         ]
                       )
@@ -6450,7 +7214,8 @@ var render = function() {
                     _vm._v(" "),
                     _c("h1", { staticClass: "title-login-center" }, [
                       _vm._v(
-                        "Solo falta crear tu contraseña y todo estará listo, " +
+                        _vm._s(_vm.trans.get("UILogin.msg_create_pwd")) +
+                          ", " +
                           _vm._s(this.$store.state.userdata.client_first)
                       )
                     ])
@@ -6472,7 +7237,9 @@ var render = function() {
                       _c("div", { staticClass: "group-input group-centrado" }, [
                         _c("p", { staticStyle: { padding: "0px 22px" } }, [
                           _vm._v(
-                            "\tEnviaremos un Email para que puedas crear tu nueva contraseña."
+                            _vm._s(
+                              _vm.trans.get("UILogin.msg_create_pwd_email")
+                            )
                           )
                         ])
                       ])
@@ -6495,7 +7262,7 @@ var render = function() {
                     name: "login-submit"
                   }
                 },
-                [_vm._v("Siguiente")]
+                [_vm._v(_vm._s(_vm.trans.get("pagination.next")))]
               )
             : _vm._e(),
           _vm._v(" "),
@@ -6510,7 +7277,7 @@ var render = function() {
                     name: "login-submit"
                   }
                 },
-                [_vm._v("Login")]
+                [_vm._v(_vm._s(_vm.trans.get("UILogin.login")))]
               )
             : _vm._e(),
           _vm._v(" "),
@@ -6525,7 +7292,7 @@ var render = function() {
                     name: "login-submit"
                   }
                 },
-                [_vm._v("Crear Contraseña")]
+                [_vm._v(_vm._s(_vm.trans.get("UILogin.create_pwd")))]
               )
             : _vm._e()
         ])
@@ -6561,36 +7328,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "light-bar-t",
-        staticStyle: {
-          position: "absolute",
-          top: "11px",
-          "margin-top": "0px!important",
-          "z-index": "1000"
-        },
-        attrs: { id: "nav-bar" }
-      },
-      [
-        _c("div", { attrs: { id: "nav-bar-container" } }, [
-          _c("nav", [
-            _c("ul", { staticClass: "light-bar-text" }, [
-              _c("li", [
-                _c("a", { attrs: { href: "/" } }, [
-                  _c("div", { attrs: { id: "home-icon" } })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("li", { staticClass: "navbar-divisor" }, [_vm._v(">")]),
-              _vm._v(" "),
-              _c("li", [_vm._v("Iniciar Sesion")])
-            ])
-          ])
-        ])
-      ]
-    )
+    return _c("li", [
+      _c("a", { attrs: { href: "/" } }, [
+        _c("div", { attrs: { id: "home-icon" } })
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -6702,7 +7444,11 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("div", { staticClass: "badge" }, [
-                      _c("span", [_vm._v("OFERTA DESTA SEMANA")])
+                      _c(
+                        "span",
+                        { staticStyle: { "text-transform": "uppercase" } },
+                        [_vm._v(_vm._s(_vm.trans.get("messages.offer_week")))]
+                      )
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "box-title" }, [
@@ -6877,11 +7623,11 @@ var render = function() {
                         )
                       ]
                     )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "next-selection" }, [
-                    _c("h2", [_vm._v(_vm._s(_vm.steps.Next))])
                   ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "next-selection" }, [
+                  _c("h2", [_vm._v(_vm._s(_vm.steps.Next))])
                 ])
               ])
             ])
@@ -6963,7 +7709,10 @@ var render = function() {
                                 _c("div", { staticClass: "group-input" }, [
                                   _c("input", {
                                     staticClass: "input-material",
-                                    staticStyle: { width: "285px" },
+                                    staticStyle: {
+                                      width: "100%",
+                                      "max-width": "285px"
+                                    },
                                     attrs: {
                                       id: "clientfirst",
                                       type: "text",
@@ -6986,7 +7735,10 @@ var render = function() {
                                 _c("div", { staticClass: "group-input" }, [
                                   _c("input", {
                                     staticClass: "input-material",
-                                    staticStyle: { width: "285px" },
+                                    staticStyle: {
+                                      width: "100%",
+                                      "max-width": "285px"
+                                    },
                                     attrs: {
                                       id: "clientlast",
                                       type: "text",
@@ -7009,7 +7761,10 @@ var render = function() {
                                 _c("div", { staticClass: "group-input" }, [
                                   _c("input", {
                                     staticClass: "input-material",
-                                    staticStyle: { width: "285px" },
+                                    staticStyle: {
+                                      width: "100%",
+                                      "max-width": "285px"
+                                    },
                                     attrs: {
                                       id: "clientemail",
                                       type: "email",
@@ -7214,11 +7969,11 @@ var render = function() {
                         1
                       )
                     ]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "next-selection" }, [
-                    _c("h2", [_vm._v(_vm._s(_vm.steps.Next))])
-                  ])
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "next-selection" }, [
+                  _c("h2", [_vm._v(_vm._s(_vm.steps.Next))])
                 ])
               ])
             ])
@@ -7263,7 +8018,13 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("div", { attrs: { id: "qr" } }),
+                          _c("div", {
+                            style: {
+                              backgroundImage:
+                                "url(data:image/png;base64," + this.qrcode + ")"
+                            },
+                            attrs: { id: "qr" }
+                          }),
                           _vm._v(" "),
                           _c("p", [_vm._v("Aqui está o seu código:")]),
                           _vm._v(" "),
@@ -7356,7 +8117,10 @@ var render = function() {
                                       }
                                     ],
                                     staticClass: "input-material",
-                                    staticStyle: { width: "285px" },
+                                    staticStyle: {
+                                      width: "88%",
+                                      "max-width": "285px"
+                                    },
                                     attrs: {
                                       id: "clientpwd",
                                       type: "password",
@@ -7387,64 +8151,78 @@ var render = function() {
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _c("div", [
-                            _c("p", { staticStyle: { "margin-top": "0px" } }, [
-                              _vm._v("\r\n                        Oops, aun "),
-                              _c("strong", [_vm._v("no tienes contraseña")]),
-                              _vm._v(
-                                ", " +
-                                  _vm._s(
-                                    _vm.$store.state.userdata.client_first
-                                  ) +
-                                  ". Ve a "
-                              ),
-                              _c("strong", [
-                                _c(
-                                  "a",
-                                  {
-                                    staticStyle: { color: "var(--red)" },
-                                    attrs: { href: "/login" }
-                                  },
-                                  [_vm._v("Login")]
-                                )
-                              ]),
-                              _vm._v(
-                                " y crea tu contraseña.\r\n                      "
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
                           _c(
                             "transition",
                             { attrs: { name: "fade", mode: "out-in" } },
                             [
-                              _vm.hasPass == true
-                                ? _c("div", [
-                                    _vm.hasError
-                                      ? _c(
-                                          "p",
-                                          {
-                                            staticClass: "alert alert-danger",
-                                            staticStyle: { top: "44px" }
-                                          },
-                                          [_vm._v(_vm._s(_vm.responseContent))]
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.hasResponse
-                                      ? _c(
-                                          "p",
-                                          {
-                                            staticClass: "alert alert-normal",
-                                            staticStyle: { top: "44px" }
-                                          },
-                                          [_vm._v(_vm._s(_vm.responseContent))]
-                                        )
-                                      : _vm._e()
-                                  ])
+                              _vm.hasError && _vm.hasPass
+                                ? _c(
+                                    "p",
+                                    {
+                                      staticClass: "alert alert-danger",
+                                      staticStyle: { top: "44px" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        " " + _vm._s(_vm.responseContent) + " "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.hasResponse && _vm.hasPass
+                                ? _c(
+                                    "p",
+                                    {
+                                      staticClass: "alert alert-normal",
+                                      staticStyle: { top: "44px" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        " " + _vm._s(_vm.responseContent) + " "
+                                      )
+                                    ]
+                                  )
                                 : _vm._e()
                             ]
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c("div", [
+                            _vm.hasPass == false
+                              ? _c(
+                                  "p",
+                                  { staticStyle: { "margin-top": "0px" } },
+                                  [
+                                    _vm._v(
+                                      "\r\n                        Oops, aun "
+                                    ),
+                                    _c("strong", [
+                                      _vm._v("no tienes contraseña")
+                                    ]),
+                                    _vm._v(
+                                      ", " +
+                                        _vm._s(
+                                          _vm.$store.state.userdata.client_first
+                                        ) +
+                                        ". Ve a "
+                                    ),
+                                    _c("strong", [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticStyle: { color: "var(--red)" },
+                                          attrs: { href: "/login" }
+                                        },
+                                        [_vm._v("Login")]
+                                      )
+                                    ]),
+                                    _vm._v(
+                                      " y crea tu contraseña.\r\n                      "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ])
                         ],
                         1
                       )
@@ -21738,12 +22516,23 @@ module.exports = g;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./store/store */ "./resources/js/store/store.js");
+/* harmony import */ var lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lang.js */ "./node_modules/lang.js/src/lang.js");
+/* harmony import */ var lang_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lang_js__WEBPACK_IMPORTED_MODULE_1__);
+var default_locale = window.default_locale;
+var fallback_locale = window.fallback_locale;
+var messages = window.messages;
 window.Vuex = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
- //require('./custom');
-
 window.custom = __webpack_require__(/*! ./custom */ "./resources/js/custom.js");
+
+
+Vue.prototype.trans = new lang_js__WEBPACK_IMPORTED_MODULE_1___default.a({
+  messages: messages,
+  locale: default_locale,
+  fallback: fallback_locale
+});
+window.messages = {};
 window.Laravel = {
   csrfToken: document.head.querySelector("meta[name='csrf-token']").getAttribute('content')
 };
@@ -21752,17 +22541,17 @@ window.axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest',
   'Accept': 'application/json',
   'Content-Type': 'application/json'
-  /**
-   * The following block of code may be used to automatically register your
-   * Vue components. It will recursively scan this directory for the Vue
-   * components and automatically register them with their "basename".
-   
-   * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
-   */
-  // const files = require.context('./', true, /\.vue$/i);
-  // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-
 };
+/**
+ * The following block of code may be used to automatically register your
+ * Vue components. It will recursively scan this directory for the Vue
+ * components and automatically register them with their "basename".
+ 
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ */
+// const files = require.context('./', true, /\.vue$/i);
+// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+
 Vue.component('dealsubmit-component', __webpack_require__(/*! ./components/modalwindow/DealSubmitComponent.vue */ "./resources/js/components/modalwindow/DealSubmitComponent.vue")["default"]);
 Vue.component('Spinner', __webpack_require__(/*! ./components/Spinner.vue */ "./resources/js/components/Spinner.vue")["default"]);
 Vue.component('spinner-small', __webpack_require__(/*! ./components/Spinner-small.vue */ "./resources/js/components/Spinner-small.vue")["default"]);
@@ -22541,6 +23330,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var custom = {
   toast: function toast(title, msg, time) {
+    clearTimeout(1);
     var msgwindow = document.getElementById('toastdiv');
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
@@ -22560,6 +23350,7 @@ var custom = {
     return msg;
   },
   msg: function msg(_msg, time) {
+    clearTimeout(1);
     var msgwindow = document.getElementById('toastdiv');
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
@@ -22578,6 +23369,7 @@ var custom = {
     return _msg;
   },
   boxtoast: function boxtoast(title, msg, time, div) {
+    clearTimeout(1);
     var msgwindow = div;
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
@@ -22597,6 +23389,7 @@ var custom = {
     return msg;
   },
   boxmsg: function boxmsg(msg, time, div) {
+    clearTimeout(1);
     var msgwindow = div;
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
@@ -22613,6 +23406,27 @@ var custom = {
       msgwindow.querySelector('.toastprogressbar').style.width = '0%';
     }, time);
     return msg;
+  },
+  getJSON: function getJSON(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+
+    xhr.onload = function () {
+      var status = xhr.status;
+
+      if (status === 200) {
+        callback(null, xhr.response);
+      } else {
+        callback(status, xhr.response);
+      }
+    };
+
+    xhr.send();
+  },
+  toggleSidebarMenu: function toggleSidebarMenu(div) {
+    var sidebar = document.getElementById(div);
+    sidebar.classList.toggle("show-menu-sidebar");
   }
 };
 module.exports = custom;

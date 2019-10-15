@@ -3,6 +3,7 @@
 namespace judiostatic;
 
 use judiostatic\Role;
+use judiostatic\SocialProvider;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -36,6 +37,18 @@ class User extends Authenticatable
 
     public function roles(){
        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    public function socialProviders(){
+        return $this->belongsToMany(SocialProvider::class)->withTimestamps();
+    }
+
+    public function hasSocialProviders($email){ //core
+        if ($socialProviders = $this->socialProviders()->where('email', $email)->get()) {
+            dd($socialProviders);
+            return $socialProviders;
+        }
+        return false;
     }
 
     public function hasRole($role){ //core

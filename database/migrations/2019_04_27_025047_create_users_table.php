@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             //$table->string('activation_token');
             $table->rememberToken();
             $table->string('provider_id', 191)->nullable();
-            $table->string('provider_name')->default('Omeleth');
+            // $table->string('provider_name')->default('Omeleth');
             $table->timestamps();
             $table->softDeletes();
         });

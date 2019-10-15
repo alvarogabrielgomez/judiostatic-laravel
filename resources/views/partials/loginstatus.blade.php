@@ -42,6 +42,7 @@ $hasAvatar = true;
 
                 {{-- DropdownMenu --}}
                 <div id="dropdown-menu" class="dropdown-content">
+                <div class="triangle-up"></div>
                         <div id="whoisyou">
                                 <div id="whoisyou-img"> 
                                         @if(Auth::check())
@@ -74,17 +75,17 @@ $hasAvatar = true;
                         </div>
                         <div id="dropdown-o-container">
                                 @if (Auth::check())
-                                <a href="/home">Dashboard</a>
+                                <a href="/home">{{ __('messages.dashboard') }}</a>
                                 <a><form action="/logout" method="POST">
                                 @csrf
-                                <button type="submit" class="logout-b" name="logout-submit">Logout</button>
+                                <button type="submit" class="logout-b" name="logout-submit">{{ __('UILogin.logout') }}</button>
                                 </form></a>
                                 @else
-                                <a href="/login">Iniciar Sesion</a>
+                                <a href="/login">{{ __('UILogin.login') }}</a>
                                 @endif  
                                 
                                 <div class="divider"></div>
-                                <a href="#footer">Ayuda</a>   
+                                <a href="#footer">{{ __('messages.help') }}</a>   
                         </div>
                 </div> {{-- id="dropdown-menu" --}}
                 

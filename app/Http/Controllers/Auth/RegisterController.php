@@ -3,6 +3,7 @@
 namespace judiostatic\Http\Controllers\Auth;
 
 use judiostatic\User;
+use judiostatic\Role;
 use Illuminate\Http\Request;
 use judiostatic\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -78,27 +79,31 @@ class RegisterController extends Controller
 
     protected function register(Request $request)
     {
+        
         $this->validator($request->all())->validate();
         $user = User::where('email', '=', $request->input('email'))->first();
         //$this->guard()->login($user);
 
         if($user){
             //return redirect()->route('auth.register')->with('status', 'exists');
-            return $this->registered($request, $user);
+            return $this->registered($request, $user)->with('status', 'exists');
         }
         else{
-            $user = User::create([
-                'email' => $request->input('email'),
-                'client_first' => $request->input('client_first'),
-                'client_last' => $request->input('client_last'),
-                'password' => Hash::make($request->input('password')),
-                //'username' => $googleUser->nickname,
-                //'avatar' => $googleUser->avatar,
-                //'provider_id' => $googleUser->getId(),
-                'provider_name' => 'Omeleth',
-                'active' => '1',
-                ]);
-                return redirect($this->redirectPath());
+
+            $role_user = Role::where('name', 'user')->first();
+            $social_provider = SocialProvider::where('name', 'Omeleth')->first();
+            $user = new User();
+            $user->email = $request->input('email');
+            $user->client_first = $request->input('client_first');
+            $user->client_last = $request->input('client_last');
+            $user->password = Hash::make($request->input('password'));
+            //$user->avatar = $googleUser->avatar;
+            $user->active = '1';
+            $user->save();
+            $user->roles()->attach($role_user);
+            $user->socialProviders()->attach($social_provider);
+
+            return redirect($this->redirectPath())->with('status', __('messages.account_created'));
         }
             
     }
@@ -129,20 +134,23 @@ class RegisterController extends Controller
         }
         else{
             try {
-                $user = User::create([
-                    'email' => $email,
-                    'client_first' => $client_first,
-                    'client_last' => $client_last,
-                    'password' => Hash::make('secret'),
-                    //'username' => $googleUser->nickname,
-                    //'avatar' => $googleUser->avatar,
-                    //'provider_id' => $googleUser->getId(),
-                    'provider_name' => 'Omeleth',
-                    'active' => '1',
-                ]);
+
+                $role_user = Role::where('name', 'user')->first();
+                $social_provider = SocialProvider::where('name', 'Omeleth')->first();
+                $user = new User();
+                $user->email = $email;
+                $user->client_first = $client_first;
+                $user->client_last = $client_last;
+                $user->password = Hash::make('secret');
+                //$user->avatar = $googleUser->avatar;
+                $user->active = '1';
+                $user->save();
+                $user->roles()->attach($role_user);
+                $user->socialProviders()->attach($social_provider);
+
                 $user = User::where('email', $email)->first();
                 $client_id = $user->id;
-                $responseContent = "Usuario Creado";
+                $responseContent =  __('messages.account_created');
                 $response = "success"; 
             } catch (\Throwable $th) {
                 $responseContent = "No se pudo crear usuario";

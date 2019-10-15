@@ -68,6 +68,19 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/animate.min.css') }}">
 </head>
 <body>
+  <script>
+      window.default_locale = "{{ config('app.locale') }}";
+      window.fallback_locale = "{{ config('app.fallback_locale') }}";
+      window.messages = @json($messages);
+    </script>
+    @if (session('status'))
+    <script>
+      function alertSession(){
+        custom.msg('{{ session('status') }}', 5000);
+      };
+        </script>
+      @endif
+
     <div id="app">
     <div id="themoderfoquer">
 
@@ -76,6 +89,7 @@
             <label class="title" for="titles">Title</label>
             <label class="content" for="Content">Lorem ipsum dolor sit amet</label>
         </div>
+    
 
         <header id="header" class="index-h">
             <div id="header-container">
@@ -88,7 +102,7 @@
               <div id="header-container-menu">
                 <nav id="header-menu">
                   <ul id="header-menu-buttoms">
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="index.php">{{ __('messages.home') }}</a></li>
 
                   
                     <li class="login-status">
@@ -129,49 +143,47 @@
       </script>
 
     <footer id="footer">
-            <div id="ir-arriba"><a href="#">Subir</a></div>
+            <div id="ir-arriba"><a href="#">{{ __('messages.up') }}</a></div>
           
             <div class="f-container">
               <div class="b1">
-                <div class="navFooterHeader">Saiba mais sobre nós</div>
+                <div class="navFooterHeader">{{ __('messages.footer_col1_h1') }}</div>
                 <ul class="navFooter">
                   <li class="">
-                    <a href="" class="">Jobs</a>
+                    <a href="" class="">{{ __('messages.jobs') }}</a>
                   </li>
                   <li>
-                    <a href="" class="">Blog</a>
+                    <a href="" class="">{{ __('messages.blog') }}</a>
                   </li>
                   <li>
-                    <a href="" class="">Sobre o Omeleth</a>
+                    <a href="" class="">{{ __('messages.about_omeleth') }}</a>
                   </li>
                 </ul>
               </div>
           
               <div class="b2">
-                <div class="navFooterHeader">Venda conosco</div>
+                <div class="navFooterHeader">{{ __('messages.footer_col2_h1') }}</div>
                 <ul class="navFooter">
                   <li class="">
-                    <a href="documents/with-us.html" class=""
-                      >Venda seus cupons em Omeleth</a
-                    >
+                    <a href="documents/with-us.html" class="">{{ __('messages.sell_with_os_in_omeleth') }}</a>
                   </li>
                   <li>
-                    <a href="documents/lets-start.html" class="">Como começar conosco</a>
+                    <a href="documents/lets-start.html" class="">{{ __('messages.how_start') }}</a>
                   </li>
                 </ul>
               </div>
           
               <div class="b3">
-                <div class="navFooterHeader">Deixe-nos ajudá-lo</div>
+                <div class="navFooterHeader">{{ __('messages.footer_col3_h1') }}</div>
                 <ul class="navFooter">
                   <li class="">
-                    <a href="" class="">Sua conta</a>
+                    <a href="" class="">{{ __('messages.your_account') }}</a>
                   </li>
                   <li>
-                    <a href="" class="">Comunicar um erro</a>
+                    <a href="" class="">{{ __('messages.tell_errors') }}</a>
                   </li>
                   <li>
-                    <a href="" class="">Contribua com sugestões</a>
+                    <a href="" class="">{{ __('messages.contr_sugg') }}</a>
                   </li>
                 </ul>
               </div>
@@ -180,16 +192,25 @@
           
             <div id="creditos">
               <div>
-                <a href="/documents/es/terms">Condições de uso</a>
-                <a href="/documents/es/privacy-policy">Privacidade</a
+                <a href="/documents/es/terms">{{ __('messages.terms') }}</a>
+                <a href="/documents/es/privacy-policy">{{ __('messages.privacy') }}</a
                 ><a href="https://ckj.one" rel="external"> © Alvaro Gabriel Gomez</a>.
-                TODOS OS DIREITOS RESERVADOS
+                {{ __('messages.rights') }}
               </div>
             </div>
           </footer>
 
           
-          <script src="{{ asset('js/custom.js') }}" defer></script>
+          {{-- <script src="{{ asset('js/custom.js') }}" defer></script> --}}
+          @if (session('status'))
+          <script>
+          document.addEventListener("DOMContentLoaded", function(event) { 
+            setTimeout(() => {
+            alertSession();
+            }, 200);
+          });
+          </script>
+          @endif
 </body>
 </html>
 

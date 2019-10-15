@@ -95,6 +95,7 @@
 
 var custom = {
   toast: function toast(title, msg, time) {
+    clearTimeout(1);
     var msgwindow = document.getElementById('toastdiv');
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
@@ -114,6 +115,7 @@ var custom = {
     return msg;
   },
   msg: function msg(_msg, time) {
+    clearTimeout(1);
     var msgwindow = document.getElementById('toastdiv');
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
@@ -132,6 +134,7 @@ var custom = {
     return _msg;
   },
   boxtoast: function boxtoast(title, msg, time, div) {
+    clearTimeout(1);
     var msgwindow = div;
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
@@ -151,6 +154,7 @@ var custom = {
     return msg;
   },
   boxmsg: function boxmsg(msg, time, div) {
+    clearTimeout(1);
     var msgwindow = div;
     msgwindow.style.transform = 'translateY(0px)';
     msgwindow.style.opacity = "100";
@@ -167,6 +171,27 @@ var custom = {
       msgwindow.querySelector('.toastprogressbar').style.width = '0%';
     }, time);
     return msg;
+  },
+  getJSON: function getJSON(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+
+    xhr.onload = function () {
+      var status = xhr.status;
+
+      if (status === 200) {
+        callback(null, xhr.response);
+      } else {
+        callback(status, xhr.response);
+      }
+    };
+
+    xhr.send();
+  },
+  toggleSidebarMenu: function toggleSidebarMenu(div) {
+    var sidebar = document.getElementById(div);
+    sidebar.classList.toggle("show-menu-sidebar");
   }
 };
 module.exports = custom;

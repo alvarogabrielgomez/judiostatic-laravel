@@ -2,6 +2,8 @@
 
 namespace judiostatic\Http\Controllers;
 
+use Auth;
+use judiostatic\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        //dd($user = Auth::user()->hasSocialProviders(Auth::user()->email));
         return view('home');
     }
 }

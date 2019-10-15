@@ -21,11 +21,28 @@ use function GuzzleHttp\json_decode;
 // Rutas laravel predefinidas de PASSPORT
 Auth::routes();
 
+// Locale
+Route::get('/lang/{locale}', 'MainController@changeLang');
+Route::get('/lang/{locale}/{next}', 'MainController@changeLang');
+Route::get('/lang/{locale}/{next}/{id}', 'MainController@changeLang');
+Route::get('/lang', function(Request $request){
+    $locale = App::getLocale();
+    return $locale;
+});
+Route::get(config('laravel-localization.routes.prefix'), function(){
+
+    $strings = ExportLocalization::export()->toArray();
+    return response()->json($strings);
+
+})->name('assets.lang')->middleware(config('laravel.localization.routes.middleware'));
+
 // Gets Direcciones Normales
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('deals', 'DealsController');
-Route::get('/', 'MainController@index')->name('/');
 Route::get('/deals', 'DealsController@index')->name('deals');
+Route::get('/deals/{id}', 'DealsController@show')->name('deals');
+Route::get('/', 'MainController@index');
 Route::get('/documents/{lang}/{document}', function(Request $request){
     $document = $request->document;
     $lenguaje = $request->lang;
@@ -73,14 +90,16 @@ Route::post('/registering', 'Auth\RegisterController@register');
 Route::post('/registerStateless', 'Auth\RegisterController@registerStateless');
 Route::post('/newPwd', 'Auth\ForgotPasswordController@newPwd');
 
-// Callbacks Socialite
+///// Callbacks Socialite
+//GitHub
 Route::get('/login/github', 'Auth\LoginController@redirectToProvider');
 Route::get('/login/github/callback', 'Auth\LoginController@handleProviderCallback');
-Route::get('/login/google', 'Auth\LoginController@redirectToProvider');
-Route::get('/login/google/callback', 'Auth\LoginController@handleProviderCallback');
+//Google
+Route::get('/login/google', 'Auth\LoginController@redirectToGoogleProvider');
+Route::get('/login/google/callback', 'Auth\LoginController@handleGoogleProviderCallback');
 
-// Tools Publicas
-Route::get('/qrcode', 'ToolsController@qrcode')->name('qrcode');
+////// Tools Publicas
+Route::get('tools/qrcode', 'ToolsController@qrcode')->name('qrcode');
 Route::post('/enviaremail', 'DealsController@enviaremail')->name('enviaremail');
 
 // Herramientas API PUBLICAS

@@ -1,5 +1,6 @@
 var custom = {
 toast : function(title, msg, time){
+    clearTimeout(1);
         var msgwindow = document.getElementById('toastdiv');
         msgwindow.style.transform = 'translateY(0px)'
         msgwindow.style.opacity = "100";
@@ -20,6 +21,7 @@ toast : function(title, msg, time){
 },
 
 msg : function(msg, time){
+    clearTimeout(1);
     var msgwindow = document.getElementById('toastdiv');
     msgwindow.style.transform = 'translateY(0px)'
     msgwindow.style.opacity = "100";
@@ -40,6 +42,7 @@ return msg;
 
 
 boxtoast : function(title, msg, time, div){
+    clearTimeout(1);
     var msgwindow = div;
     msgwindow.style.transform = 'translateY(0px)'
     msgwindow.style.opacity = "100";
@@ -60,6 +63,7 @@ return msg;
 },
 
 boxmsg : function(msg, time, div){
+    clearTimeout(1);
     var msgwindow = div;
     msgwindow.style.transform = 'translateY(0px)'
     msgwindow.style.opacity = "100";
@@ -78,7 +82,25 @@ boxmsg : function(msg, time, div){
 return msg;
 },
 
+ getJSON : function(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        callback(null, xhr.response);
+      } else {
+        callback(status, xhr.response);
+      }
+    };
+    xhr.send();
+},
 
+toggleSidebarMenu : function (div){
+   var sidebar = document.getElementById(div);
+   sidebar.classList.toggle("show-menu-sidebar");
+}
 
 }
 module.exports = custom;
