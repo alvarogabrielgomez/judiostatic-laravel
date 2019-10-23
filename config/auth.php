@@ -68,6 +68,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => judiostatic\User::class,
+            'database' => 'login_system',
         ],
 
         // 'users' => [

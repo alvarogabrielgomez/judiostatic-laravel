@@ -14,6 +14,7 @@ class User extends Authenticatable
 {
     use Notifiable, HasApiTokens, SoftDeletes;
     
+        protected $connection = 'login_system';
         protected $table = 'users';
 
         protected $primaryKey = 'id';

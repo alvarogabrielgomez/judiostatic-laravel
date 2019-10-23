@@ -13,7 +13,7 @@ class AppAuthorized extends Migration
      */
     public function up()
     {
-        Schema::create('AppAuthorized', function (Blueprint $table) {
+        Schema::connection('login_system')->create('AppAuthorized', function (Blueprint $table) {
             $table->bigIncrements('app_id');
             $table->string('app_name');
             $table->timestamps();

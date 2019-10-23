@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Buss extends Model
 {
+    protected $connection = 'omeleth_webapp';
     protected $table = 'buss';
     protected $primaryKey = 'buss_id';
     public function getRouteKeyName()

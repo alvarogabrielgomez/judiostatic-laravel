@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SocialProvider extends Model
 {
+    protected $connection = 'login_system';
     protected $table = 'social_providers';
     protected $primaryKey = 'id';
 

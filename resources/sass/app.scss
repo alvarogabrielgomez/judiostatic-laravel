@@ -712,7 +712,7 @@ header {
   max-width: 1000px;
   width: 100%;
   margin: auto;
-  height: 100px;
+  height: 80px;
 }
 
 #header-container-nomargin {
@@ -749,7 +749,7 @@ header {
 #header-menu-buttoms {
   list-style: none;
   display: flex;
-  line-height: 100px;
+  line-height: 75px;
   flex-wrap: nowrap;
   justify-content: space-between;
   padding: 0px 10px;
@@ -778,9 +778,10 @@ header {
 }
 
 #header-logo-container {
-  width: 175px;
-  height: 58px;
-  margin: 21px -22px;
+  width: 159px;
+  height: 53px;
+  background-size: contain;
+  margin: 14px -22px;
 }
 
 #header-logo-container-register {

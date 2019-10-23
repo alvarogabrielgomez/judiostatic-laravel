@@ -13,7 +13,7 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::connection('omeleth_webapp')->create('posts', function (Blueprint $table) {
             $table->bigIncrements('post_id');
             $table->integer('buss_id');
             $table->boolean('active')->default(1);

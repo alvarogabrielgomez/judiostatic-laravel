@@ -13,7 +13,7 @@ class CreateTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::connection('omeleth_webapp')->create('transactions', function (Blueprint $table) {
             $table->bigIncrements('transaction_id');
             $table->integer('post_id');
             $table->integer('buss_id');

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Buylimit extends Model
 {
+    protected $connection = 'omeleth_webapp';
     protected $table = 'buylimits';
     protected $primaryKey = 'limits_id';
 

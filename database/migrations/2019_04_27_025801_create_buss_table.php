@@ -13,7 +13,7 @@ class CreateBussTable extends Migration
      */
     public function up()
     {
-        Schema::create('buss', function (Blueprint $table) {
+        Schema::connection('omeleth_webapp')->create('buss', function (Blueprint $table) {
             $table->bigIncrements('buss_id');
             $table->string('buss_name');
             $table->string('buss_dir');

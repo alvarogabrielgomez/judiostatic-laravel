@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
+    protected $connection = 'omeleth_webapp';
     protected $table = 'transactions';
     protected $primaryKey = 'transaction_id';
 

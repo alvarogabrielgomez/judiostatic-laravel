@@ -13,7 +13,7 @@ class Buylimits extends Migration
      */
     public function up()
     {
-        Schema::create('Buylimits', function (Blueprint $table) {
+        Schema::connection('omeleth_webapp')->create('Buylimits', function (Blueprint $table) {
             $table->bigIncrements('limits_id');
             $table->integer('buss_id');
             $table->integer('client_id');
