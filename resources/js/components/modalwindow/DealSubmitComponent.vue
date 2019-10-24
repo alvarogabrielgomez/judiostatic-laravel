@@ -1234,29 +1234,41 @@ export default {
           .then((response) => {
             this.hasResponse = true;
             this.hasError = false;
-            this.loadingMss = false;
+
           
             if(response.data.response == "success"){
               //this.showing = true;
-              this.stepactual = 3;
+              
               this.responseMss = "success";
               this.responseContent = "TransQR returned";
               this.activelimits++;
               this.transqr = response.data.data.transqr;
               this.generarQr().then((response) => {
                 console.log("Generando Imagen");
+                this.qrcode = response.data.qrcode;
+
                 if(response.data.response == "success"){
-                  this.qrcode = response.data.qrcode;
+                  
                   this.responseMss = "success";
                   this.responseContent = "QRCode generado";
+                  this.passToShow();
+                  this.loadingMss = false; // Quitar pantalla de carga
                 }else{
                   this.responseMss = "error";
                   this.responseContent = "No se pudo generar QRCode";
+                  this.loadingMss = false; // Quitar pantalla de carga
+                  this.hasError = true;
+                  this.passToShow();
+                  custom.toast('Error', 'QR ERROR', 4000);
                 }
                 })
                 .catch((error) =>{
                   this.responseMss = "error";
                   this.responseContent = "No se pudo generar QRCode";
+                  this.loadingMss = false; // Quitar pantalla de carga
+                  this.hasError = true;
+                  this.passToShow();
+                  custom.toast('Error', 'QR ERROR', 4000);
                 });
 
               this.enviaremail();
@@ -1283,6 +1295,12 @@ export default {
       });
  
     },
+
+      passToShow: function passToShow(){
+        //setTimeout(function(){
+          this.stepactual = 3;
+       // }, 3000);
+      },
 
      enviaremail: function enviaremail(){
       

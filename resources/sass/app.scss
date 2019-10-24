@@ -32,6 +32,17 @@ input:-webkit-autofill:active {
     }
 }
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+ 
+::-webkit-scrollbar-track {
+  background: #ddd;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #666; 
+}
 
 body {
   --highlight-input: #3490dc;
@@ -85,6 +96,8 @@ h3 {
   font-size: 1.2em;
 }
 
+
+
 .triangle-up{
   position: absolute;
   right: 12px;
@@ -136,13 +149,28 @@ h3 {
   }
 }
 
+#dashboard-clipper{
+  position: relative;
+  min-height: 108vh;
+  transition: .2s all ease-in-out;
+}
+
+
 .sidebar-icon{
-  display: block;
-  width: 40px;
+  display: flex;
+  width: 35px;
   height: 40px;
   float: left;
   margin-right: 10px;
-  background-color: #c3c3c3;
+  font-size: 21px;
+  background-color: transparent;
+  text-align: center;
+  vertical-align: middle;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
 }
 
 .sidebar-menu-hover{
@@ -191,10 +219,6 @@ h3 {
       transform: translateX(-6px);
     }
 
-    // &:active ~ {
-
-    // }
-
   }
 }
 .sidebar-menu{
@@ -242,24 +266,61 @@ h3 {
     transform: translateX(0px);    
 }
 
+.sidebar-detached-hide{
+  transform: translateX(-267px);
+  z-index: 10000;
+  position: absolute;
+}
+
+.main-dashboard-fullsize{
+  width: 100%;
+}
+.main-dashboard-spacesidebar{
+  width: calc(100% - 258px);
+}
 
 #sidebar-dashboard{
   display:flex;
+  position: absolute;
+  top: 0px;
+  left: 0px;
   flex-direction: column;
   flex-grow: 1;
-  max-width: 258px;;
+  width: 100%;
+  max-width: 258px;
   background: #fbfbf2;
   height: 100%;
   min-height: 100vh;
   transition: all .2s ease-in-out;
+  z-index: 10000;
 }
   
   .dashboard-container{
   display: flex;
   height: auto;
   flex-direction: row;
+  min-height:100vh;
   }
 
+  .content-modulo{
+    display:flex;
+    width:100%;
+    height:100%;
+    flex-direction:column;
+    float: right;
+    transition: all .2s ease-in-out;
+  }
+  .modulo-row{
+    flex-direction:row!important;
+  }
+
+  .card-dashboard{
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    position: absolute;
+
+  }
   
 .leyenda-resetpwd{
   // margin-top: 36px;
@@ -304,11 +365,12 @@ h3 {
           transition: all .13s ease-in-out;
           transform: translateX(0px) !important;
           color: #7f7b7b !important;
-          &:hover{
+          &:hover, &:active{
             transition: all .13s ease-in-out;
             color: #68a5ff!important;
             transform: translateX(0px) !important;
           }
+          
         }
       }
     }
@@ -746,6 +808,7 @@ header {
   padding: 0px 7px;
 }
 
+
 #header-menu-buttoms {
   list-style: none;
   display: flex;
@@ -971,6 +1034,7 @@ nav ul li a {
 }
 
 #main-container {
+  position:relative;
   margin-top: 54px;
   padding-bottom: 63px;
   width: inherit;
@@ -1308,16 +1372,28 @@ color: var(--red-alert);
     vertical-align: center;
   }
 }
+
+.loading-overlay-show{
+
+  opacity: 1; 
+  visibility: visible;
+}
+
+.loading-overlay-hide{
+  opacity: 0; 
+  visibility: hidden;
+}
 #loading-overlay{
-position: absolute;
-width: 100%;
-height: 100%;
-display:flex;
-box-sizing: border-box;
-padding-bottom: 45px;
-z-index: 10000;
-background-color: rgba(255, 255, 255, 0.81);
-transition: all .27s ease 0s;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display:flex;
+  box-sizing: border-box;
+  padding-bottom: 45px;
+  z-index: 10000;
+  background-color: rgba(255, 255, 255, 0.81);
+  transition: all .27s ease 0s;  
+
 }
 
 .invalid-data {

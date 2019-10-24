@@ -32,6 +32,6 @@ class Buylimits extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Buylimits');
+        Schema::connection('omeleth_webapp')->dropIfExists('Buylimits');
     }
 }

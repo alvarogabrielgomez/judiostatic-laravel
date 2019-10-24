@@ -33,6 +33,6 @@ class CreateBussTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('buss');
+        Schema::connection('omeleth_webapp')->dropIfExists('buss');
     }
 }

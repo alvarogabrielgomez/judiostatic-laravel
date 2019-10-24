@@ -28,6 +28,6 @@ class AppAuthorized extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('AppAuthorized');
+        Schema::connection('login_system')->dropIfExists('AppAuthorized');
     }
 }

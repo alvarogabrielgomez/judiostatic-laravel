@@ -37,6 +37,12 @@ window.axios.defaults.headers.common = {
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
+Vue.component('dashboard-layout', require('./components/dashboard/dashboard-layout.vue').default);
+Vue.component('dashboard-modulo-1', require('./components/dashboard/modulos/dashboard-modulo-1.vue').default);
+Vue.component('dashboard-modulo-2', require('./components/dashboard/modulos/dashboard-modulo-2.vue').default);
+Vue.component('dashboard-modulo-3', require('./components/dashboard/modulos/dashboard-modulo-3.vue').default);
+Vue.component('dashboard-modulo-4', require('./components/dashboard/modulos/dashboard-modulo-4.vue').default);
+
 
 Vue.component('dealsubmit-component', require('./components/modalwindow/DealSubmitComponent.vue').default);
 Vue.component('Spinner', require('./components/Spinner.vue').default);
@@ -49,6 +55,7 @@ Vue.component('clock-sm', require('./components/commons/Clock-sm.vue').default);
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);
 Vue.component('passport-clients', require('./components/passport/Clients.vue').default);
 Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

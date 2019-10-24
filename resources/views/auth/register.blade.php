@@ -30,7 +30,7 @@
                     <div class="main-hero-img-register-textcontainer register-box">
                         <form method="POST" action="/registering" class="register-form-box" id="register-from">
                             @csrf    
-                            <div id="loading-overlay" style="top: 0px;left: 0px;opacity: 0;display:none;">
+                            <div id="loading-overlay" style="top: 0px;left: 0px;opacity: 0;display:none; transition: 0.2s all ease-in-out;">
                                     <div class="loader-small-container">
                                         <div class="loader-small">{{ __('messages.loading') }}...</div>
                                     </div>
@@ -107,7 +107,7 @@
                                 <label style="font-size: 0.8em;width: 300px;display: block;">{{ __('UILogin.password_requirements') }}</label>
                             <br>
                             </div>
-                            <button form="register-from" type="submit" name="register-submit" class="button red register-submit">{{ __('pagination.next') }}</button>
+                            <button form="register-from" onClick="mostrarCargando()" type="submit" name="register-submit" class="button red register-submit">{{ __('pagination.next') }}</button>
                         
                         
                         
@@ -122,6 +122,28 @@
             </div>
         </div>
 </div>
+
+<script>
+
+// function mostrarCargando() {
+//     var nombres = document.getElementById("client_first").value;
+//     var apellidos = document.getElementById("client_last").value;
+//     var email = document.getElementById("email").value;
+//     var pwd = document.getElementById("password").value;
+//     var pwd2 = document.getElementById("password_confirmation").value;
+
+
+// if(nombres === "" || apellidos === "" || email === "" || pwd === "" || pwd2 === ""){
+//     console.log("Faltan Campos");
+// }else{
+//     var registerbtn = document.getElementById("loading-overlay");
+//     registerbtn.style.display = "flex";
+//     registerbtn.style.opacity = "100";
+// }
+
+// }
+
+</script>
 
 @endsection
 
