@@ -54,6 +54,34 @@ class DealsController extends AuthController
 
     }
 
+    public function getParam(Request $request)
+    {
+        $param = $request->param;
+
+
+        if(empty($param)){
+            return response()->json(array('response' => 'error', 'message' => 'no param'), 400);
+        }
+
+        if($param == "activeCoupons"){
+
+            $client_id = $request->client_id;
+
+            if(empty($client_id)){
+                return response()->json(array('response' => 'error', 'message' => 'no client_id' ), 400);
+            }
+
+            $posts = Transaction::where('client_id', $client_id)
+                        ->where('finished','0')
+                        ->join('omeleth_webapp.buss as b', 'transactions.buss_id', '=', 'b.buss_id')
+                        ->join('omeleth_webapp.posts as p', 'transactions.post_id', '=', 'p.post_id')
+                        ->select('b.buss_name', 'p.title', 'p.description', 'p.post_hero_img_url', 'p.price_from', 'p.price_new', 'p.offer_end_at', 'p.created_at', 'p.post_id', 'p.active', 'transactions.created_at as t_created_at', 'transactions.finished', 'transactions.trans_qr', 'transactions.app_id', 'transactions.transaction_id')
+                        ->get();
+
+            return response()->json(array('data' => $posts, 'response' => 'success', 'message' => 'Retornado Correctamente'), 200);
+        }
+    }
+
 
 
     public function carousel(Request $request)

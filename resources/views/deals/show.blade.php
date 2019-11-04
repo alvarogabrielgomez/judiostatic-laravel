@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title',  $posts->title)
-@section('id',  $posts->post_id)
+@section('id',  'deals/'.$posts->post_id)
 @section('description',  $posts->description)
 @section('heroimage',  $posts->post_hero_img_url)
 @section('content')

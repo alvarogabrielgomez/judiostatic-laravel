@@ -38,17 +38,16 @@
     
     <link rel="preload" href="{{ asset('/slick/slick.min.js')}}" as="script">
 
-    <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('images/favicon/apple-touch-icon-60x60.png') }}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/favicon/apple-touch-icon-76x76.png') }}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('images/favicon/apple-touch-icon-120x120.png') }}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('images/favicon/apple-touch-icon-152x152.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/apple-touch-icon-180x180.png') }}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('images/favicon/android-icon-512x512.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/favicon/android-icon-192x192.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('images/favicon/site.webmanifest') }}">
-    
     <link rel="mask-icon" href="{{ asset('images/favicon/safari-pinned-tab.svg')}}" color="#bc2b19">
-    <meta name="msapplication-TileColor" content="#da532c">
+    <link rel="shortcut icon" href="{{ asset('images/favicon/favicon.ico')}}">
+    <meta name="msapplication-TileColor" content="#0f172b">
+    <meta name="msapplication-config" content="{{ asset('images/favicon/browserconfig.xml')}}">
     <meta name="theme-color" content="#bc2b19">
 
     {{-- <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }}">
@@ -68,7 +67,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/animate.min.css') }}">
 </head>
 <body>
-  <script>
+  <script id ="temp-script-locale">
       window.default_locale = "{{ config('app.locale') }}";
       window.fallback_locale = "{{ config('app.fallback_locale') }}";
       window.messages = @json($messages);

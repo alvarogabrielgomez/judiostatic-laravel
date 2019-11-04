@@ -23,7 +23,12 @@ window.axios.defaults.headers.common = {
     'Content-Type':'application/json'
 }
 
-
+// Remove tag Temporal Locale para Lang.js
+let tempTag = document.getElementById("temp-script-locale");
+if(tempTag){
+    tempTag.remove();
+    console.log("TTRemv");
+}
 
 
 /**

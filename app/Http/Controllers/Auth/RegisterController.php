@@ -4,6 +4,7 @@ namespace judiostatic\Http\Controllers\Auth;
 
 use judiostatic\User;
 use judiostatic\Role;
+use judiostatic\SocialProvider;
 use Illuminate\Http\Request;
 use judiostatic\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;

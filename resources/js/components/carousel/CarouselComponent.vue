@@ -109,8 +109,7 @@ export default {
 
   mounted() {
 
-      axios
-        .get("/carousel")
+      axios.get("/carousel")
         .then(res => {
           this.posts = res.data.data;
           this.loading = false;

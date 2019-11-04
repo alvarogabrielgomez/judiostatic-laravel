@@ -97,7 +97,7 @@ export default {
     props:{
         userdata:{
             required: true
-        }
+        },
     },
     data(){
         return{
@@ -150,6 +150,7 @@ position: relative;
     display: flex;
     flex-direction: row;
     background-color: #fbfbf2;
+    border-bottom: 1px solid #f3f2f2;
 }
 #btn-explorar{
 
@@ -190,8 +191,8 @@ position: relative;
 }
 
 .dashboard-main{
-   transition: all .2s ease-out;
-    min-height:100vh;
+   transition: width 0.2s ease-out;
+    min-height: calc(100vh - 110px);
     position:absolute;
     display:flex;
     flex-direction:column;

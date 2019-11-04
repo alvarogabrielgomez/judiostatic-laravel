@@ -51,6 +51,12 @@ class AppServiceProvider extends ServiceProvider
             ] );
         } );
 
+        View::composer('home', function ( $view ) {
+
+            return $view->with( [
+                'messages' => ExportLocalization::export()->toFlat(),
+            ] );
+        } );
 
     }
 }

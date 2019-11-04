@@ -2,7 +2,7 @@
 @section('title', 'Login')
 @section('content')
 <!-- Scripts -->
-<script>
+<script id ="temp-script-locale">
         window.default_locale = "{{ config('app.locale') }}";
         window.fallback_locale = "{{ config('app.fallback_locale') }}";
         window.messages = @json($messages);

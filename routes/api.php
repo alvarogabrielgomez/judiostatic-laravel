@@ -63,6 +63,8 @@ Route::get('/v1/callback', function(Request $request){
 Route::middleware('auth:api')->get('/v1/deals', 'DealsController@indexApi');
 Route::middleware('auth:api')->get('/v1/deals/{id}', 'DealsController@showApi');
 
+Route::middleware('auth:api')->get('/v1/get/{param}', 'DealsController@GetParam');
+
 Route::middleware('auth:api')->post('/v1/inserttrans', 'DealsController@insertTransaction');
 
 
