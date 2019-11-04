@@ -1,4 +1,5 @@
 /node_modules
+/ParaProduccion
 /public/hot
 /public/storage
 /storage/*.key
