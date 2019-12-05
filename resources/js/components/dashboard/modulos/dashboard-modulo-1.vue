@@ -8,7 +8,6 @@
                     </div>
                 </div>
           </transition>
-
           <div class="dashboard-item-lista-deals" v-for="post in postsActive" v-bind:key="post.transaction_id" @click="openPost(post.transaction_id)">
               <div class="dashboard-item-avatar-icon"></div>
               <div class="dashboard-item-text-container">
@@ -23,6 +22,7 @@
                         <span>{{post.created_at}}</span>
                     </div>
                     </div>
+
 
                   <div class="dashboard-item-text item-text-desc"><span>{{post.description}}</span></div>
               </div>
